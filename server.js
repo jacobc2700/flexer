@@ -1,6 +1,11 @@
 const express = require('express');
+require('dotenv').config();
+const connectDatabase = require('./config/database');
 
 const app = express();
+
+//Connect to database.
+connectDatabase();
 
 app.get('/', (req, res) => {
   res.send('hello');
