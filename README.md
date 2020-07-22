@@ -10,6 +10,8 @@ make a env file and put DATABASE_URL with username, password, dbname
 
 ### Endpoints:
 
+### Models:
+
 ### Folder structure:
 
 - server.js entry file
