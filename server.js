@@ -7,8 +7,11 @@ const app = express();
 //Connect to database.
 connectDatabase();
 
+//Initialize middleware (body parser) (enable req.body).
+app.use(express.json({ extended: false }));
+
 app.get('/', (req, res) => {
-  res.send('hello');
+  res.send('API running');
 });
 
 //Define routes.

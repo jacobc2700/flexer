@@ -18,7 +18,7 @@ make a env file and put DATABASE_URL with username, password, dbname
 
 - regular:
 - express
-- express-validator
+- express-validator: validate the user input
 - bcryptjs
 - config
 - gravatar
@@ -39,3 +39,13 @@ within postman, create new collection called "Users & Auth"
 
 collection: Posts
 collection: Profiles
+
+POST: localhost:5000/api/users (saved within Users & Auth collection as "Register User")
+JSON body:
+{
+"name" : "Jacob"
+}
+
+### problems to fix:
+
+- user should not have empty whitespace as name
