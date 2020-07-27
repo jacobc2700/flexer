@@ -1,5 +1,11 @@
 ### packages
 
+### Technologies
+
+### db
+
+default avatar - http://www.gravatar.com/avatar/?s=200&r=pg&d=mm
+
 ### Usage;
 
 npm run server
@@ -49,3 +55,11 @@ JSON body:
 ### problems to fix:
 
 - user should not have empty whitespace as name
+
+### http requests
+
+await/async in simple terms!
+https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_await
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+https://javascript.info/async-await
+s
