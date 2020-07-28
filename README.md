@@ -6,11 +6,14 @@
 
 default avatar - http://www.gravatar.com/avatar/?s=200&r=pg&d=mm
 
+make sure jwt token is set to expiresIn 3600 seconds
+
 ### Usage;
 
 npm run server
 
 make a env file and put DATABASE_URL with username, password, dbname
+also in env, set JWT_SECRET=any string u want
 
 ### Npm scripts
 

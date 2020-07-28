@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 //Docs: https://www.npmjs.com/package/gravatar
 const gravatar = require('gravatar');
@@ -67,9 +68,26 @@ router.post(
       //Save user to database.
       await user.save();
 
-      //Return JSON web token.
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
 
-      res.send('User was registered successfully.');
+      //Return JSON web token.
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: 360000 }, //1 hour or 3600 seconds for production, longer for testing purposes
+        (err, token) => {
+          if (err) {
+            throw err;
+          }
+          res.json({ token });
+        }
+      );
+
+      // res.send('User was registered successfully.');
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error with user registration.');
