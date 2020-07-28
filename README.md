@@ -55,6 +55,8 @@ JSON body:
 "name" : "Jacob"
 }
 
+multiple collections and saved requests...
+
 ### problems to fix:
 
 - user should not have empty whitespace as name
