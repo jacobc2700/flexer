@@ -5,7 +5,7 @@
 ### db
 
 default avatar - http://www.gravatar.com/avatar/?s=200&r=pg&d=mm
-
+mongo atlas
 make sure jwt token is set to expiresIn 3600 seconds
 
 ### Usage;
