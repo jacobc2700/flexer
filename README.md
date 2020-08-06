@@ -2,9 +2,14 @@
 
 Social media website for computer programmers.
 
-### packages
+### Technologies:
 
-### Technologies
+- MongoDB (Mongoose): JSON-style database for persistent data.
+
+### Hosting:
+
+- MongoDB Atlas:
+- Heroku:
 
 learn header body response http guide
 
@@ -19,7 +24,7 @@ make sure jwt token is set to expiresIn 3600 seconds
 - `git clone`.
 - `npm install`.
 - `npm run server`.
-- Go to [localhost:5000](localhost:5000).
+- Go to localhost:5000.
 
 opotion to have publicly displayed email.
 
@@ -34,7 +39,12 @@ also in env, set JWT_SECRET=any string u want
 
 ### Models:
 
-### Folder structure:
+- Profile:
+- User
+
+### NPM Packages:
+
+### Folder Structure:
 
 - server.js entry file
 
@@ -53,7 +63,9 @@ also in env, set JWT_SECRET=any string u want
 
 -dotenv???
 
-### Postman
+### Postman:
+
+- Here is some info on the Postman collections and endpoints.
 
 within postman, create new collection called "Users & Auth"
 
