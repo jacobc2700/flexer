@@ -34,6 +34,7 @@ JWT_SECRET=Random string for JSON web token authentication.
 - Go to localhost:5000.
 
 opotion to have publicly displayed email.
+github topics: adding new skills
 
 npm run server
 
@@ -91,6 +92,8 @@ JSON body:
 {
 "name" : "Jacob"
 }
+
+await method for ALL mongoose methods since they return promises
 
 multiple collections and saved requests...
 

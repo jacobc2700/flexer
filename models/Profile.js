@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 //All profiles contain a user.
 const ProfileSchema = new mongoose.Schema({
   user: {
+    //In the database, it gets saved as "user": "id"
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user', //Reference to 'user' model in User.js
   },
@@ -105,9 +106,6 @@ const ProfileSchema = new mongoose.Schema({
       type: String,
     },
     instagram: {
-      type: String,
-    },
-    github: {
       type: String,
     },
     medium: {
