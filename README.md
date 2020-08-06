@@ -25,7 +25,8 @@ make sure jwt token is set to expiresIn 3600 seconds
 - Create a `.env` file in the root directory and add these secret keys.
 
 ```
-DATABASE
+DATABASE_URL=Link to Mongo Atlas Database URL with username, password, and database name.
+JWT_SECRET=Random string for JSON web token authentication.
 ```
 
 - `npm install`.
