@@ -11,7 +11,7 @@ connectDatabase();
 app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => {
-  res.send('API running');
+  res.send('Flexer is live.');
 });
 
 //Define routes.

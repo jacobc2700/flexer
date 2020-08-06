@@ -21,7 +21,13 @@ make sure jwt token is set to expiresIn 3600 seconds
 
 ### Usage:
 
-- `git clone`.
+- `git clone https://github.com/jacobc2700/flexer.git`.
+- Create a `.env` file in the root directory and add these secret keys.
+
+```
+DATABASE
+```
+
 - `npm install`.
 - `npm run server`.
 - Go to localhost:5000.
@@ -72,6 +78,7 @@ also in env, set JWT_SECRET=any string u want
 - GET: Get Authenticated User
 
 within postman, create new collection called "Users & Auth"
+possibly share them since they are bidned to an account
 
 - for users and authentication
 
