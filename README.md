@@ -5,18 +5,18 @@ Social media website for computer programmers.
 ### Technologies:
 
 - MongoDB (Mongoose): JSON-style database for persistent data.
+-
 
 ### Hosting:
 
-- MongoDB Atlas:
-- Heroku:
+- MongoDB Atlas: hosting service for our MongoDB database.
+- Heroku: deployment service for hosting our web application.
 
 learn header body response http guide
 
 ### db
 
 default avatar - http://www.gravatar.com/avatar/?s=200&r=pg&d=mm
-mongo atlas
 make sure jwt token is set to expiresIn 3600 seconds
 
 ### Usage:
@@ -46,7 +46,7 @@ also in env, set JWT_SECRET=any string u want
 
 ### Folder Structure:
 
-- server.js entry file
+- Entry file: `server.js`.
 
 - regular:
 - express
@@ -61,11 +61,15 @@ also in env, set JWT_SECRET=any string u want
   -nodemon
 - concurrently
 
--dotenv???
+-dotenv
 
 ### Postman:
 
 - Here is some info on the Postman collections and endpoints.
+- Posts:
+- Profiles:
+- Users & Authentication (4):
+- GET: Get Authenticated User
 
 within postman, create new collection called "Users & Auth"
 
