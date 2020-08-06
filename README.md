@@ -12,6 +12,8 @@ make sure jwt token is set to expiresIn 3600 seconds
 
 ### Usage;
 
+opotion to have publicly displayed email.
+
 npm run server
 
 make a env file and put DATABASE_URL with username, password, dbname
