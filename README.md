@@ -1,3 +1,7 @@
+# flexer
+
+Social media website for computer programmers.
+
 ### packages
 
 ### Technologies
@@ -10,7 +14,12 @@ default avatar - http://www.gravatar.com/avatar/?s=200&r=pg&d=mm
 mongo atlas
 make sure jwt token is set to expiresIn 3600 seconds
 
-### Usage;
+### Usage:
+
+- `git clone`.
+- `npm install`.
+- `npm run server`.
+- Go to [localhost:5000](localhost:5000).
 
 opotion to have publicly displayed email.
 
