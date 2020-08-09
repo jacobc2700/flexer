@@ -2,10 +2,12 @@
 
 Social media website for computer programmers.
 
-### Technologies:
+### Technologies (MERN):
 
 - MongoDB (Mongoose): JSON-style database for persistent data.
--
+- Express: web framework for Node.js.
+- React: front-end framework for making the website look pretty.
+- Node.js: server-side JavaScript client.
 
 ### Hosting:
 
