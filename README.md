@@ -110,3 +110,7 @@ https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_awa
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 https://javascript.info/async-await
 s
+
+### Credits:
+
+- Based partially on a [Udemy](https://www.udemy.com/course/mern-stack-front-to-back/) course by Brad Traversy.
