@@ -113,4 +113,4 @@ s
 
 ### Credits:
 
-- Based partially on a [Udemy](https://www.udemy.com/course/mern-stack-front-to-back/) course by Brad Traversy.
+- Based on a [Udemy](https://www.udemy.com/course/mern-stack-front-to-back/) course by Brad Traversy.
