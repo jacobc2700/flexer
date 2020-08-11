@@ -6,6 +6,8 @@ const { body, validationResult } = require('express-validator');
 const User = require('../../models/User');
 const Profile = require('../../models/Profile');
 
+var _ = require('lodash');
+
 //below: document the route => private routes need tokens
 
 //@route    GET api/profile/me
@@ -158,5 +160,86 @@ router.get('/user/:user_id', async (req, res) => {
     res.status(500).send('Error getting profile.');
   }
 });
+
+//@route    DELETE api/profile
+//@desc     Delete profile, user, and posts
+//@access   Private
+router.delete('/', auth, async (req, res) => {
+  try {
+    //Later todo: remove user posts
+
+    //Delete profile.
+    await Profile.findOneAndRemove({ user: req.user.id });
+
+    //Delete user.
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: 'User and profile deleted.' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Error getting all profiles.');
+  }
+});
+
+//@route    PUT api/profile/experience (PUT is used to modify a resource)
+//@desc     Add experience to profile
+//@access   Private
+router.put(
+  '/experience',
+  [
+    auth,
+    [
+      body('title', 'Job title is required.').not().isEmpty(),
+      body('company', 'Company name is required.').not().isEmpty(),
+      body('from', 'Job starting date is required.').not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    //If there are errors...
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
+
+    //Create new job experience based on the inputted data in the request object.
+    //Use lodash to capitalize first letter of each word.
+    const newExperience = {
+      title: _.startCase(_.toLower(title)),
+      company: _.startCase(_.toLower(title)),
+      location: location,
+      from: from,
+      to: to,
+      current: current,
+      description: description,
+    };
+
+    try {
+      const currentProfile = await Profile.findOne({ user: req.user.id });
+
+      //Unshift method: adds latest experience to the beginning of the array.
+      currentProfile.experience.unshift(newExperience);
+
+      await currentProfile.save();
+
+      res.json(currentProfile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error with updating profile experience.');
+    }
+  }
+);
+
+//@todo: update an experience...
 
 module.exports = router;

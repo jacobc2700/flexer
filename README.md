@@ -4,6 +4,7 @@ Social media website for computer programmers.
 
 ### Technologies (MERN):
 
+- Flexer is built with the JavaScript MERN Stack.
 - MongoDB (Mongoose): JSON-style database for persistent data.
 - Express: web framework for Node.js.
 - React: front-end framework for making the website look pretty.
@@ -45,12 +46,11 @@ also in env, set JWT_SECRET=any string u want
 
 ### Npm scripts
 
-### Endpoints:
-
-### Models:
+### Database Models:
 
 - Profile:
 - User
+- how they work too
 
 ### NPM Packages:
 
@@ -73,7 +73,9 @@ also in env, set JWT_SECRET=any string u want
 
 -dotenv
 
-### Postman:
+- lodash
+
+### Postman Endpoints:
 
 - Here is some info on the Postman collections and endpoints.
 - Posts:
@@ -98,6 +100,8 @@ JSON body:
 await method for ALL mongoose methods since they return promises
 
 multiple collections and saved requests...
+header presets too
+when to use headers.bodies
 
 ### problems to fix:
 
@@ -110,6 +114,10 @@ https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_awa
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 https://javascript.info/async-await
 s
+
+### Problems:
+
+- use lodash to capitalize every first letter of each woird in str
 
 ### Credits:
 
