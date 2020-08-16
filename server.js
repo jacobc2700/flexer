@@ -22,4 +22,5 @@ app.use('/api/posts', require('./routes/api/posts'));
 
 const PORT = process.env.PORT || 5000;
 
+//Run app.
 app.listen(PORT, () => console.log(`Flexer running on port ${PORT}.`));

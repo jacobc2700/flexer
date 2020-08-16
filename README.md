@@ -1,4 +1,4 @@
-# flexer
+# Flexer
 
 Social media website for computer programmers.
 
