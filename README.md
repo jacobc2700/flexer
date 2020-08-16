@@ -39,11 +39,6 @@ JWT_SECRET=Random string for JSON web token authentication.
 opotion to have publicly displayed email.
 github topics: adding new skills
 
-npm run server
-
-make a env file and put DATABASE_URL with username, password, dbname
-also in env, set JWT_SECRET=any string u want
-
 ### Npm scripts
 
 ### Database Models:
@@ -54,8 +49,12 @@ also in env, set JWT_SECRET=any string u want
 
 ### NPM Packages:
 
-### Folder Structure:
+### Detailed Project Structure:
 
+- `README.md`: provides documentation about Flexer (written in Markdown).
+- `package-lock.json`: auto-generated file (you can ignore).
+- `package.json`: lists our scripts and dependencies.
+- We have a `start` script for production and a `dev` script for development.
 - Entry file: `server.js`.
 
 - regular:
@@ -118,6 +117,10 @@ s
 ### Problems:
 
 - use lodash to capitalize every first letter of each woird in str
+
+### License:
+
+- Flexer is under the [MIT License](LICENSE).
 
 ### Credits:
 
