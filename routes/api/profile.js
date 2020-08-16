@@ -240,6 +240,64 @@ router.put(
   }
 );
 
-//@todo: update an experience...
+//@route    PATCH api/profile/experience/:experience_id
+//@desc     Update an existing experience by its id
+//@access   Private
+router.patch(
+  '/experience/:experience_id',
+  [
+    auth,
+    [
+      body('title', 'Job title is required.').not().isEmpty(),
+      body('company', 'Company name is required.').not().isEmpty(),
+      body('from', 'Job starting date is required.').not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    //If there are errors...
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
+
+    const currentProfile = await Profile.findOne({ user: req.user.id });
+
+    //Since experience is not a model itself, we need to use map
+    //Gets the index of the experience we are editing.
+    const currentExperienceIndex = currentProfile.experience
+      .map((item) => item.id)
+      .indexOf(req.params.experience_id);
+
+    const newExperience = {
+      _id: req.params.experience_id,
+      title: _.startCase(_.toLower(title)),
+      company: _.startCase(_.toLower(title)),
+      location: location,
+      from: from,
+      to: to,
+      current: current,
+      description: description,
+    };
+
+    currentProfile.experience[currentExperienceIndex] = newExperience;
+
+    await currentProfile.save();
+
+    res.json(currentProfile);
+
+    // res.json({ currentExperienceIndex: currentExperienceIndex });
+  }
+);
 
 module.exports = router;
