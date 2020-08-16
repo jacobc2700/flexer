@@ -56,7 +56,6 @@ github topics: adding new skills
 - `package.json`: lists our scripts and dependencies.
 - We have a `start` script for production and a `dev` script for development.
 - Entry file: `server.js`.
-
 - regular:
 - express
 - express-validator: validate the user input
@@ -67,11 +66,9 @@ github topics: adding new skills
 - mongoose
 
 - dev dependencies:
-  -nodemon
+- nodemon
 - concurrently
-
--dotenv
-
+- dotenv
 - lodash
 
 ### Postman Endpoints:
