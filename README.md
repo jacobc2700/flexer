@@ -56,6 +56,7 @@ github topics: adding new skills
 - Here are some of the regular packages (https://www.npmjs.com/)we're using:
 - `bcryptjs`: for hashing passwords using mainly 3 methods => genSalt (more rounds = more secure), hash (turn password into an unreadable string), compare (compares the typed password to the hashed password).
 - `dotenv`: load secret environment variables from an environment file (`.env`).
+- The `require('dotenv').config()` command in `server.js` enables access to variables in the `.env` file from anywhere in our project directory.
 - `express`: web application framework for Node.js.
 - `express-validator`: for validating user inputs for creating new profiles and new users before inserting them into the database.
 - `gravatar`: finds the image associated with a user's email address or generates a default one for email addresses without an image. Here is the default image: http://www.gravatar.com/avatar/?s=200&r=pg&d=mm.
@@ -70,6 +71,9 @@ github topics: adding new skills
 - Now let's look at the project structure.
 - `server.js`: entry file for our web application. Within this file, we create our Express application, connect to our MongoDB database, define our routes, and run the application.
 - `LICENSE`: this project is licensed under the MIT license (few restrictions).
+- `.gitignore`: ignores certain files when pushing to GitHub.
+- `.env`: contains environment variables that you want to keep secret.
+- `routes/api`: folder which contains our routes and endpoints.
 
 ### Postman Endpoints:
 
