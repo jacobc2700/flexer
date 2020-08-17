@@ -19,7 +19,6 @@ learn header body response http guide
 
 ### db
 
-default avatar - http://www.gravatar.com/avatar/?s=200&r=pg&d=mm
 make sure jwt token is set to expiresIn 3600 seconds
 
 ### Usage:
@@ -54,24 +53,21 @@ github topics: adding new skills
 - `package-lock.json`: auto-generated file (you can ignore).
 - `package.json`: lists our scripts and dependencies.
 - We have a `start` script for production and a `dev` script for development.
-- Here are some of the packages we're using:
+- Here are some of the regular packages (https://www.npmjs.com/)we're using:
 - `bcryptjs`: for hashing passwords using mainly 3 methods => genSalt (more rounds = more secure), hash (turn password into an unreadable string), compare (compares the typed password to the hashed password).
-- `config`:
-
-* Entry file: `server.js`.
-* regular:
-* express
-* express-validator: validate the user input
-* config
-* gravatar
-* jsonwebtoken
-* mongoose
-
-* dev dependencies:
-* nodemon
-* concurrently
-* dotenv
-* lodash
+- `dotenv`: load secret environment variables from an environment file (`.env`).
+- `express`: web application framework for Node.js.
+- `express-validator`: for validating user inputs for creating new profiles and new users before inserting them into the database.
+- `gravatar`: finds the image associated with a user's email address or generates a default one for email addresses without an image. Here is the default image: http://www.gravatar.com/avatar/?s=200&r=pg&d=mm.
+- `jsonwebtoken`: generates tokens that authorize user logins.
+- `lodash`: utility library that has built-in methods for working with arrays, strings, and more.
+- `mongoose`: object data modeling (ODM) library which makes working with MongoDB easier.
+- `request`: package for making HTTP calls.
+- Here are the developer dependencies we're using:
+- `concurrently`: runs multiple commands at the same time. We'll need it to run our back-end (Express) and front-end (React) at the same time.
+- `nodemon`: automatically restarts our server each time we edit our files.
+- Now let's look at the project structure.
+- `server.js`: entry file for our web application.
 
 ### Postman Endpoints:
 

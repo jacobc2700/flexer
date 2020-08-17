@@ -19,7 +19,6 @@
   "homepage": "https://github.com/jacobc2700/flexer#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "config": "^3.3.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.6.0",
@@ -27,7 +26,8 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.19",
     "mongoose": "^5.9.25",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
