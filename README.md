@@ -41,11 +41,10 @@ github topics: adding new skills
 
 ### Npm scripts
 
-### Database Models:
+### Database Model Objects:
 
-- Profile:
-- User
-- how they work too
+- Profile: associated with exactly one user.
+- User: represents a person who logs in to the website.
 
 ### NPM Packages:
 
@@ -55,21 +54,24 @@ github topics: adding new skills
 - `package-lock.json`: auto-generated file (you can ignore).
 - `package.json`: lists our scripts and dependencies.
 - We have a `start` script for production and a `dev` script for development.
-- Entry file: `server.js`.
-- regular:
-- express
-- express-validator: validate the user input
-- bcryptjs
-- config
-- gravatar
-- jsonwebtoken
-- mongoose
+- Here are some of the packages we're using:
+- `bcryptjs`: for hashing passwords using mainly 3 methods => genSalt (more rounds = more secure), hash (turn password into an unreadable string), compare (compares the typed password to the hashed password).
+- `config`:
 
-- dev dependencies:
-- nodemon
-- concurrently
-- dotenv
-- lodash
+* Entry file: `server.js`.
+* regular:
+* express
+* express-validator: validate the user input
+* config
+* gravatar
+* jsonwebtoken
+* mongoose
+
+* dev dependencies:
+* nodemon
+* concurrently
+* dotenv
+* lodash
 
 ### Postman Endpoints:
 

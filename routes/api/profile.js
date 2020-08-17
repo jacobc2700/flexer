@@ -295,8 +295,6 @@ router.patch(
     await currentProfile.save();
 
     res.json(currentProfile);
-
-    // res.json({ currentExperienceIndex: currentExperienceIndex });
   }
 );
 
