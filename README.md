@@ -77,7 +77,8 @@ github topics: adding new skills
 
 ### Postman Endpoints:
 
-- Here is some info on the Postman collections and endpoints.
+- Here is some info on the Postman collections and the endpoints within each one.
+- We have three different Postman collections: Posts, Profiles, Users & Authentication.
 - Posts:
 - Profiles:
 - Users & Authentication (4):
@@ -103,10 +104,6 @@ multiple collections and saved requests...
 header presets too
 when to use headers.bodies
 
-### problems to fix:
-
-- user should not have empty whitespace as name
-
 ### http requests
 
 await/async in simple terms!
@@ -118,6 +115,10 @@ s
 ### Problems:
 
 - use lodash to capitalize every first letter of each woird in str
+- White space should not be allowed
+- You cannot have both a current education or experience set to true and have a "to" field
+- if current is true, there must be no "to" field
+- if current is false, there must be a "to" field
 
 ### License:
 

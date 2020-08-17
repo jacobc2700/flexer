@@ -8,6 +8,8 @@ const Profile = require('../../models/Profile');
 
 var _ = require('lodash');
 
+//Provide an overview of different endpoints and routes....
+
 //below: document the route => private routes need tokens
 
 //@route    GET api/profile/me
@@ -216,7 +218,7 @@ router.put(
     //Use lodash to capitalize first letter of each word.
     const newExperience = {
       title: _.startCase(_.toLower(title)),
-      company: _.startCase(_.toLower(title)),
+      company: _.startCase(_.toLower(company)),
       location: location,
       from: from,
       to: to,
@@ -235,7 +237,7 @@ router.put(
       res.json(currentProfile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error with updating profile experience.');
+      res.status(500).send('Server error with adding profile experience.');
     }
   }
 );
@@ -282,7 +284,7 @@ router.patch(
     const newExperience = {
       _id: req.params.experience_id,
       title: _.startCase(_.toLower(title)),
-      company: _.startCase(_.toLower(title)),
+      company: _.startCase(_.toLower(company)),
       location: location,
       from: from,
       to: to,
@@ -317,7 +319,88 @@ router.delete('/experience/:experience_id', auth, async (req, res) => {
     await currentProfile.save();
 
     res.json(currentProfile);
-  } catch (err) {}
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error with deleting profile experience.');
+  }
+});
+
+//@route    PUT api/profile/education (PUT is used to modify a resource)
+//@desc     Add education to profile
+//@access   Private
+router.put(
+  '/education',
+  [
+    auth,
+    [
+      //Required fields.
+      body('school', 'School is required.').not().isEmpty(),
+      body('degree', 'Degree is required.').not().isEmpty(),
+      body('major', 'Major is required.').not().isEmpty(),
+      body('from', 'From date is required.').not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    //If there are errors...
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { school, degree, major, from, to, current, description } = req.body;
+
+    //Create new education based on the inputted data in the request object.
+    //Use lodash to capitalize first letter of each word.
+    const newEducation = {
+      school: _.startCase(_.toLower(school)),
+      degree: _.startCase(_.toLower(degree)),
+      major: _.startCase(_.toLower(major)),
+      from: from,
+      to: to,
+      current: current,
+      description: description,
+    };
+
+    try {
+      const currentProfile = await Profile.findOne({ user: req.user.id });
+
+      //Unshift method: adds latest education to the beginning of the array.
+      currentProfile.education.unshift(newEducation);
+
+      await currentProfile.save();
+
+      res.json(currentProfile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error with adding profile education.');
+    }
+  }
+);
+
+//@route    DELETE api/profile/education/:education_id
+//@desc     Delete education by id from profile
+//@access   Private
+
+router.delete('/education/:education_id', auth, async (req, res) => {
+  try {
+    const currentProfile = await Profile.findOne({ user: req.user.id });
+
+    //Get index of education to remove
+    const removeEducationIndex = currentProfile.education
+      .map((item) => item.id)
+      .indexOf(req.params.education_id);
+
+    //Delete education from profile
+    currentProfile.education.splice(removeEducationIndex, 1);
+
+    await currentProfile.save();
+
+    res.json(currentProfile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error with deleting profile education.');
+  }
 });
 
 module.exports = router;
