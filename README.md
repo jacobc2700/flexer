@@ -63,6 +63,7 @@ github topics: adding new skills
 - `lodash`: utility library that has built-in methods for working with arrays, strings, and more.
 - `mongoose`: object data modeling (ODM) library which makes working with MongoDB easier.
 - `request`: package for making HTTP calls.
+- `serve-favicon`: serve a favicon for our web application.
 - Here are the developer dependencies we're using:
 - `concurrently`: runs multiple commands at the same time. We'll need it to run our back-end (Express) and front-end (React) at the same time.
 - `nodemon`: automatically restarts our server each time we edit our files.
