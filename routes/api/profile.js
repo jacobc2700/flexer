@@ -378,6 +378,57 @@ router.put(
   }
 );
 
+//@route    PATCH api/profile/education/:education_id
+//@desc     Update an existing education by its id
+//@access   Private
+router.patch(
+  '/education/:education_id',
+  [
+    auth,
+    [
+      //Required fields.
+      body('school', 'School is required.').not().isEmpty(),
+      body('degree', 'Degree is required.').not().isEmpty(),
+      body('major', 'Major is required.').not().isEmpty(),
+      body('from', 'From date is required.').not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    //If there are errors...
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { school, degree, major, from, to, current, description } = req.body;
+
+    const currentProfile = await Profile.findOne({ user: req.user.id });
+
+    //Since education is not a model itself, we need to use map
+    //Gets the index of the education we are editing.
+    const currentEducationIndex = currentProfile.education
+      .map((item) => item.id)
+      .indexOf(req.params.education_id);
+
+    const newEducation = {
+      school: _.startCase(_.toLower(school)),
+      degree: _.startCase(_.toLower(degree)),
+      major: _.startCase(_.toLower(major)),
+      from: from,
+      to: to,
+      current: current,
+      description: description,
+    };
+
+    currentProfile.education[currentEducationIndex] = newEducation;
+
+    await currentProfile.save();
+
+    res.json(currentProfile);
+  }
+);
+
 //@route    DELETE api/profile/education/:education_id
 //@desc     Delete education by id from profile
 //@access   Private
