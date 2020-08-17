@@ -68,7 +68,8 @@ github topics: adding new skills
 - `concurrently`: runs multiple commands at the same time. We'll need it to run our back-end (Express) and front-end (React) at the same time.
 - `nodemon`: automatically restarts our server each time we edit our files.
 - Now let's look at the project structure.
-- `server.js`: entry file for our web application.
+- `server.js`: entry file for our web application. Within this file, we create our Express application, connect to our MongoDB database, define our routes, and run the application.
+- `LICENSE`: this project is licensed under the MIT license (few restrictions).
 
 ### Postman Endpoints:
 
