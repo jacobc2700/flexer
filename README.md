@@ -86,7 +86,7 @@ https://www.digitalocean.com/community/tutorials/nodejs-res-object-in-expressjs
 - `.env`: contains environment variables that you want to keep secret.
 - `routes/api`: folder which contains our routes and endpoints.
 
-### Postman Endpoints:
+### Postman Endpoints (Custom API):
 
 - Here is some info on the Postman collections and the endpoints within each one.
 - We have three different Postman collections: Posts, Profiles, Users & Authentication.
