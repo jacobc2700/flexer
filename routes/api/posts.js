@@ -46,4 +46,82 @@ router.post(
   }
 );
 
+//@route    GET api/posts
+//@desc     Get all the posts
+//@access   Private: you have to log in to see the posts
+// could make a note on the front-end about logging in to see the posts
+router.get('/', auth, async (req, res) => {
+  try {
+    //Get all the posts, sort by most recent first
+    const posts = await Post.find({}).sort({ date: -1 });
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error getting all posts.');
+  }
+});
+
+//@route    GET api/posts/:post_id
+//@desc     Get post by id
+//@access   Private
+router.get('/:post_id', auth, async (req, res) => {
+  try {
+    //Get post by id
+    const post = await Post.findById(req.params.post_id);
+
+    //If there is no post with that id:
+    if (!post) {
+      //404 - not found
+      return res.status(404).json({ msg: 'Post not found.' });
+    }
+
+    res.json(post);
+  } catch (err) {
+    console.error(err.message);
+
+    //Non-formatted correctly id
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Post not found.' });
+    }
+
+    res.status(500).send('Server error getting post by id.');
+  }
+});
+
+//@route    DELETE api/posts/:post_id
+//@desc     Delete post by id
+//@access   Private
+router.delete('/:post_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+
+    if (!post) {
+      return res.status(404).json({ msg: 'Post not found.' });
+    }
+
+    //We need to make sure that only the owner of this post can delete the post.
+
+    //If the creator of the post is not the same as the logged in user...
+    if (post.user.toString() !== req.user.id) {
+      //401 - not authorized
+      return res.status(401).json({ msg: 'User not authorized.' });
+    }
+
+    //Remove post from database.
+    await post.remove();
+
+    res.json({ msg: 'Post removed.' });
+  } catch (err) {
+    console.error(err.message);
+
+    //True if post_id is invalid format
+    if (err.kind === 'ObjectId') {
+      return res.status(401).json({ msg: 'Post not found.' });
+    }
+
+    res.status(500).send('Server error deleting post by id.');
+  }
+});
+
 module.exports = router;
