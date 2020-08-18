@@ -106,6 +106,8 @@ JSON body:
 
 await method for ALL mongoose methods since they return promises
 
+make sure check status codes
+
 multiple collections and saved requests...
 header presets too
 when to use headers.bodies

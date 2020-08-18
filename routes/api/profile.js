@@ -477,11 +477,9 @@ router.get('/github/:username', async (req, res) => {
     return res.json(githubResponse.data);
   } catch (err) {
     console.error(err.message);
-    res
-      .status(500)
-      .send(
-        `Server error getting public GitHub repositories for ${req.params.username}.`
-      );
+    return res
+      .status(404)
+      .send(`${req.params.username} is not a valid GitHub profile.`);
   }
 });
 
