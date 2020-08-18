@@ -50,8 +50,13 @@ github topics: adding new skills
 
 - Profile: associated with exactly one user.
 - User: represents a person who logs in to the website.
+- Post: associated with exactly one user.
 
-### NPM Packages:
+### how the auth middleware and jWT tokens work
+
+- jwt tokens carry the usre object with them.
+
+https://www.digitalocean.com/community/tutorials/nodejs-res-object-in-expressjs
 
 ### Detailed Project Structure:
 
