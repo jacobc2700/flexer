@@ -29,7 +29,13 @@ make sure jwt token is set to expiresIn 3600 seconds
 ```
 DATABASE_URL=Link to Mongo Atlas Database URL with username, password, and database name.
 JWT_SECRET=Random string for JSON web token authentication.
+GITHUB_TOKEN=Personal access token from GitHub.
 ```
+
+- To enable the function where a user's latest GitHub repositories are automatically generated, you will need to get an access token from GitHub.
+- Follow the instructions on [this](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) website.
+- When creating the personal access token, **DO NOT** select any boxes within the `scopes` section.
+- Add the token to the `.env` file.
 
 - `npm install`.
 - `npm run server`.
@@ -54,6 +60,7 @@ github topics: adding new skills
 - `package.json`: lists our scripts and dependencies.
 - We have a `start` script for production and a `dev` script for development.
 - Here are some of the regular packages (https://www.npmjs.com/)we're using:
+- `axios`: for making HTTP requests.
 - `bcryptjs`: for hashing passwords using mainly 3 methods => genSalt (more rounds = more secure), hash (turn password into an unreadable string), compare (compares the typed password to the hashed password).
 - `dotenv`: load secret environment variables from an environment file (`.env`).
 - The `require('dotenv').config()` command in `server.js` enables access to variables in the `.env` file from anywhere in our project directory.
@@ -63,7 +70,6 @@ github topics: adding new skills
 - `jsonwebtoken`: generates tokens that authorize user logins.
 - `lodash`: utility library that has built-in methods for working with arrays, strings, and more.
 - `mongoose`: object data modeling (ODM) library which makes working with MongoDB easier.
-- `request`: package for making HTTP calls.
 - `serve-favicon`: serve a favicon for our web application.
 - Here are the developer dependencies we're using:
 - `concurrently`: runs multiple commands at the same time. We'll need it to run our back-end (Express) and front-end (React) at the same time.

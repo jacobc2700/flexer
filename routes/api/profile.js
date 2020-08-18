@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const axios = require('axios');
 const auth = require('../../middleware/auth');
 const { body, validationResult } = require('express-validator');
 
@@ -451,6 +452,36 @@ router.delete('/education/:education_id', auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error with deleting profile education.');
+  }
+});
+
+//@route    GET api/profile/github/:github_username
+//@desc     Get public repos from github account
+//@access   Public
+router.get('/github/:username', async (req, res) => {
+  try {
+    const uri = encodeURI(
+      //Gets all the public repos for now
+      //Gets them in order of most recent
+      // `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`
+      `https://api.github.com/users/${req.params.username}/repos?sort=created:asc`
+    );
+
+    const headers = {
+      'user-agent': 'node.js',
+      Authorization: `token ${process.env.GITHUB_TOKEN}`,
+    };
+
+    const githubResponse = await axios.get(uri, { headers });
+
+    return res.json(githubResponse.data);
+  } catch (err) {
+    console.error(err.message);
+    res
+      .status(500)
+      .send(
+        `Server error getting public GitHub repositories for ${req.params.username}.`
+      );
   }
 });
 
