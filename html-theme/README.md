@@ -1,3 +1,8 @@
 # Flexer (HTML Theme)
 
-Here is the HTML for Flexer.
+This folder contains the HTML theme for Flexer.
+
+### Technologies:
+
+- Font Awesome: pretty font icons.
+-

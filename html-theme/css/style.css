@@ -1,12 +1,14 @@
 /* Global Styles */
+/* Declares global color variables to keep color consistent on all pages */
 :root {
-  --primary-color: #17a2b8;
+  --primary-color: #318fb5;
   --dark-color: #343a40;
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
   --success-color: #28a745;
 }
 
+/* Remove default styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -40,7 +42,7 @@ img {
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
-  margin-top: 6rem;
+  margin-top: 11rem;
   margin-bottom: 3rem;
 }
 
@@ -132,7 +134,7 @@ img {
   color: #333;
   padding: 0.4rem 1.3rem;
   font-size: 1rem;
-  border: none;
+  border-radius: 4px;
   cursor: pointer;
   margin-right: 0.5rem;
   transition: opacity 0.2s ease-in;
@@ -245,6 +247,7 @@ img {
   color: #888;
 }
 
+/* Form inputs */
 .form input[type='text'],
 .form input[type='email'],
 .form input[type='password'],
@@ -252,10 +255,12 @@ img {
 .form select,
 .form textarea {
   display: block;
+  border-radius: 25px;
   width: 100%;
-  padding: 0.4rem;
+  padding: 1.4rem;
   font-size: 1.2rem;
   border: 1px solid #ccc;
+  outline: none !important;
 }
 
 .form input[type='submit'],
@@ -299,7 +304,7 @@ button {
 }
 
 /* Navbar */
-/* .navbar {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -310,6 +315,11 @@ button {
   top: 0;
   border-bottom: solid 1px var(--primary-color);
   opacity: 0.9;
+}
+
+/* Navbar heading (top left) */
+.navbar-brand {
+  font-size: 2.5rem;
 }
 
 .navbar ul {
@@ -328,12 +338,12 @@ button {
 
 .navbar .welcome span {
   margin-right: 0.6rem;
-} */
+}
 
-/* Landing Page */
+/* Home page */
 .landing {
   position: relative;
-  background: url('../img/showcase.jpg') no-repeat center center/cover;
+  background: url('../img/home.jpg') no-repeat center center/cover;
   height: 100vh;
 }
 
