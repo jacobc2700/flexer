@@ -5,7 +5,7 @@ Social media website for computer programmers.
 ### Technologies (MERN):
 
 - Flexer is built with the JavaScript MERN Stack.
-- JavaScript (ES6)
+- JavaScript (ES6): http://es6-features.org/.
 - MongoDB (Mongoose): JSON-style database for persistent data.
 - Express: web framework for Node.js.
 - React: front-end framework for making the website look pretty.
