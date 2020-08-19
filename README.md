@@ -85,17 +85,20 @@ https://www.digitalocean.com/community/tutorials/nodejs-res-object-in-expressjs
 - `.gitignore`: ignores certain files when pushing to GitHub.
 - `.env`: contains environment variables that you want to keep secret.
 - `routes/api`: folder which contains our routes and endpoints.
+- `routes/api/auth.js`:
 
 ### Postman Endpoints (Custom API):
 
+- All our endpoints in development start with: `localhost:5000/api`.
 - Here is some info on the Postman collections and the endpoints within each one.
 - We have three different Postman collections: Posts, Profiles, Users & Authentication.
 - Posts:
-- Profiles:
-- Users & Authentication (4):
+- Profiles (12):
+- Users & Authentication (3):
 - GET: Get Authenticated User
+- POST: Register User
+- POST: Log In User
 
-within postman, create new collection called "Users & Auth"
 possibly share them since they are bidned to an account
 
 - for users and authentication
@@ -129,7 +132,6 @@ s
 
 - use lodash to capitalize every first letter of each woird in str
 - White space should not be allowed
-- You cannot have both a current education or experience set to true and have a "to" field
 - if current is true, there must be no "to" field
 - if current is false, there must be a "to" field
 
