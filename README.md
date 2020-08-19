@@ -45,6 +45,10 @@ GITHUB_TOKEN=Personal access token from GitHub.
 opotion to have publicly displayed email.
 github topics: adding new skills
 
+### Rest API:
+
+- How does a REST API work?
+
 ### Npm scripts
 
 ### Database Model Objects:
