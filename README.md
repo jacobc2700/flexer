@@ -1,3 +1,7 @@
+- Work on html theme (describe in read me with font awesome and flexbox, bootstrap)
+  update comments.
+  add and remove likes from comments
+
 # Flexer
 
 Social media website for computer programmers.
