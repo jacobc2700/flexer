@@ -1,7 +1,8 @@
 /* Global Styles */
 /* Declares global color variables to keep color consistent on all pages */
 :root {
-  --primary-color: #318fb5;
+  /* --primary-color: #318fb5; */
+  --primary-color: #5590fd;
   --dark-color: #343a40;
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
@@ -16,7 +17,7 @@
 }
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   background-color: #fff;
@@ -156,6 +157,8 @@ img {
   opacity: 0.9;
   background: var(--light-color);
   color: #333;
+  /* Rounded corners */
+  border-radius: 10px;
 }
 
 .btn-primary,
