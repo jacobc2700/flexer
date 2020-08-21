@@ -1,5 +1,4 @@
-/* Global Styles */
-/* Declares global color variables to keep color consistent on all pages */
+/* Declares global color variables to keep color consistency on all pages */
 :root {
   /* --primary-color: #318fb5; */
   --primary-color: #5590fd;
@@ -17,6 +16,7 @@
 }
 
 body {
+  /* Default font-family: Roboto */
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
@@ -370,7 +370,7 @@ button {
   grid-gap: 2rem;
   padding: 1rem;
   line-height: 1.8;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Profile Page */
