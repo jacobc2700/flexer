@@ -16,7 +16,7 @@
     />
 
     <link rel="stylesheet" href="css/style.css" />
-    <title>Welcome To The Developer Connector</title>
+    <title>Flexer</title>
   </head>
   <body>
     <nav class="navbar bg-dark">
@@ -55,7 +55,7 @@
         <div class="form-group">
           <small class="form-text">Where are you at in your career?</small>
           <select name="status">
-            <option value="0">* Select Professional Status</option>
+            <option value="0">* Professional Status</option>
             <option value="Developer">Developer</option>
             <option value="Junior Developer">Junior Developer</option>
             <option value="Senior Developer">Senior Developer</option>
@@ -71,16 +71,16 @@
           <input type="text" placeholder="Company" name="company" />
         </div>
         <div class="form-group">
-          <input type="text" placeholder="Website" name="website" />
           <small class="form-text"
-            >Could be your own or a company website</small
+            >What is your personal website or company website?</small
           >
+          <input type="text" placeholder="Website" name="website" />
         </div>
         <div class="form-group">
-          <input type="text" placeholder="Location" name="location" />
           <small class="form-text"
-            >City & state suggested (eg. Boston, MA)</small
+            >Which city and country are you based in?</small
           >
+          <input type="text" placeholder="Location" name="location" />
         </div>
         <div class="form-group">
           <input type="text" placeholder="* Skills" name="skills" />
@@ -90,15 +90,11 @@
           >
         </div>
         <div class="form-group">
-          <input
-            type="text"
-            placeholder="Github Username"
-            name="githubusername"
-          />
           <small class="form-text"
-            >If you want your latest repos and a Github link, include your
-            username</small
+            >Provide your username if you want your public repositories to be
+            displayed.</small
           >
+          <input type="text" placeholder="GitHub" name="githubusername" />
         </div>
         <div class="form-group">
           <textarea placeholder="A short bio of yourself" name="bio"></textarea>
