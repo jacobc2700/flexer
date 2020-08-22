@@ -77,7 +77,7 @@ img {
   color: var(--dark-color);
 }
 
-/* Padding */
+/* Padding  classes for providing spacing in elements */
 .p {
   padding: 0.5rem;
 }
