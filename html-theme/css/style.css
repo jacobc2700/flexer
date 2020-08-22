@@ -103,7 +103,7 @@ img {
   padding: 3rem 0;
 }
 
-/* Margin */
+/* Margin classes for providing spacing between elements */
 .m {
   margin: 0.5rem;
 }
@@ -259,7 +259,7 @@ img {
 .form select,
 .form textarea {
   display: block;
-  border-radius: 25px;
+  border-radius: 5px;
   width: 100%;
   padding: 1.4rem;
   font-size: 1.2rem;
@@ -267,9 +267,15 @@ img {
   outline: none !important;
 }
 
+.form textarea {
+  font-size: 1.7rem;
+}
+
 .form input[type='submit'],
 button {
   font: inherit;
+  /* Remove border */
+  border: none;
 }
 
 .form .social-input {
