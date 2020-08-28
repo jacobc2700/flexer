@@ -137,6 +137,30 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 https://javascript.info/async-await
 s
 
+Path parameters: key-value pairs that belong to URL path -> /users/123 (USE WHEN IDENTIFYING RESOURCE)
+-> before quetsion mark, looks like a vairable that belongs
+
+Query string: key-value pairs after the question mark (?) -> /users?id=123 (USE WHEN SORTING/FILTERING ITEMS)
+
+/users # Fetch a list of users
+/users?occupation=programer # Fetch a list of programer user
+/users/123 # Fetch a user who has id 123
+
+req.query = query params
+
+req.query comes from query parameters in the URL such as http://foo.com/somePath?name=ted where req.query.name === "ted"
+
+All three properties are populated from different sources:
+
+req.query comes from query parameters in the URL such as http://foo.com/somePath?name=ted where req.query.name === "ted".
+
+req.params comes from path segments of the URL that match a parameter in the route definition such a /song/:songid. So, with a route using that designation and a URL such as /song/48586, then req.params.songid === "48586".
+
+req.body properties come from a form post where the form data (which is submitted in the body contents) has been parsed into properties of the body tag.
+
+PUT/POST = usually read the body
+GET = usually reads the path params
+
 ### Problems:
 
 - use lodash to capitalize every first letter of each woird in str
