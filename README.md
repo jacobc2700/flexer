@@ -161,6 +161,8 @@ req.body properties come from a form post where the form data (which is submitte
 PUT/POST = usually read the body
 GET = usually reads the path params
 
+Usually the content body is used for the data that is to be uploaded/downloaded to/from the server and the query parameters are used to specify the exact data requested
+
 ### Problems:
 
 - use lodash to capitalize every first letter of each woird in str
