@@ -1,0 +1,71 @@
+//Import variables.
+@import 'config';
+
+* {
+  //Include padding and border in an element's total width and height.
+  box-sizing: border-box;
+
+  //Reset default HTML styles.
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: #fff;
+  color: #333;
+}
+
+a {
+  //Remove underline.
+  text-decoration: none;
+  color: $primary-color;
+}
+
+ul {
+  //Remove bullet points.
+  list-style: none;
+}
+
+img {
+  width: 100%;
+}
+
+//Navigation bar styles.
+//It has two flex items (header and list).
+.navbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-bottom: solid 1px $primary-color;
+  opacity: 0.9;
+
+  //Separate two flex items.
+  justify-content: space-between;
+
+  //Top-bottom, right-left.
+  padding: 0.7rem 2rem;
+
+  //Keep at top of screen & on top of all content.
+  position: fixed;
+  z-index: 1;
+  top: 0;
+
+  ul {
+    //You got me moving side to side...
+    display: flex;
+  }
+
+  a {
+    // color: #fff;
+    padding: 0.45rem;
+    margin: 0 0.25rem;
+
+    //Anchor tags within navbar that are hovered...
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
