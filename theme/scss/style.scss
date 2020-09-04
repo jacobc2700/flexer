@@ -1,6 +1,7 @@
 //Import variables.
 @import 'config';
 @import 'utilities';
+@import 'form';
 
 * {
   //Include padding and border in an element's total width and height.
@@ -9,6 +10,9 @@
   //Reset default HTML styles.
   margin: 0;
   padding: 0;
+
+  //Override outlines.
+  outline: none;
 }
 
 body {

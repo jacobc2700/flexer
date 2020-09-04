@@ -25,3 +25,29 @@ $max-width: 1100px;
   background-color: $color;
   color: set-text-color($color);
 }
+
+//Margin and padding.
+$space_amounts: (1, 2, 3, 4, 5);
+
+//Automatically generates CSS classes.
+@each $space in $space_amounts {
+  //Margin on all four sides.
+  .m-#{$space} {
+    margin: #{$space}rem;
+  }
+
+  //Vertical margin on top and bottom (y-axis).
+  .my-#{$space} {
+    margin: #{$space}rem 0;
+  }
+
+  //Padding on all four sides.
+  .p-#{$space} {
+    padding: #{$space}rem;
+  }
+
+  //Vertical padding on top and bottom (y-axis).
+  .py-#{$space} {
+    padding: #{$space}rem 0;
+  }
+}
