@@ -4,11 +4,11 @@ Here is the HTML theme for Flexer.
 
 ### Technologies:
 
-- HTML.
+- HTML5.
 - CSS (Flexbox, Grid, SASS):
 
 * Flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ (only use for small component layouts).
-* Grid: (only use for larger scale layouts).
+* Grid: https://css-tricks.com/snippets/css/complete-guide-grid/ (only use for larger scale layouts).
 * SASS: https://sass-lang.com/guide.
 
 - Font Awesome (Icons) & Google Fonts (Roboto).

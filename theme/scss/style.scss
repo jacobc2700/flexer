@@ -97,3 +97,20 @@ img {
     text-align: center;
   }
 }
+
+//Profile page w/CSS Grid.
+.profile {
+  display: grid;
+
+  //Divides columns by fractions.
+  grid-template-columns: 2fr 4fr 2fr;
+
+  align-items: center;
+
+  //Puts a gap between grid items.
+  grid-gap: 2rem;
+
+  padding: 1.3rem;
+  line-height: 2;
+  margin-bottom: 1.3rem;
+}
