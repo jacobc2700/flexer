@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.min.css" />
+    <title>Flexer</title>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar bg-dark">
+      <h1>
+        <a href="dashboard.html">
+          <i class="fa fa-code"></i> Flexer <i class="fa fa-code"></i>
+        </a>
+      </h1>
+      <ul>
+        <li><a href="developers.html">Developers</a></li>
+        <li><a href="posts.html">Posts</a></li>
+        <li>
+          <a href="dashboard.html"
+            ><i class="fa fa-user"></i>
+            <span class="hide-sm">Dashboard</span></a
+          >
+        </li>
+        <li>
+          <a href="login.html"
+            ><i class="fa fa-sign-out"></i>
+            <span class="hide-sm">Log Out</span></a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <section class="container">
+      <h1 class="large text-primary">Edit Profile</h1>
+      <p class="lead">
+        <i class="fa fa-user"></i> Customize your profile with developer
+        credentials.
+      </p>
+      <small>Required fields are marked with an asterisk (*).</small>
+
+      <form class="form">
+        <div class="form-group">
+          <select name="status">
+            <!-- TODO: order by length later. -->
+            <option value="0">* Professional Status</option>
+            <option value="Developer">Amateur Developer</option>
+            <option value="Junior Developer">Junior Developer</option>
+            <option value="Senior Developer">Senior Developer</option>
+            <option value="Manager">Manager</option>
+            <option value="Student or Learner">Student or Learner</option>
+            <option value="Instructor">Instructor or Teacher</option>
+            <option value="Intern">Intern</option>
+            <option value="Other">Other</option>
+          </select>
+          <small class="form-text"
+            >Where you are at in your developer career?</small
+          >
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Company" name="company" />
+          <small class="form-text"
+            >Do you have a company that you own or work for? (example: General
+            Motors).</small
+          >
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Website" name="website" />
+          <small class="form-text"
+            >Do you have a personal website or a company website? (example:
+            thehumboo.com).</small
+          >
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Location" name="location" />
+          <small class="form-text"
+            >What is your country, state or province, and city? (example: USA,
+            NY, New York City).</small
+          >
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="* Skills" name="skills" />
+          <small class="form-text"
+            >Please use comma separated values (example: HTML, CSS, PHP).</small
+          >
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="GitHub" name="githubusername" />
+          <small class="form-text"
+            >Please include your username if you would like your public
+            repositories to be displayed.</small
+          >
+        </div>
+        <div class="form-group">
+          <textarea placeholder="Biography" name="biography"></textarea>
+          <small class="form-text"
+            >Let other developers know something about you.</small
+          >
+        </div>
+
+        <div class="my-2">
+          <button type="button" class="btn btn-light">
+            Add Social Media Links
+          </button>
+          <span>(Optional)</span>
+        </div>
+
+        <div class="form-group social-input">
+          <i class="fa fa-twitter fa-2x"></i>
+          <input type="text" placeholder="Twitter" name="twitter" />
+        </div>
+
+        <div class="form-group social-input">
+          <i class="fa fa-facebook fa-2x"></i>
+          <input type="text" placeholder="Facebook" name="facebook" />
+        </div>
+
+        <div class="form-group social-input">
+          <i class="fa fa-youtube fa-2x"></i>
+          <input type="text" placeholder="YouTube" name="youtube" />
+        </div>
+
+        <div class="form-group social-input">
+          <i class="fa fa-linkedin fa-2x"></i>
+          <input type="text" placeholder="LinkedIn" name="linkedin" />
+        </div>
+
+        <div class="form-group social-input">
+          <i class="fa fa-instagram fa-2x"></i>
+          <input type="text" placeholder="Instagram" name="instagram" />
+        </div>
+
+        <div class="form-group social-input">
+          <i class="fa fa-medium fa-2x"></i>
+          <input type="text" placeholder="Medium" name="medium" />
+        </div>
+
+        <input type="submit" class="btn btn-primary my-1" />
+        <a class="btn btn-light my-1" href="dashboard.html">Go Back</a>
+      </form>
+    </section>
+  </body>
+</html>
