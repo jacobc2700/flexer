@@ -24,7 +24,8 @@
     border: 1px solid #ccc;
   }
 
-  textarea[name='biography'] {
+  textarea[name='biography'],
+  textarea[name='description'] {
     font-size: 1.5rem;
     height: 7rem;
   }

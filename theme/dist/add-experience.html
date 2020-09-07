@@ -49,40 +49,60 @@
     </nav>
 
     <section class="container">
-      <h1 class="large text-primary">Add An Experience</h1>
+      <h1 class="large text-primary">Add New Experience</h1>
       <p class="lead">
-        <i class="fas fa-code-branch"></i> Add any developer/programming
-        positions that you have had in the past
+        <!-- Change to fa-code-branch Later -->
+        <i class="fa fa-terminal"></i> Add any developer positions that you have
+        had in the past.
       </p>
-      <small>* = required field</small>
+      <small>Required fields are marked with an asterisk (*).</small>
       <form class="form">
         <div class="form-group">
           <input type="text" placeholder="* Job Title" name="title" required />
+          <small class="form-text"
+            >What was your official job title? (example: Project Manager).
+          </small>
         </div>
         <div class="form-group">
           <input type="text" placeholder="* Company" name="company" required />
+          <small class="form-text"
+            >What company did you work for? (example: Apple).</small
+          >
         </div>
         <div class="form-group">
           <input type="text" placeholder="Location" name="location" />
+          <small class="form-text"
+            >Where did you work? (example: USA, NY, New York City).</small
+          >
         </div>
         <div class="form-group">
           <h4>From Date</h4>
           <input type="date" name="from" />
+          <small class="form-text"
+            >When did you begin working this job? (example: 03/04/2019).</small
+          >
         </div>
         <div class="form-group">
-          <p><input type="checkbox" name="current" value="" /> Current Job</p>
+          <p>
+            <input type="checkbox" name="current" value="" /> Are you still
+            working at this job?
+          </p>
         </div>
         <div class="form-group">
           <h4>To Date</h4>
           <input type="date" name="to" />
+          <small class="form-text"
+            >When did you stop working this job? (example: 06/05/2020).</small
+          >
         </div>
         <div class="form-group">
           <textarea
             name="description"
             cols="30"
             rows="5"
-            placeholder="Job Description"
+            placeholder="Description"
           ></textarea>
+          <small class="form-text">Describe your job experience.</small>
         </div>
         <input type="submit" class="btn btn-primary my-1" />
         <a class="btn btn-light my-1" href="dashboard.html">Go Back</a>

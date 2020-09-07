@@ -45,3 +45,4 @@ Here is the HTML theme for Flexer.
       src="https://kit.fontawesome.com/4e27ae35df.js"
       crossorigin="anonymous"
     ></script> -->
+- Command + F: all the icons ("i class")
