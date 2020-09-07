@@ -44,6 +44,13 @@
   border-radius: 50%;
 }
 
+//Horizontal rule type-thing.
+.line {
+  height: 1px;
+  background: #ccc;
+  margin: 1.5rem 0;
+}
+
 //Backgrounds (bg).
 .bg {
   &-primary {
@@ -145,6 +152,32 @@
   }
 
   &.alert-danger {
+    @include set-background($danger-color);
+  }
+}
+
+//Badges.
+.badge {
+  font-size: 0.9rem;
+  padding: 0.3rem;
+  text-align: center;
+  margin: 0.3rem;
+  background: $light-color;
+  color: #333;
+
+  &.badge-primary {
+    @include set-background($primary-color);
+  }
+
+  &.badge-dark {
+    @include set-background($dark-color);
+  }
+
+  &.badge-success {
+    @include set-background($success-color);
+  }
+
+  &.badge-danger {
     @include set-background($danger-color);
   }
 }

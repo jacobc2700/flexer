@@ -39,3 +39,5 @@ Here is the HTML theme for Flexer.
 
 - The snippet above gives elements with class name (.header-main) the blue color.
 - Always use `rem` units (they are superior): 1 rem = font size for root `html` element (default: 16px).
+
+- Might need to update font awesome cdn version
