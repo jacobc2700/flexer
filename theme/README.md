@@ -46,3 +46,7 @@ Here is the HTML theme for Flexer.
       crossorigin="anonymous"
     ></script> -->
 - Command + F: all the icons ("i class")
+- at the moment, you can't delete an education while on mobile screens because of media query
+- Fine-tune css styles, especially mobile
+  !important = bad practice?
+- problem with small screens on developer.html pg

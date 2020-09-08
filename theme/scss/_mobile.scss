@@ -1,0 +1,85 @@
+//Mobile styles.
+
+@media (max-width: 700px) {
+  .hide-sm {
+    display: none;
+  }
+
+  .container {
+    margin-top: 8rem;
+  }
+
+  //Text styles.
+  .x-large {
+    font-size: 3rem;
+  }
+
+  .large {
+    font-size: 2rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+
+  //Navigation bar.
+  .navbar {
+    display: block;
+    text-align: center;
+
+    ul {
+      text-align: center;
+      justify-content: center;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+  }
+
+  //Individual lines.
+  .dashboard-buttons a {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.3rem;
+  }
+
+  //Developers.
+  .profile {
+    //Only one column.
+    grid-template-columns: 1fr;
+    text-align: center;
+
+    //Hide skills.
+    ul {
+      display: none;
+    }
+  }
+
+  //TODO: FIX on small screens not full width
+  .profile-grid {
+    display: grid;
+    grid-template-areas:
+      'top'
+      'about'
+      'experience'
+      'education'
+      'github';
+  }
+
+  .profile-about {
+    .skills {
+      // display: none !important;
+      flex-direction: column !important;
+    }
+  }
+
+  .post {
+    grid-template-columns: 1fr;
+
+    a,
+    button {
+      padding: 0.3rem 0.4rem;
+    }
+  }
+}
