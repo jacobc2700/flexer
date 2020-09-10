@@ -161,12 +161,15 @@ GET = usually reads the path params
 
 Usually the content body is used for the data that is to be uploaded/downloaded to/from the server and the query parameters are used to specify the exact data requested
 
-### Problems:
+### Problems & Additional Features:
 
 - use lodash to capitalize every first letter of each woird in str
 - White space should not be allowed
 - if current is true, there must be no "to" field
 - if current is false, there must be a "to" field
+- make sure to kepe same id when updating experience, education, or the comment
+- like/dislike comments?
+- dark mode
 
 ### License:
 
@@ -175,7 +178,3 @@ Usually the content body is used for the data that is to be uploaded/downloaded 
 ### Credits:
 
 - Based on a [Udemy](https://www.udemy.com/course/mern-stack-front-to-back/) course by Brad Traversy.
-
-make sure to kepe same id when updating experience, education, or the comment
-like/dislike comments?
-dark mode
