@@ -130,7 +130,7 @@ img {
     display: flex;
     flex-direction: column;
 
-    //Everything will be centered!
+    //Everything will be centered.
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -204,7 +204,7 @@ img {
 
       //List of badges for repo.
       & > div:last-child {
-        flex: 2;
+        flex: 3;
         flex-basis: 20%;
       }
     }

@@ -7,6 +7,8 @@
 
   .container {
     margin-top: 8rem;
+
+    padding: 0 0.5rem;
   }
 
   //Text styles.
@@ -56,8 +58,8 @@
     }
   }
 
-  //TODO: FIX on small screens not full width
   .profile-grid {
+    position: relative;
     display: grid;
     grid-template-areas:
       'top'
@@ -65,11 +67,19 @@
       'experience'
       'education'
       'github';
+
+    .profile-top,
+    .profile-about,
+    .profile-experience,
+    .profile-education,
+    .profile-github {
+      padding: 0.2rem !important;
+    }
   }
 
   .profile-about {
     .skills {
-      // display: none !important;
+      // background-color: blue;
       flex-direction: column !important;
     }
   }
