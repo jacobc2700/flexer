@@ -56,7 +56,6 @@
     }
   }
 
-  //TODO: FIX on small screens not full width
   .profile-grid {
     display: grid;
     grid-template-areas:
@@ -65,12 +64,13 @@
       'experience'
       'education'
       'github';
-  }
 
-  .profile-about {
-    .skills {
-      // display: none !important;
-      flex-direction: column !important;
+    .profile-top,
+    .profile-about,
+    .profile-experience,
+    .profile-education,
+    .profile-github {
+      padding: 0.2rem;
     }
   }
 
