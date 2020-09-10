@@ -276,6 +276,68 @@ router.post(
   }
 );
 
+//@route    PATCH api/posts/comment/:post_id/:comment_id
+//@desc     Update an existing comment by post id and comment id
+//@access   Private
+router.patch(
+  '/comment/:post_id/:comment_id',
+  [auth, [body('text', 'Text is required').not().isEmpty()]],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    //If there are errors...
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const post = await Post.findById(req.params.post_id);
+
+      // console.log(req.user + 'D');
+
+      //Get comment from post.
+      const comment = post.comments.find(
+        (comment) => comment.id === req.params.comment_id
+      );
+
+      //Check if comment exists.
+      if (!comment) {
+        return res.status(404).json({ msg: 'Comment does not exist.' });
+      }
+
+      //Make sure that the user updating the comment is the owner of the comment.
+      if (comment.user.toString() !== req.user.id) {
+        //401 - unauthorized
+        return res.status(401).json({ msg: 'User not authorized.' });
+      }
+      // console.log(comment.user);
+
+      const updateCommentIndex = post.comments
+        .map((comment) => comment.user.toString())
+        .indexOf(req.user.id);
+
+      const user = await User.findById(req.user.id).select('-password');
+
+      const newComment = {
+        _id: req.params.comment_id,
+        text: req.body.text,
+        name: user.name,
+        avatar: user.avatar,
+        user: req.user.id,
+      };
+
+      post.comments[updateCommentIndex] = newComment;
+
+      await post.save();
+
+      res.json(post.comments);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error updating a comment on a post.');
+    }
+  }
+);
+
 //@route    DELETE api/posts/comment/:post_id/:comment_id
 //@desc     Delete a comment
 //@access   Private

@@ -1,6 +1,4 @@
-- Work on html theme (describe in read me with font awesome and flexbox, bootstrap)
-  update comments.
-  add and remove likes from comments
+update comments.
 
 # Flexer
 
@@ -177,3 +175,7 @@ Usually the content body is used for the data that is to be uploaded/downloaded 
 ### Credits:
 
 - Based on a [Udemy](https://www.udemy.com/course/mern-stack-front-to-back/) course by Brad Traversy.
+
+make sure to kepe same id when updating experience, education, or the comment
+like/dislike comments?
+dark mode
