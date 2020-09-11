@@ -180,15 +180,28 @@ Usually the content body is used for the data that is to be uploaded/downloaded 
 - Added a proxy to the package.json file in the client-side folder, for axios:
   "proxy": "http://localhost:5000"
 
-### Problems & Additional Features:
+### Problems:
 
 - use lodash to capitalize every first letter of each woird in str
 - White space should not be allowed
 - if current is true, there must be no "to" field
 - if current is false, there must be a "to" field
 - make sure to kepe same id when updating experience, education, or the comment
-- like/dislike comments?
-- dark mode
+
+### New Features:
+
+- Dark Mode
+- Like & Dislike Comments
+
+### Leraning React?
+
+- React strict mode strict mode is development oriented
+  https://stackoverflow.com/questions/53183362/what-is-strictmode-in-react
+- Fragment
+  https://reactjs.org/docs/fragments.html
+- nice simple tutorial: https://www.w3schools.com/REACT/default.asp
+- "racf" on the vscode will auto-gen boilerplate (snipets extension)
+- link to react docs above
 
 ### License:
 

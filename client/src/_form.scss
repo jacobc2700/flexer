@@ -1,0 +1,72 @@
+.form {
+  &-group {
+    //Only on the top and bottom.
+    margin: 1.4rem 0;
+  }
+
+  &-text {
+    //Separate line.
+    display: block;
+    margin-top: 0.3rem;
+    color: #888;
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='date'],
+  select,
+  textarea {
+    display: block;
+    width: 100%;
+    padding: 0.7rem;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+  }
+
+  textarea[name='biography'],
+  textarea[name='description'] {
+    font-size: 1.5rem;
+    height: 7rem;
+  }
+
+  input[type='submit'] {
+    font: inherit;
+  }
+
+  //Social network links.
+  .social-input {
+    display: flex;
+    text-align: center;
+
+    i {
+      padding: 0.5rem;
+      width: 4rem;
+
+      //Setting actual colors of social icons.
+      &.fa-twitter {
+        color: #38a1f3;
+      }
+
+      &.fa-facebook {
+        color: #3b5998;
+      }
+
+      &.fa-instagram {
+        color: #3f729b;
+      }
+
+      &.fa-youtube {
+        color: #c4302b;
+      }
+
+      &.fa-linkedin {
+        color: #0077b5;
+      }
+
+      &.fa-medium {
+        color: black;
+      }
+    }
+  }
+}
