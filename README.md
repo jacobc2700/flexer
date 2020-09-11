@@ -41,8 +41,8 @@ GITHUB_TOKEN=Personal access token from GitHub.
 - Add the token to the `.env` file.
 
 - `npm install`.
-- `npm run server`.
-- Go to localhost:5000.
+- `npm run dev`.
+- Open up localhost:5000 (back-end) and localhost:3000 (front-end).
 
 opotion to have publicly displayed email.
 github topics: adding new skills
@@ -51,7 +51,16 @@ github topics: adding new skills
 
 - How does a REST API work?
 
-### Npm scripts
+### NPM Scripts:
+
+```
+"scripts": {
+    "start": "node server",
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+}
+```
 
 ### Database Model Objects:
 
@@ -93,6 +102,10 @@ https://www.digitalocean.com/community/tutorials/nodejs-res-object-in-expressjs
 - `.env`: contains environment variables that you want to keep secret.
 - `routes/api`: folder which contains our routes and endpoints.
 - `routes/api/auth.js`:
+
+### Server Packages (NPM):
+
+### Client Packages (NPM):
 
 ### Postman Endpoints (Custom API):
 
@@ -160,6 +173,12 @@ PUT/POST = usually read the body
 GET = usually reads the path params
 
 Usually the content body is used for the data that is to be uploaded/downloaded to/from the server and the query parameters are used to specify the exact data requested
+
+### React & Concurrently Setup:
+
+- Run `npx create-react-app client` to setup react.
+- Added a proxy to the package.json file in the client-side folder, for axios:
+  "proxy": "http://localhost:5000"
 
 ### Problems & Additional Features:
 
