@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Landing = () => {
   return (
@@ -10,12 +11,12 @@ const Landing = () => {
             Create an online portfolio and flex your developer credentials.
           </p>
           <div className='buttons'>
-            <a href='register.html' className='btn btn-primary'>
+            <Link to='/register' className='btn btn-primary'>
               Sign Up
-            </a>
-            <a href='login.html' className='btn'>
+            </Link>
+            <Link to='/login' className='btn'>
               Sign In
-            </a>
+            </Link>
           </div>
         </div>
       </div>

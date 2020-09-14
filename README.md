@@ -193,7 +193,7 @@ Usually the content body is used for the data that is to be uploaded/downloaded 
 - Dark Mode
 - Like & Dislike Comments
 
-### Leraning React?
+### React Tutorial:
 
 - React strict mode strict mode is development oriented
   https://stackoverflow.com/questions/53183362/what-is-strictmode-in-react
@@ -202,10 +202,34 @@ Usually the content body is used for the data that is to be uploaded/downloaded 
 - nice simple tutorial: https://www.w3schools.com/REACT/default.asp
 - "racf" on the vscode will auto-gen boilerplate (snipets extension)
 - link to react docs above
+- React Router (https://reactrouter.com/web/example/basic): helps with our routes in the React app
+- its called react-router-dom
+- Dont use the a href tags from html as the links to routes, use react router: Link ele,ment
+- state hooK: useState => your state is a like the variable, and there is a setter function which updates the state
+
+```
+import React, { useState } from 'react';
+
+function Example() {
+  // Declare a new state variable, which we'll call "count"
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+### Useful vscode extensions or browser chrome extensions
 
 ### License:
 
-- Flexer is under the [MIT License](LICENSE).
+- Flexer is licensed under the [MIT License](LICENSE).
 
 ### Credits:
 
