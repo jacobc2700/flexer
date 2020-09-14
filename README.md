@@ -225,6 +225,33 @@ function Example() {
 }
 ```
 
+how to make a request:
+
+```
+const newUser = {
+        name: name,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+      };
+
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'Application/json',
+          },
+        };
+
+        const body = JSON.stringify(newUser);
+
+        const response = await axios.post('/api/users', body, config);
+
+        console.log(response.data);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+```
+
 ### Useful vscode extensions or browser chrome extensions
 
 ### License:

@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   //Default state values: initial state
@@ -21,7 +22,7 @@ const Register = () => {
   };
 
   //Called when the form is submitted.
-  const onSubmit = (x) => {
+  const onSubmit = async (x) => {
     //Prevent browser reload.
     x.preventDefault();
 
@@ -74,7 +75,7 @@ const Register = () => {
             value={password}
             onChange={(x) => onChange(x)}
             placeholder='Password'
-            minlength='8'
+            minLength='8'
             required
           />
         </div>
@@ -86,14 +87,14 @@ const Register = () => {
             value={confirmPassword}
             onChange={(x) => onChange(x)}
             placeholder='Confirm Password'
-            minlength='8'
+            minLength='8'
             required
           />
         </div>
         <input type='submit' value='Register' className='btn btn-primary' />
       </form>
       <p className='my-1'>
-        Already have an account? <a href='login.html'>Sign In</a>
+        Already have an account? <Link to='/login'>Sign In</Link>
       </p>
     </Fragment>
   );
