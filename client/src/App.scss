@@ -80,7 +80,9 @@ img {
 .landing {
   //Positioned relative to the normal position.
   position: relative;
-  background: url('./images/landing.jpeg') no-repeat center center/cover;
+
+  background: url('https://picsum.photos/2000/1333') no-repeat center
+    center/cover;
 
   //Full screen.
   height: 100vh;
@@ -95,6 +97,12 @@ img {
     align-items: center;
     justify-content: center;
     text-align: center;
+  }
+
+  .landing-photo-details {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
   }
 }
 

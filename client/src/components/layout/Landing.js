@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Landing = () => {
@@ -17,6 +17,17 @@ const Landing = () => {
             <Link to='/login' className='btn'>
               Sign In
             </Link>
+          </div>
+          <div className='landing-photo-details'>
+            <p>
+              Photo provided by{' '}
+              <span>
+                <a href='https://github.com/DMarby/picsum-photos'>
+                  Lorem Picsum
+                </a>
+              </span>
+              .
+            </p>
           </div>
         </div>
       </div>

@@ -20,9 +20,13 @@ Social media website for computer programmers.
 
 learn header body response http guide
 
+Make sure you watch SASS through VSCODE
+
 ### db
 
 make sure jwt token is set to expiresIn 3600 seconds
+
+front-end packages vs back-end pakges
 
 ### Usage:
 
