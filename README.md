@@ -178,9 +178,9 @@ GET = usually reads the path params
 
 Usually the content body is used for the data that is to be uploaded/downloaded to/from the server and the query parameters are used to specify the exact data requested
 
-### React & Concurrently Setup:
+### React & Concurrently:
 
-- Run `npx create-react-app client` to setup react.
+- Run `npx create-react-app client` to create a new React app.
 - Added a proxy to the package.json file in the client-side folder, for axios:
   "proxy": "http://localhost:5000"
 
@@ -197,17 +197,19 @@ Usually the content body is used for the data that is to be uploaded/downloaded 
 - Dark Mode
 - Like & Dislike Comments
 
-### React Tutorial:
+### Redux:
 
-- React strict mode strict mode is development oriented
-  https://stackoverflow.com/questions/53183362/what-is-strictmode-in-react
-- Fragment
-  https://reactjs.org/docs/fragments.html
-- nice simple tutorial: https://www.w3schools.com/REACT/default.asp
+- State manager which acts like a cloud over our web app which
+
+### React within Flexer:
+
+- `React` is being served from the `client` folder.
+- `StrictMode` is enabled, which helps find potential problems in the app (https://reactjs.org/docs/strict-mode.html).
+- `Fragments` should be used instead of container `<div></div>` tags (https://reactjs.org/docs/fragments.html).
+- `React Router` manages the different routes of the web app (https://reactrouter.com/web/example/basic).
+
 - "racf" on the vscode will auto-gen boilerplate (snipets extension)
-- link to react docs above
-- React Router (https://reactrouter.com/web/example/basic): helps with our routes in the React app
-- its called react-router-dom
+
 - Dont use the a href tags from html as the links to routes, use react router: Link ele,ment
 - state hooK: useState => your state is a like the variable, and there is a setter function which updates the state
 
@@ -256,7 +258,7 @@ const newUser = {
       }
 ```
 
-### Useful vscode extensions or browser chrome extensions
+### Visual Studio Code Extensions
 
 ### License:
 
