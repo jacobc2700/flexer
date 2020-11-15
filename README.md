@@ -144,13 +144,33 @@ multiple collections and saved requests...
 header presets too
 when to use headers.bodies
 
-### http requests
+### Async, Await, Promise:
 
-await/async in simple terms!
-https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_await
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
-https://javascript.info/async-await
-s
+- Why are we using `async` and `await` for all our mongoose methods? (https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_await)
+- `async` keyword before a function means that you can use `await` within the function.
+- `async` functions return promises.
+- A `Promise` contains a value which is not necessarily known at the time it's created:
+- Instead of returning a value like a synchronous function, an `async` function "promises" to return the value at some point in the future.
+- A `Promise` is either pending (initial state - value not known yet), fulfilled (value has been returned successfully), or rejected (error).
+- `await` is always called within in an `async` function and usually wrapped within a `try catch error` block.
+- `await` keyword only works within `async` functions.
+- `await` makes JavaScript wait until a promise settles and fulfills returning a value: `let value = await promise`.
+- When the code gets to an `await` keyword, function execution stops until the promise settles and a value is fulfilled.
+
+```
+async function demo() {
+
+  let promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Promise Fulfilled"), 1000);
+  });
+
+  let result = await promise; //Wait until the promise resolves and a value is returned.
+
+  alert(result); // "Promise Fulfilled"
+}
+
+demo();
+```
 
 Path parameters: key-value pairs that belong to URL path -> /users/123 (USE WHEN IDENTIFYING RESOURCE)
 -> before quetsion mark, looks like a vairable that belongs
@@ -180,7 +200,7 @@ Usually the content body is used for the data that is to be uploaded/downloaded 
 
 ### React & Concurrently:
 
-- Run `npx create-react-app client` to create a new React app.
+- Run `npx create-react-app client` to create a new React app which will be stored in a folder named `client`.
 - Added a proxy to the package.json file in the client-side folder, for axios:
   "proxy": "http://localhost:5000"
 
@@ -199,63 +219,74 @@ Usually the content body is used for the data that is to be uploaded/downloaded 
 
 ### Redux:
 
-- State manager which acts like a cloud over our web app which
+- Component-level state in react: register/login forms
+- data put in input fields get stored in copmonent level state
+- State manager which acts like a cloud over our web app which we can submit actions through events to get data
+- to fall into our component.
+- authentication, profile, posts = app level state which should be able to be accessed from anywhere in the app
+- Redux gives us app-level state.
+- Profile data from MongoDB gets put into a redux store,
 
-### React within Flexer:
+https://www.w3schools.com/react/react_state.asp
+
+### React Within Flexer:
 
 - `React` is being served from the `client` folder.
 - `StrictMode` is enabled, which helps find potential problems in the app (https://reactjs.org/docs/strict-mode.html).
 - `Fragments` should be used instead of container `<div></div>` tags (https://reactjs.org/docs/fragments.html).
 - `React Router` manages the different routes of the web app (https://reactrouter.com/web/example/basic).
-
-- "racf" on the vscode will auto-gen boilerplate (snipets extension)
-
-- Dont use the a href tags from html as the links to routes, use react router: Link ele,ment
-- state hooK: useState => your state is a like the variable, and there is a setter function which updates the state
+- `useState` is a React hook for storing state variables inside functional components (component-level state).
+- When the state variable is changed by using `setState`, the component re-renders so the user can see it immediately.
+- The web app will immediately update the click total with each new click on the button:
 
 ```
 import React, { useState } from 'react';
 
 function Example() {
-  // Declare a new state variable, which we'll call "count"
+  //Declare a new state variable which represents how many clicks you made.
   const [count, setCount] = useState(0);
 
   return (
     <div>
-      <p>You clicked {count} times</p>
+      <p>You clicked {count} times.</p>
       <button onClick={() => setCount(count + 1)}>
-        Click me
+        Click Me
       </button>
     </div>
   );
 }
 ```
 
+- "racf" on the vscode will auto-gen boilerplate (snipets extension)
+
 how to make a request:
 
 ```
+//Make a new user object with certain properties.
 const newUser = {
-        name: name,
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword,
-      };
+  name: name,
+  email: email,
+  password: password,
+  confirmPassword: confirmPassword,
+};
 
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'Application/json',
-          },
-        };
+try {
+  const config = {
+    headers: {
+      'Content-Type': 'Application/json',
+    },
+  };
 
-        const body = JSON.stringify(newUser);
+  //Converts object into a string.
+  const body = JSON.stringify(newUser);
 
-        const response = await axios.post('/api/users', body, config);
+  const response = await axios.post('/api/users', body, config);
 
-        console.log(response.data);
-      } catch (err) {
-        console.log(err.response.data);
-      }
+  console.log(response.data);
+
+} catch (err) {
+  console.log(err.response.data);
+}
 ```
 
 ### Visual Studio Code Extensions
