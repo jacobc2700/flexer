@@ -18,7 +18,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("company/", include('company.urls')),
+     # our custom endpoints
+    path('levels/', include('levels.urls'))
+    # path("company/", include('company.urls')),
 
     # our custom endpoints
     # path('', include('api.urls'))

@@ -6,5 +6,5 @@ from .serializers import CompanySerializer
 # Create your views here.
 class CompanyList(generics.ListAPIView):
     # API endpoint that allows customer to be viewed.
-    queryset = Company.objects.all()
-    serializer_class = CompanySerializer
+    queryset = {'hello': 'dog'}
+    # serializer_class = CompanySerializer
