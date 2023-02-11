@@ -4,7 +4,7 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
 
-load_dotenv('.env.local')
+load_dotenv()
 
 # /companies
 @api_view(['GET'])

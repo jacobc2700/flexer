@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 import json
 
-load_dotenv('.env.local')
+load_dotenv()
 
 # /users
 # view all registered users, creates a new user

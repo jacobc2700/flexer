@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-load_dotenv('.env.local')
+load_dotenv()
 
 # Application definition
 
