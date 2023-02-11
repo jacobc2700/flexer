@@ -1,0 +1,1 @@
+CREATE TYPE gender as ENUM ('MALE', 'FEMALE', 'UNSPECIFIED');
