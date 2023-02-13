@@ -5,6 +5,7 @@
 # Install Django and Django REST framework into the virtual environment
 
 ```
+virtual environment
 pip install psycopg2-binary
 pip install django
 pip install djangorestframework

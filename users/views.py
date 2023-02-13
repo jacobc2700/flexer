@@ -5,33 +5,43 @@ from dotenv import load_dotenv
 import os
 import json
 
+# TO DO: stop repeating the "url, key, supabase" code
+# needs more validation for what is passed in the body, better responses + error handles
 load_dotenv('.env.local')
 
 # /users
-# view all registered users, creates a new user
+# GET: view all registered users
+# POST: creates a new user
+# Request body:
+# {
+#    "email": "jacob@gmail.com",
+#    "password": "asdasda",
+#    "username": "asdasda",
+#    "first_name": "asdasda",
+#    "last_name": "asdasda"
+# }
+# http://127.0.0.1:8000/users/
 @api_view(['GET', 'POST'])
-def get_all_users(request):
+def users(request):
     if request.method == 'GET':
         url = os.environ.get("SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY")
         supabase: Client = create_client(url, key)
         data = supabase.table("users").select("*").limit(5).execute()
-        # assert len(data.data) > 0
-        # return {'success': 'success'}
         return Response(data)
     elif request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
         url = os.environ.get("SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY")
         supabase: Client = create_client(url, key)
-        data = supabase.table("users").select("*").limit(5).execute()
-        email = request.body.get('email', None)
-        password = request.body.get('password', None)
-        username = request.body.get('username', None)
-        first_name = request.body.get('first_name', None)
-        last_name = request.body.get('last_name', None)
+        email = body['email']
+        password = body['password']
+        username = body['username']
+        first_name = body['first_name']
+        last_name = body['last_name']
 
         new_user_object = {
-            'data': data,
             'email': email,
             'password': password,
             'username': username,
@@ -41,53 +51,110 @@ def get_all_users(request):
 
         user = supabase.auth.sign_up(new_user_object)
         data = supabase.table("users").insert(new_user_object).execute()
-        print("new user", user)
-        assert len(data.data) > 0
-        return Response(data)
-        # return {'success': 'success'}
-    return Response(data)
 
+    return Response({'success': 'created a new user today'})
+
+# GET: gets data back about a single user
+# POST: update an existing user by their id, specifying any number of parameters to update in the body
+# Request body for POST:
+# {
+#    "email": "jacob@gmail.com",
+#    "password": "asdasda",
+#    "username": "asdasda",
+#    "first_name": "asdasda",
+#    "last_name": "asdasda"
+# }
+# DELETE: deletes a user by their id
+# http://127.0.0.1:8000/users/id/
+# http://127.0.0.1:8000/users/a714d173-5240-4630-a842-ae0ab9a076ba/
+@api_view(['GET', 'POST', 'DELETE'])
+def user(request, id):
+    if request.method == 'GET':
+        url = os.environ.get("SUPABASE_URL")
+        key = os.environ.get("SUPABASE_KEY")
+
+        supabase: Client = create_client(url, key)
+        data = supabase.table("users").select("*").limit(1).match({'id': id}).execute()
+        return Response(data)
+    elif request.method == 'POST':
+        url = os.environ.get("SUPABASE_URL")
+        key = os.environ.get("SUPABASE_KEY")
+        supabase: Client = create_client(url, key)
+        data = supabase.table("users").select("*").limit(5).execute()
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+
+        user_object_changes = {}
+        
+        if 'email' in body:
+            user_object_changes['email'] = body['email']
+        if 'password' in body:
+            user_object_changes['password'] = body['password']
+        if 'username' in body:
+            user_object_changes['username'] = body['username']
+        if 'first_name' in body:
+            user_object_changes['first_name'] = body['first_name']
+        if 'last_name' in body:
+            user_object_changes['last_name'] = body['last_name']
+
+        data = supabase.table("users").update(user_object_changes).eq("id", id).execute()
+        return Response({"success": "updated user info for user with id " + str(id)})
+    elif request.method == 'DELETE':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        url = os.environ.get("SUPABASE_URL")
+        key = os.environ.get("SUPABASE_KEY")
+        supabase: Client = create_client(url, key)
+        data = supabase.table("users").delete().eq("id", id).execute()
+        return Response({'success': 'deleted user with id ' + str(id)})
+    return Response({'generic': 'hello'})
+
+# DELETE
 # # /users/delete
-# # delete a user
+# # deletes a user by their id
+# # http://127.0.0.1:8000/users/id/delete
 # @api_view(['DELETE'])
-# def get_company(request, company_name):
+# def delete_user(request, id):
+#     body_unicode = request.body.decode('utf-8')
+#     body = json.loads(body_unicode)
 #     url = os.environ.get("SUPABASE_URL")
 #     key = os.environ.get("SUPABASE_KEY")
-
 #     supabase: Client = create_client(url, key)
-#     data = supabase.table("levels").select("*").limit(5).match({'company': company_name}).execute()
+#     data = supabase.table("users").delete().eq("id", id).execute()
+#     return Response({'success': 'deleted user with id ' + str(id)})
 
-#     assert len(data.data) > 0
-#     return Response(data)
-
-# # /users/update
-# # update an existing user
-
-# /users
-# create a new user
+# /users/update
+# update an existing user by their id, specifying any number of parameters to update in the body
+# Request body:
+# {
+#    "email": "jacob@gmail.com",
+#    "password": "asdasda",
+#    "username": "asdasda",
+#    "first_name": "asdasda",
+#    "last_name": "asdasda"
+# }
+# http://127.0.0.1:8000/users/id/update
 # @api_view(['POST'])
-# def create_new_user(request):
+# def update_user(request):
 #     url = os.environ.get("SUPABASE_URL")
 #     key = os.environ.get("SUPABASE_KEY")
 #     supabase: Client = create_client(url, key)
 #     data = supabase.table("users").select("*").limit(5).execute()
-#     email = request.query_params.get('email', None)
-#     password = request.query_params.get('password', None)
-#     username = request.query_params.get('username', None)
-#     first_name = request.query_params.get('first_name', None)
-#     last_name = request.query_params.get('last_name', None)
+#     body_unicode = request.body.decode('utf-8')
+#     body = json.loads(body_unicode)
 
-#     new_user_object = {
-#         'data': data,
-#         'email': email,
-#         'password': password,
-#         'username': username,
-#         'first_name': first_name,
-#         'last_name': last_name
-#     }
+#     user_object_changes = {}
+    
+#     if 'email' in body:
+#         user_object_changes['email'] = body['email']
+#     if 'password' in body:
+#         user_object_changes['password'] = body['password']
+#     if 'username' in body:
+#         user_object_changes['username'] = body['username']
+#     if 'first_name' in body:
+#         user_object_changes['first_name'] = body['first_name']
+#     if 'last_name' in body:
+#         user_object_changes['last_name'] = body['last_name']
 
-#     user = supabase.auth.sign_up(new_user_object)
-#     data = supabase.table("users").insert(new_user_object).execute()
-#     print("new user", user)
-#     assert len(data.data) > 0
-#     return Response(data)
+#     data = supabase.table("users").update(user_object_changes).eq("id", body['id']).execute()
+#     return Response({"success": "updated user info for user with id " + str(id)})
