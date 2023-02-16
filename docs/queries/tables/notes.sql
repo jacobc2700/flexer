@@ -6,8 +6,8 @@ CREATE TABLE
     description text,
     body text,
     type note_type,
-    timestamp timestamp WITH time zone DEFAULT current_timestamp,
-    updated timestamp WITH time zone DEFAULT current_timestamp, 
+    created_at timestamp WITH time zone DEFAULT current_timestamp,
+    updated_at timestamp WITH time zone DEFAULT current_timestamp, 
     FOREIGN KEY (user_id) REFERENCES auth.users (id),
     PRIMARY key (id)
   )
