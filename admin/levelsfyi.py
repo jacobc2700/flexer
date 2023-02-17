@@ -17,10 +17,23 @@ def init_supabase_client():
     return client
 
 
-def insert_levelsfyi_data(client: Client):
+def insert_data(client: Client):
     file = open('./salaryData.json')
 
     data = json.load(file)
+    companies = []
+
+    num_companies = client.table('companies').select(
+        "*", count="exact").execute().count
+
+    for i in range(0, num_companies, 1000):
+        c = client.table('companies').select(
+            "id, company_name").range(i, i+1000).execute()
+        companies = companies + c.data
+
+    companies_dict = {}
+    for c in companies:
+        companies_dict[c['company_name']] = c['id']
 
     rows = []
     completed = 0
@@ -31,9 +44,14 @@ def insert_levelsfyi_data(client: Client):
 
         dt = [int(i) for i in item['timestamp'].replace(
             '/', ' ').replace(':', ' ').split(' ')]
-        row['timestamp'] = datetime.datetime(
+        dt_iso = datetime.datetime(
             dt[2], dt[0], dt[1], *dt[3:]).isoformat()
-        row['company'] = str(item['company'])
+        row['created_at'] = dt_iso
+        row['updated_at'] = dt_iso
+
+        company_name = str(item['company']).strip().upper()
+        row['company_id'] = companies_dict[company_name]
+
         row['level'] = str(item['level'])
         row['title'] = str(item['title'])
         row['yearly_compensation'] = int(item['totalyearlycompensation'])
@@ -49,6 +67,7 @@ def insert_levelsfyi_data(client: Client):
         row['notes'] = str(item['otherdetails'])
 
         rows.append(row)
+
         completed += 1
 
         print(f'{completed}/{datapoints}')
@@ -60,12 +79,12 @@ def insert_levelsfyi_data(client: Client):
         client.table('levels').insert(rows[i:i+batch_size]).execute()
         print(f'pushed rows {i}-{i+batch_size}')
 
-    print(f'COMPLETE. Pushed {datapoints} to database.')
+    print(f'COMPLETE. Pushed {datapoints} to levels table.')
 
 
 def main():
     client = init_supabase_client()
-    insert_levelsfyi_data(client)
+    insert_data(client)
 
 
 if __name__ == "__main__":
