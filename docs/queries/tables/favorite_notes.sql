@@ -1,7 +1,7 @@
 CREATE TABLE
   favorite_notes (
     id uuid DEFAULT uuid_generate_v4 (),
-    timestamp timestamp WITH time zone DEFAULT current_timestamp,
+    created_at timestamp WITH time zone DEFAULT current_timestamp,
     user_id uuid not null,
     note_id uuid not null,
     type note_type
