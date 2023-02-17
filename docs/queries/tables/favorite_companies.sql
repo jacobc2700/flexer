@@ -3,7 +3,7 @@
 CREATE TABLE
   favorite_companies (
     id uuid DEFAULT uuid_generate_v4 (),
-    timestamp timestamp WITH time zone DEFAULT current_timestamp,
+    created_at timestamp WITH time zone DEFAULT current_timestamp,
     user_id uuid,
     company_id uuid,
     FOREIGN KEY (user_id) REFERENCES auth.users (id),
