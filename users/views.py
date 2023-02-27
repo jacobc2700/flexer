@@ -76,7 +76,9 @@ def users(request):
 # http://127.0.0.1:8000/users/a714d173-5240-4630-a842-ae0ab9a076ba/
 @api_view(['GET', 'POST', 'DELETE'])
 def user(request, id):
+    print(request.method)
     if request.method == 'GET':
+        print("get is hit")
         url = os.environ.get("SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY")
 
@@ -114,7 +116,7 @@ def user(request, id):
         supabase: Client = create_client(url, key)
         data = supabase.table("users").delete().eq("id", id).execute()
         return Response({'success': 'deleted user with id ' + str(id)})
-    return Response({'generic': 'hello'})
+    # return Response({'generic': 'hello'})
 
 # DELETE
 # # /users/delete

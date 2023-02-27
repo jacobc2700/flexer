@@ -29,16 +29,19 @@ https://medium.com/@nadinCodeHat/rest-api-naming-conventions-and-best-practices-
 
 Note: supabase returns a max of 1000 records -> requires pagination if more than 1000 records.
 
-GET routes: 
+GET routes:
+
 - only used for read operations (no db modification allowed)
 - pass data to server using query params
 - should be easy for a user to type in the URL
 
-DELETE/POST/PATCH routes: 
+DELETE/POST/PATCH routes:
+
 - these operations will modify the db
 - pass data to server using request body
 
 username/.. routes:
+
 - must check auth status of user
 - must check if user specified in URL matches the user making the request
 - if url user != request user -> only return data if the resource is marked as public.
@@ -46,11 +49,9 @@ username/.. routes:
 Users:
 
 - GET http://127.0.0.1:8000/users: get all users. (an admin route only?)
-
 - GET http://127.0.0.1:8000/username: get a user profile by username.
-
 - DELETE http://127.0.0.1:8000/username: delete a user by their ID.
-- POST http://127.0.0.1:8000/username: create a user.
+- POST http://127.0.0.1:8000/users: create a user.
 - PATCH http://127.0.0.1:8000/username: update a user profile.
 
 Notes:
@@ -83,6 +84,7 @@ Problems:
 - http://127.0.0.1:8000/problems/problem_name/notes: get all public notes associated with a problem
 
 Favorite Notes:
+
 - GET http://127.0.0.1:8000/user_id/notes/favorites[?type=notes&favorite]
 - GET http://127.0.0.1:8000/user_id/notes/favorites[?note_id=id]
 - GET http://127.0.0.1:8000/user_id/notes/favorites[?type=notes&note_id=id]
@@ -99,6 +101,7 @@ Favorite Companies:
 - GET http://127.0.0.1:8000/users/user_id/favorites/companies: get all user's fav companies
 
 Leetcode API:
+
 - leetcode.something/completed_problems
 - leetcode.something/user_data
 

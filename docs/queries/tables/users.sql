@@ -21,7 +21,7 @@ CREATE TABLE users (
     created_at timestamp WITH time zone DEFAULT current_timestamp,
     updated_at timestamp WITH time zone DEFAULT current_timestamp,
     FOREIGN KEY (user_id) REFERENCES auth.users (id),
-    primary key (user_id)
+    PRIMARY KEY (user_id, username)
 );
 
 -- CREATE TABLE users (
