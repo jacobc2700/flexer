@@ -87,7 +87,7 @@ def user(request, id):
         url = os.environ.get("SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY")
         supabase: Client = create_client(url, key)
-        data = supabase.table("users").select("*").limit(5).execute()
+        # data = supabase.table("users").select("*").limit(5).execute()
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
 
@@ -107,12 +107,23 @@ def user(request, id):
         data = supabase.table("users").update(user_object_changes).eq("id", id).execute()
         return Response({"success": "updated user info for user with id " + str(id)})
     elif request.method == 'DELETE':
-        body_unicode = request.body.decode('utf-8')
-        body = json.loads(body_unicode)
-        url = os.environ.get("SUPABASE_URL")
-        key = os.environ.get("SUPABASE_KEY")
-        supabase: Client = create_client(url, key)
-        data = supabase.table("users").delete().eq("id", id).execute()
+        try:
+            # body_unicode = request.body.decode('utf-8')
+            # body = json.loads(body_unicode)
+            url = os.environ.get("SUPABASE_URL")
+            key = os.environ.get("SUPABASE_KEY")
+            supabase: Client = create_client(url, key)
+            # body_unicode = request.body.decode('utf-8')
+            # print(body_unicode)
+            # body = json.loads(body_unicode)
+            # print("-------")
+            # print(body_unicode)
+            # print(body)
+            data = supabase.table("users").delete().eq("id", id).execute()
+        except Exception as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
         return Response({'success': 'deleted user with id ' + str(id)})
     return Response({'generic': 'hello'})
 
