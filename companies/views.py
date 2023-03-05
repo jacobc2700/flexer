@@ -12,8 +12,10 @@ def get_all_companies(request):
     url = os.environ.get("SUPABASE_URL")
     key = os.environ.get("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
-    data = supabase.table("levels").select("*").limit(5).execute()
-    assert len(data.data) > 0
+    # data = supabase.table("levels").select("*").limit(5).execute()
+    # data = supabase.table("levels").select('company_id, *, companies (id)').limit(5).execute()
+    data = supabase.table("joined_tables").select("*").execute()
+    # assert len(data.data) > 0
     return Response(data)
 
 # /companies/company_name
