@@ -6,7 +6,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "devall": "concurrently \"source ../venv/bin/activate && python manage.py runserver\" \"npm run dev\""
     },
     "dependencies": {
         "@emotion/react": "^11.10.6",
@@ -25,6 +26,7 @@
         "@types/react-dom": "18.0.11",
         "@typescript-eslint/eslint-plugin": "^5.51.0",
         "@typescript-eslint/parser": "^5.51.0",
+        "concurrently": "^7.6.0",
         "eslint": "8.35.0",
         "eslint-config-next": "13.2.1",
         "eslint-config-prettier": "^8.6.0",
