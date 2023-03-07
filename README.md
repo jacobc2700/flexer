@@ -10,6 +10,9 @@ python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 
+activate venv (ubuntu):
+source venv/bin/activate
+
 Database:
 python manage.py makemigrations
 python manage.py migrate
