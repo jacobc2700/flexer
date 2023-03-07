@@ -1,0 +1,1 @@
+CREATE TYPE visibility_type as ENUM ("PUBLIC", "PRIVATE", "UNLISTED");
