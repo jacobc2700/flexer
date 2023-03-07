@@ -1,8 +1,8 @@
-from typing import Callable, Union, Optional
+from typing import Callable, Optional
 from rest_framework import status
 from rest_framework.response import Response
 from django.http import HttpRequest
-
+from flexer import logger
 
 class MethodNotAllowedError(TypeError):
     pass
@@ -32,24 +32,28 @@ def exec_method(
         if request.method == 'GET':
             if GET == None:
                 raise MethodNotAllowedError()
-            return GET(request)
+            return GET(request, path_params)
         elif request.method == 'POST':
             if POST == None:
                 raise MethodNotAllowedError()
-            return POST(request)
+            return POST(request, path_params)
         elif request.method == 'PATCH':
             if PATCH == None:
                 raise MethodNotAllowedError()
-            return PATCH(request)
+            return PATCH(request, path_params)
         elif request.method == 'DELETE':
             if DELETE == None:
                 raise MethodNotAllowedError()
-            return DELETE(request)
+            return DELETE(request, path_params)
         elif request.method == 'PUT':
             if PUT == None:
                 raise MethodNotAllowedError()
             return
     except MethodNotAllowedError:
         return standard_resp({}, status.HTTP_405_METHOD_NOT_ALLOWED)
-    except:
+    except Exception as ex:
+        logger.exception(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def is_pass_valid(password: str):
+    return len(password) >= 6

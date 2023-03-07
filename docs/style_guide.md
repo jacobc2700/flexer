@@ -2,14 +2,14 @@ Server:
 
 TODO: cache headers for get requests
 
-return object standard:
-
-Response => 
+standardized response object:
+**Use the standard_resp() function**
+Response format => 
 {
     ok: bool,
     status: int, # a status code
     message: str # some descriptor for the status
-    data: {}
+    data: any (if None -> becomes null in json)
 }
 
 Status codes used:
