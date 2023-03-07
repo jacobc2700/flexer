@@ -2,6 +2,7 @@
 !.env.template
 
 *.json
+*.csv
 venv
 
 /node_modules
