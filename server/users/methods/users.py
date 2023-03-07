@@ -3,20 +3,30 @@ from rest_framework.response import Response
 from django.http import HttpRequest
 import json
 from json import JSONDecodeError
+from postgrest import APIError
 
 from flexer import supabase
 from utils import standard_resp
 
 
 def GET(request: HttpRequest) -> Response:
-    data = supabase.table("users").select("*").limit(5).execute()
-    return standard_resp(data, status.HTTP_200_OK)
+    try:
+        resp = supabase.table("users").select("*").limit(5).execute()
+        return standard_resp(resp.data, status.HTTP_200_OK)
+    except APIError as err:
+        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
+    except Exception as e:
+        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def POST(request: HttpRequest) -> Response:
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
+
+        # TODO: validation
+        if (len(body['password']) < 6):
+            raise ValueError('Password must be at least 6 characters')
 
         new_user_object = {
             'email': body['email'],
@@ -36,10 +46,15 @@ def POST(request: HttpRequest) -> Response:
         new_user_object['created_at'] = created_at_supabase
         new_user_object['updated_at'] = created_at_supabase
 
-        # print(user['user_id'])
-        data = supabase.table("users").insert(new_user_object).execute()
+        resp = supabase.table("users").insert(new_user_object).execute()
 
-        return Response({'success': 'created a new user today'}, status=status.HTTP_201_CREATED)
-    
+        return standard_resp(resp.data, status=status.HTTP_201_CREATED)
+
     except JSONDecodeError:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid input")
+    except ValueError as err:
+        return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))
+    except APIError as err:
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
+    except Exception:
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)

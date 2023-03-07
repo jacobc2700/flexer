@@ -8,7 +8,7 @@ class MethodNotAllowedError(TypeError):
     pass
 
 
-def standard_resp(data: dict, statusCode: int, message: 'Optional[str]' = ""):
+def standard_resp(data, statusCode: int, message: 'Optional[str]' = ""):
     ok: bool = (status.is_informational(statusCode) or status.is_success(statusCode) or status.is_redirect(
         statusCode)) and not (status.is_client_error(statusCode) or status.is_server_error(statusCode))
 
@@ -30,7 +30,6 @@ def exec_method(
         PUT: 'Optional[Callable]' = None) -> Response:
     try:
         if request.method == 'GET':
-            print(GET)
             if GET == None:
                 raise MethodNotAllowedError()
             return GET(request)
