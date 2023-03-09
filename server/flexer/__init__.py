@@ -28,17 +28,18 @@ logging.config.dictConfig({
             'class': 'logging.StreamHandler',
             'formatter': 'console'
         },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'formatter': 'file',
-            'filename': '/tmp/debug.log'
-        }
+        # 'file': {
+        #     'level': 'DEBUG',
+        #     'class': 'logging.FileHandler',
+        #     'formatter': 'file',
+        #     # 'filename': './tmp/debug.log'
+        # }
     },
     'loggers': {
         '': {
             'level': 'DEBUG',
-            'handlers': ['console', 'file']
+            'handlers': ['console']
+            # 'handlers': ['console', 'file']
         }
     }
 })

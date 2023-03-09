@@ -1,8 +1,8 @@
 .env*
 !.env.template
 
-*.json
-*.csv
+admin/*.json
+admin/*.csv
 venv
 
 /node_modules
