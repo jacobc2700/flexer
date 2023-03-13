@@ -1,8 +1,10 @@
 # How to make a new API:
 
-server/[new_name]/methods/file1.py
-server/[new_name]/methods/file2.py
-server/[new_name]/methods/file3.py
+Files:
+
+- server/[new_name]/methods/file1.py
+- server/[new_name]/methods/file2.py
+- server/[new_name]/methods/file3.py
 
 server/[new_name]/**init**.py: empty file
 
