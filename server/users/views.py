@@ -1,9 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-import json
 from django.http import HttpRequest
-
-from flexer import auth_supabase
 from utils import exec_method
 
 from .methods import users as users_methods

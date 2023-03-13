@@ -8,7 +8,7 @@ import datetime
 
 from typing import TypedDict
 
-from flexer import auth_supabase, logger, supabase
+from flexer import supabase, logger, supabase
 from utils import is_pass_valid, standard_resp
 
 
@@ -20,15 +20,11 @@ class PathParams(TypedDict):
 
 def GetSession(request: HttpRequest, path_params: PathParams) -> Response:
     # print(path_params)
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    sessionToken = body['sessionToken']
-    userId = body['userId']
-    expires = body['expires']
-
-    # ??????
-    def toISOString(date):
-        return date.strftime("%Y-%m-%dT%H:%M:%SZ") 
+    # body_unicode = request.body.decode('utf-8')
+    # body = json.loads(body_unicode)
+    # sessionToken = body['sessionToken']
+    # userId = body['userId']
+    # expires = body['expires']
 
     # expires?: string | null
     #       sessionToken?: string | null
@@ -37,8 +33,9 @@ def GetSession(request: HttpRequest, path_params: PathParams) -> Response:
 
 
     try:
+        resp = supabase.table("sessions").select("*, users (*)").eq("sessionToken", path_params['sessionToken']).execute()
         # resp = supabase.from_("next_auth.accousnts").select("*").execute()
-        resp = supabase.table("sessions").insert({'sessionToken': sessionToken, 'userId': userId, "expires": expires}).execute()
+        # resp = supabase.table("sessions").insert({'sessionToken': sessionToken, 'userId': userId, "expires": expires}).execute()
         # resp = supabase.table("accounts").select(`provider, providerAccountId, users (*)`)
         # resp = supabase.table("accounts").select(
         #     "*").limit(1).match({'id': path_params["identifier"]}).execute()
@@ -106,3 +103,56 @@ def CreateSession(request: HttpRequest, path_params: PathParams) -> Response:
         print(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
     
+def UpdateSession(request: HttpRequest, path_params: PathParams) -> Response:
+    # print(path_params)
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    sessionToken = path_params['sessionToken']
+    userId = body['userId']
+    expires = body['expires']
+
+    # ??????
+    def toISOString(date):
+        return date.strftime("%Y-%m-%dT%H:%M:%SZ") 
+
+    # expires?: string | null
+    #       sessionToken?: string | null
+    #       userId?: string | null
+    #       id?: string
+
+
+    try:
+        # resp = supabase.from_("next_auth.accousnts").select("*").execute()
+        resp = supabase.table("sessions").update({'userId': userId, "expires": expires}).eq('sessionToken', sessionToken).execute()
+        # resp = supabase.table("accounts").select(`provider, providerAccountId, users (*)`)
+        # resp = supabase.table("accounts").select(
+        #     "*").limit(1).match({'id': path_params["identifier"]}).execute()
+        print("WHO")
+        print(resp)
+        print("DOG")
+        # supabase.from("accounts").insert(account)
+        # if len(resp.data) != 1:
+        #     return standard_resp(None, status.HTTP_200_OK)
+
+        # print(len(resp))
+        return standard_resp(resp.data, status.HTTP_200_OK)
+    except APIError as err:
+        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
+    except Exception as ex:
+        # logger.exception(ex)
+        print(ex)
+        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# Delete a session by sessionToken from the sessions table.
+def DeleteSession(request: HttpRequest, path_params: PathParams) -> Response:
+    session_token = path_params['sessionToken']
+
+    try:
+        resp = supabase.table("sessions").delete().eq("sessionToken", session_token).execute()
+        return standard_resp(resp.data, status.HTTP_200_OK)
+    except APIError as err:
+        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
+    except Exception as ex:
+        # logger.exception(ex)
+        print(ex)
+        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
