@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,8 +27,6 @@ SECRET_KEY = "django-insecure-8bd%^cs5u+1((4))nlqe=&!ct%m2l+rqkb2__#6&ipavwhnxj#
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-load_dotenv()
 
 # Application definition
 
@@ -91,8 +88,6 @@ WSGI_APPLICATION = "flexer.wsgi.application"
 #         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
-
-print(os.environ.get('DB_NAME'))
 
 DATABASES = {
     'default': {

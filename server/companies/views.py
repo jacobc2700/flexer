@@ -1,10 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from supabase import create_client, Client
-from dotenv import load_dotenv
 import os
-
-load_dotenv()
 
 # /companies
 @api_view(['GET'])

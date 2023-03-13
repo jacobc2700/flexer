@@ -1,8 +1,9 @@
 .env*
 !.env.template
 
-*.json
+admin/*.json
+admin/*.csv
 venv
 
 /node_modules
-/__pycache__/*
+__pycache__/
