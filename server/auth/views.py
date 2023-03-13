@@ -1,15 +1,13 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-import json
 from django.http import HttpRequest
-
-from flexer import auth_supabase
 from utils import exec_method
 
+# HTTP method implementations for /auth/[name] routes.
 from .methods import user as users_methods
 from .methods import account as accounts_methods
 from .methods import session as sessions_methods
-# from .methods import identifier as identifier_methods
+from .methods import token as tokens_methods
 
 @api_view(['GET'])
 def GetUserById(request: HttpRequest, id: str) -> Response:
@@ -31,10 +29,18 @@ def LinkAccount(request: HttpRequest) -> Response:
 def UnlinkAccount(request: HttpRequest) -> Response:
     return exec_method(request, DELETE=accounts_methods.UnlinkAccount)
 
-@api_view(['POST', 'DELETE'])
-def Sessions(request: HttpRequest) -> Response:
-    return exec_method(request, GET=session_methods.GetSession, POST=sessions_methods.CreateSession)
+@api_view(['POST'])
+def GeneralSession(request: HttpRequest) -> Response:
+    return exec_method(request, POST=sessions_methods.CreateSession)
 
-# @api_view(['GET', 'PATCH', 'DELETE'])
-# def identifier(request: HttpRequest, identifier: str):
-#     return exec_method(request, {"identifier": identifier}, identifier_methods.GET, None, identifier_methods.PATCH, identifier_methods.DELETE)
+@api_view(['GET', 'DELETE', 'POST'])
+def SpecificSession(request: HttpRequest, sessionToken: str) -> Response:
+    return exec_method(request, {"sessionToken": sessionToken}, GET=sessions_methods.GetSession, POST=sessions_methods.UpdateSession, DELETE=sessions_methods.DeleteSession)
+
+@api_view(['POST', 'DELETE'])
+def HandleToken(request: HttpRequest) -> Response:
+    return exec_method(request, POST=tokens_methods.CreateToken, DELETE=tokens_methods.DeleteToken)
+
+# @api_view(['DELETE'])
+# def DeleteToken(request: HttpRequest) -> Response:
+#     return exec_method(request, DELETE=tokens_methods.DeleteToken)

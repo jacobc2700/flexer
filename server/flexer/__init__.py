@@ -13,10 +13,6 @@ DEFAULT_HEADERS = {"X-Client-Info": f"supabase-py/{__version__}"}
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
-object = ClientOptions()
-# object['schema'] = 'next_auth'
-object.schema = 'next_auth'
-auth_supabase: Client = create_client(url, key, object)
 
 logging.config.dictConfig({
     'version': 1,
