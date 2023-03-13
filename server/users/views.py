@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 import json
 from django.http import HttpRequest
 
-from flexer import supabase
+from flexer import auth_supabase
 from utils import exec_method
 
 from .methods import users as users_methods

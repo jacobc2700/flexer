@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from postgrest import APIError
 
-from flexer import supabase, logger
+from flexer import auth_supabase, logger
 from utils import is_pass_valid, standard_resp
 
 
@@ -18,7 +18,7 @@ class PathParams(TypedDict):
 
 def GET(request: HttpRequest, path_params: PathParams) -> Response:
     try:
-        resp = supabase.table("users").select(
+        resp = auth_supabase.table("users").select(
             "*").limit(1).match({'username': path_params["identifier"]}).execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
     except APIError as err:
@@ -49,7 +49,7 @@ def PATCH(request: HttpRequest, path_params: PathParams) -> Response:
         if 'last_name' in body:
             user_object_changes['last_name'] = body['last_name']
 
-        resp = supabase.table("users").update(
+        resp = auth_supabase.table("users").update(
             user_object_changes).eq("id", path_params["identifier"]).execute()
 
         return standard_resp(resp.data, status.HTTP_200_OK)
@@ -67,7 +67,7 @@ def PATCH(request: HttpRequest, path_params: PathParams) -> Response:
 
 def DELETE(request: HttpRequest, path_params: PathParams) -> Response:
     try:
-        resp = supabase.table("users").delete().eq(
+        resp = auth_supabase.table("users").delete().eq(
             "id", path_params["identifier"]).execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
     except APIError as err:
