@@ -36,10 +36,11 @@ python manage.py test
 ### API Endpoints:
 
 Conventions:
-https://restfulapi.net/resource-naming/
-https://medium.com/@nadinCodeHat/rest-api-naming-conventions-and-best-practices-1c4e781eb6a5
-Note: supabase returns a max of 1000 records -> requires pagination if more than 1000 records.
-Notes and companies may be added specifically for users themselves, while problems cannot be created (pulled from LeetCode API).
+
+- https://restfulapi.net/resource-naming/
+- https://medium.com/@nadinCodeHat/rest-api-naming-conventions-and-best-practices-1c4e781eb6a5
+- Supabase returns a max of 1000 records -> requires pagination if more than 1000 records.
+- Notes and companies may be added specifically for users themselves, while problems cannot be created (pulled from LeetCode API).
 
 GET routes:
 
