@@ -1,28 +1,28 @@
+from django.http import HttpRequest
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from supabase import create_client, Client
-import os
+
+# from flexer import supabase
 
 # /companies
 @api_view(['GET'])
-def get_all_companies(request):
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_KEY")
-    supabase: Client = create_client(url, key)
+def get_all_companies(request: HttpRequest) -> Response:
+    """get overview data for all companies"""
+
     # data = supabase.table("levels").select("*").limit(5).execute()
     # data = supabase.table("levels").select('company_id, *, companies (id)').limit(5).execute()
-    data = supabase.table("joined_tables").select("*").execute()
+    # data = supabase.table("joined_tables").select("*").execute()
     # assert len(data.data) > 0
-    return Response(data)
+    # return Response(data)
+    raise NotImplementedError
 
 # /companies/company_name
 @api_view(['GET'])
 def get_company(request, company_name):
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_KEY")
+    """get detailed info of a single company"""
 
-    supabase: Client = create_client(url, key)
-    data = supabase.table("levels").select("*").limit(5).match({'company': company_name}).execute()
+    # data = supabase.table("levels").select("*").limit(5).match({'company': company_name}).execute()
 
-    assert len(data.data) > 0
-    return Response(data)
+    # assert len(data.data) > 0
+    # return Response(data)
+    raise NotImplementedError
