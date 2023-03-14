@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "devall": "concurrently \"source ../venv/bin/activate && python manage.py runserver\" \"npm run dev\""
+        "devall": "concurrently \"python ../server/manage.py runserver\" \"npm run dev\""
     },
     "dependencies": {
         "@emotion/react": "^11.10.6",
@@ -16,6 +16,7 @@
         "@mui/material": "^5.11.10",
         "@next/font": "^13.2.3",
         "next": "13.2.1",
+        "next-auth": "^4.20.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "typescript": "4.9.5"
