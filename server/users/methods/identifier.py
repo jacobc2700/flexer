@@ -6,17 +6,21 @@ from rest_framework import status
 from rest_framework.response import Response
 from postgrest import APIError
 
-from flexer import supabase, logger
 from utils import is_pass_valid, standard_resp
+from flexer import supabase, logger
 
 
 class PathParams(TypedDict):
-    # GET -> identifer = username,
-    # PATCH & DELETE -> identifer = id
+    """
+    GET -> identifer = username,
+    PATCH & DELETE -> identifer = id
+    """
     identifier: str
 
 
-def GET(request: HttpRequest, path_params: PathParams) -> Response:
+def get(_request: HttpRequest, path_params: PathParams) -> Response:
+    """get user by username"""
+
     try:
         resp = supabase.table("users").select(
             "*").limit(1).match({'username': path_params["identifier"]}).execute()
@@ -28,7 +32,9 @@ def GET(request: HttpRequest, path_params: PathParams) -> Response:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-def PATCH(request: HttpRequest, path_params: PathParams) -> Response:
+def patch(request: HttpRequest, path_params: PathParams) -> Response:
+    """update user by id"""
+
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
@@ -65,7 +71,9 @@ def PATCH(request: HttpRequest, path_params: PathParams) -> Response:
         return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-def DELETE(request: HttpRequest, path_params: PathParams) -> Response:
+def delete(_request: HttpRequest, path_params: PathParams) -> Response:
+    """delete user by user id"""
+
     try:
         resp = supabase.table("users").delete().eq(
             "id", path_params["identifier"]).execute()

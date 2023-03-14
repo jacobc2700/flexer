@@ -1,15 +1,17 @@
+import json
+from json import JSONDecodeError
 from rest_framework import status
 from rest_framework.response import Response
 from django.http import HttpRequest
-import json
-from json import JSONDecodeError
 from postgrest import APIError
 
-from flexer import supabase, logger
 from utils import is_pass_valid, standard_resp
+from flexer import supabase, logger
 
 
-def GET(request: HttpRequest, path_params = None) -> Response:
+def get(_request: HttpRequest, _path_params = None) -> Response:
+    """get all users in users table"""
+
     try:
         resp = supabase.table("users").select("*").limit(5).execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
@@ -20,7 +22,9 @@ def GET(request: HttpRequest, path_params = None) -> Response:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-def POST(request: HttpRequest, path_params = None) -> Response:
+def post(request: HttpRequest, _path_params = None) -> Response:
+    """create a single new user"""
+
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
