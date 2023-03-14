@@ -4,59 +4,79 @@ from rest_framework.response import Response
 from django.http import HttpRequest
 from flexer import logger
 
-# Custom error means the method is not allowed
-class MethodNotAllowedError(TypeError):
-    pass
 
-# Universal response object for HTTP methods
-def standard_resp(data, statusCode: int, message: 'Optional[str]' = ""):
-    ok: bool = (status.is_informational(statusCode) or status.is_success(statusCode) or status.is_redirect(
-        statusCode)) and not (status.is_client_error(statusCode) or status.is_server_error(statusCode))
+class MethodNotAllowedError(TypeError):
+    """Used when 405 (method not allowed) error occurs"""
+
+
+def standard_resp(data, status_code: int, message: 'Optional[str]' = ""):
+    """
+    Standardize the API's response object
+    Response{
+        ok: bool,
+        status: int,
+        message: str,
+        data: any,
+    }
+    (all data must be JSON serializable)
+    """
+    success: bool = (status.is_informational(status_code) or status.is_success(status_code) or status.is_redirect(
+        status_code)) and not (status.is_client_error(status_code) or status.is_server_error(status_code))
 
     return Response({
-        "ok": ok,
-        "status": statusCode,
+        "ok": success,
+        "status": status_code,
         "message": message,
         "data": data,
-    }, status=statusCode)
+    }, status=status_code)
 
 # Helper to run HTTP methods on some URL
+
+
 def exec_method(
         request: HttpRequest,
         path_params: 'Optional[dict]' = None,
-        GET: 'Optional[Callable]' = None,
-        POST: 'Optional[Callable]' = None,
-        PATCH: 'Optional[Callable]' = None,
-        DELETE: 'Optional[Callable]' = None,
-        PUT: 'Optional[Callable]' = None) -> Response:
+        get: 'Optional[Callable]' = None,
+        post: 'Optional[Callable]' = None,
+        patch: 'Optional[Callable]' = None,
+        delete: 'Optional[Callable]' = None,
+        put: 'Optional[Callable]' = None) -> Response:
+    """
+    Executes the correct http request method depending on the request.method property
+    Accepted methods: GET, POST, PATCH, DELETE, PUT
+    path_params: a dictionary with additional data that isn't in the request arg.
+    """
+
     try:
         if request.method == 'GET':
-            if GET is None:
+            if get is None:
                 raise MethodNotAllowedError()
-            return GET(request, path_params)
-        elif request.method == 'POST':
-            if POST is None:
+            return get(request, path_params)
+        if request.method == 'POST':
+            if post is None:
                 raise MethodNotAllowedError()
-            return POST(request, path_params)
-        elif request.method == 'PATCH':
-            if PATCH is None:
+            return post(request, path_params)
+        if request.method == 'PATCH':
+            if patch is None:
                 raise MethodNotAllowedError()
-            return PATCH(request, path_params)
-        elif request.method == 'DELETE':
-            if DELETE is None:
+            return patch(request, path_params)
+        if request.method == 'DELETE':
+            if delete is None:
                 raise MethodNotAllowedError()
-            return DELETE(request, path_params)
-        elif request.method == 'PUT':
-            if PUT is None:
+            return delete(request, path_params)
+        if request.method == 'PUT':
+            if put is None:
                 raise MethodNotAllowedError()
-            return
+            return put(request, path_params)
     except MethodNotAllowedError:
         return standard_resp({}, status.HTTP_405_METHOD_NOT_ALLOWED)
     except Exception as ex:
         logger.exception(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# Password requirements
-# TODO: add more
+
 def is_pass_valid(password: str):
+    """Make sure that the password is strong enough."""
+
+    # TODO: more complex password validation
     return len(password) >= 6

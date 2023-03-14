@@ -1,14 +1,13 @@
+import json
+from json import JSONDecodeError
+from typing import TypedDict
 from rest_framework import status
 from rest_framework.response import Response
 from django.http import HttpRequest
-import json
-from json import JSONDecodeError
 from postgrest import APIError
 
-from typing import TypedDict
-
-from flexer import supabase, logger, supabase
-from utils import is_pass_valid, standard_resp
+from utils import standard_resp
+from flexer import supabase, logger
 
 
 class PathParams(TypedDict):
@@ -17,39 +16,31 @@ class PathParams(TypedDict):
     providerAccountId: str
     provider: str
 
-# getUser(id)
-# http://localhost:8000/auth/5038bdc3-1d93-470c-a3bf-f57e8558762d
-def GetUserByAccount(request: HttpRequest, path_params: PathParams) -> Response:
-    print(path_params)
+
+def get_user_by_account(_request: HttpRequest, path_params: PathParams) -> Response:
+    """
+    get user by account
+    (http://localhost:8000/auth/5038bdc3-1d93-470c-a3bf-f57e8558762d)
+    """
+
     try:
-        # resp = supabase.from_("next_auth.accousnts").select("*").execute()
-        resp = supabase.table("accounts").select("users (*)").match({ 'provider': path_params['provider'],
-            'providerAccountId': path_params['providerAccountId'] }).execute()
-        # resp = supabase.table("accounts").select(`provider, providerAccountId, users (*)`)
-        # resp = supabase.table("accounts").select(
-        #     "*").limit(1).match({'id': path_params["identifier"]}).execute()
-        print("WHO")
-        print(resp)
-        print("DOG")
+        resp = supabase.table("accounts").select("users (*)").match({'provider': path_params['provider'],
+                                                                     'providerAccountId': path_params['providerAccountId']}).execute()
 
         if len(resp.data) != 1:
             return standard_resp(None, status.HTTP_200_OK)
 
-        # print(len(resp))
         return standard_resp(resp.data, status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
-        # logger.exception(ex)
-        print(ex)
+        logger.exception(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
 
-def LinkAccount(request: HttpRequest, path_params: PathParams) -> Response:
-    # print(path_params)
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    
+
+def link_account(request: HttpRequest, _path_params: PathParams) -> Response:
+    """link account to user"""
+
     # account = {
     #     id?: string
     #     type?: string | null
@@ -67,58 +58,44 @@ def LinkAccount(request: HttpRequest, path_params: PathParams) -> Response:
     #     userId?: string | null
     # }
 
-
     # }
 
     # TODO: must validate all the fields are present within account object.
-    
+
     try:
-        # resp = supabase.from_("next_auth.accousnts").select("*").execute()
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+
         resp = supabase.table("accounts").insert(body['account']).execute()
-        # resp = supabase.table("accounts").select(`provider, providerAccountId, users (*)`)
-        # resp = supabase.table("accounts").select(
-        #     "*").limit(1).match({'id': path_params["identifier"]}).execute()
-        print("WHO")
-        print(resp)
-        print("DOG")
-        # supabase.from("accounts").insert(account)
+
         if len(resp.data) != 1:
             return standard_resp(None, status.HTTP_200_OK)
 
-        # print(len(resp))
         return standard_resp(resp.data, status.HTTP_200_OK)
+    except JSONDecodeError:
+        return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
-        # logger.exception(ex)
-        print(ex)
+        logger.exception(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
 
-def UnlinkAccount(request: HttpRequest, path_params: PathParams) -> Response:
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+
+def unlink_account(request: HttpRequest, _path_params: PathParams) -> Response:
+    """unlink account from user"""
 
     try:
-        # resp = supabase.from_("next_auth.accousnts").select("*").execute()
-        resp = supabase.table("accounts").delete().match({ 'provider': body['provider'],
-            'providerAccountId': body['providerAccountId'] }).execute()
-        # resp = supabase.table("accounts").select(`provider, providerAccountId, users (*)`)
-        # resp = supabase.table("accounts").select(
-        #     "*").limit(1).match({'id': path_params["identifier"]}).execute()
-        print("WHO")
-        print(resp)
-        print("DOG")
-        # supabase.from("accounts").insert(account)
-        # if len(resp.data) != 1:
-        #     return standard_resp(None, status.HTTP_200_OK)
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
 
-        # print(len(resp))
+        resp = supabase.table("accounts").delete().match({'provider': body['provider'],
+                                                          'providerAccountId': body['providerAccountId']}).execute()
+
         return standard_resp(resp.data, status.HTTP_200_OK)
+    except JSONDecodeError:
+        return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
-        # logger.exception(ex)
-        print(ex)
+        logger.exception(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
