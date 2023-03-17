@@ -45,7 +45,7 @@ def patch(request: HttpRequest, path_params: PathParams) -> Response:
         if 'email' in body:
             user_object_changes['email'] = body['email']
         if 'password' in body:
-            if not is_pass_valid(user_object_changes['identifier']):
+            if not is_pass_valid(path_params['identifier']):
                 raise ValueError('Password must be at least 6 characters.')
             user_object_changes['password'] = body['password']
         if 'username' in body:
