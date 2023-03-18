@@ -18,9 +18,9 @@ const Companies: React.FC = () => {
     //     };
     useEffect(() => {
         async function getData() {
-            let adapter = await ServerAdapter().updateUser({
-                id: '15af9e68-28a7-4f6b-8b90-5cf7e31d8064',
-            });
+            let adapter = await ServerAdapter().linkAccount(
+                {userId:'a0c1d851-dc82-49f6-95fc-909b9a847490'}
+            );
             console.log(adapter);
             return adapter;
         }

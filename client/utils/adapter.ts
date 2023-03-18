@@ -245,7 +245,51 @@ const ServerAdapter = (): Adapter => {
         },
         // same problem as the createUser, updateUser
         async linkAccount(account) {
-            return;
+            const resp = await fetch(`http://localhost:8000/auth/linkAccount`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    account: {
+                        type: '1234231xc2435',
+                        provider: 'abcdd2312s34123ddasdxcasddd',
+                        providerAccountId: 'bcaxcxasdxcs4c123123',
+                        userId: account.userId
+                    }
+
+                })
+            });
+            const data: ResponseType = await resp.json();
+            console.log(data);
+
+            if (
+                data !== undefined &&
+                data !== null &&
+                'ok' in data &&
+                data.ok === true &&
+                'data' in data &&
+                Array.isArray(data.data) &&
+                data.data.length > 0
+            ) {
+                const fields = data.data[0];
+
+                if (
+                    'id' in fields &&
+                    'email' in fields &&
+                    'emailVerified' in fields
+                ) {
+                    const filteredFields: AdapterUser = {
+                        id: fields.id,
+                        email: fields.email,
+                        emailVerified: fields.emailVerified,
+                    };
+
+                    return;
+                    // return format<AdapterUser>(filteredFields);
+                }
+            }
+
+            // return format<AdapterUser>();
+            throw Error('.');
+            // return null;
         },
         async unlinkAccount({ providerAccountId, provider }) {
             const resp = await fetch(
@@ -280,7 +324,8 @@ const ServerAdapter = (): Adapter => {
                         emailVerified: fields.emailVerified,
                     };
 
-                    return format<AdapterUser>(filteredFields);
+                    return;
+                    // return format<AdapterUser>(filteredFields);
                 }
             }
 
