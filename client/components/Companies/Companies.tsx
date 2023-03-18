@@ -1,10 +1,10 @@
 import { ICompany } from '@/types';
 import { Container } from '@mui/material';
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // @ == ../
 import ServerAdapter from '../../utils/adapter';
+import { ValidateTest } from '../../utils/validate';
 import CompanyCard from './CompanyCard';
 
 const Companies: React.FC = () => {
@@ -17,15 +17,17 @@ const Companies: React.FC = () => {
     //         setCompanies(data);
     //     };
     useEffect(() => {
-        async function getData() {
-            let adapter = await ServerAdapter().updateUser({
-                id: '15af9e68-28a7-4f6b-8b90-5cf7e31d8064',
-            });
-            console.log(adapter);
-            return adapter;
-        }
+        // async function getData() {
+        //     let adapter = await ServerAdapter().updateUser({
+        //         id: '15af9e68-28a7-4f6b-8b90-5cf7e31d8064',
+        //     });
+        //     console.log(adapter);
+        //     return adapter;
+        // }
 
-        getData();
+        // getData();
+
+        ValidateTest(1)
     }, []);
 
     //     fetcher();

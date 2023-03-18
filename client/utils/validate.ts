@@ -1,44 +1,64 @@
-// TODO: what does this do?
-// Example usage:
-import { AssertionError } from 'assert';
+// import assert from 'assert';
 
-// IsNotNull().isNotUndefined()
-export default class Validate<T> {
-    static assertIsDefined<T>(data: T): asserts data is NonNullable<T> {
-        if (data === undefined || data == null) {
-            throw new AssertionError();
-        }
-    }
+// import { AssertionError } from 'assert'
 
-    static assertIsArray<T>(data: T): asserts data is T {
-        if (!(Array.isArray(data) && data.length > 0)) {
-            throw new AssertionError();
-        }
-    }
+type ResponseType = IResponseOk | IResponseError;
 
-    // isArray() {
-    //     if (Array.isArray(this.data)) return this;
-    //     throw Error('Validation Error: is not an array');
-    // }
-
-    // isNotEmptyArray() {
-    //     if (this.isArray() && (this.data as T[]).length > 0) {
-    //         return this;
-    //     } else {
-    //         throw Error('Validation Error: array is empty');
-    //     }
-    // }
-
-    // data.fieldsExists('a', 'b', 'c') ==> returns true if every fields exists in object data.
-    // fieldsExist(...fields: string[]) {
-    //     if (typeof this.data === 'object' && this.isNotNull()) {
-    //         for (let field of fields) {
-    //             if (this.data !== null && !(field in this.data)) {
-    //                 throw Error(`${field} doesn't exist in object.`);
-    //             }
-    //         }
-    //     }
-
-    //     return this;
-    // }
+interface IResponseOk {
+    ok: true;
+    status: number;
+    message: string;
+    data: Record<string, unknown>;
 }
+
+interface IResponseError {
+    ok: false;
+    status: number;
+    message: string;
+    data: null;
+}
+
+export default class Validate {
+    static isNullish<T>(data: unknown): data is NonNullable<T> {
+        return data === undefined && data === null;
+    }
+
+    static isRecord(data: unknown): data is Record<string, unknown> {
+        return (
+            !Validate.isNullish(data) &&
+            typeof data === 'object' &&
+            !Validate.isArray(data)
+        );
+    }
+
+    static isArray<T>(data: unknown): data is Array<T> {
+        return Array.isArray(data);
+    }
+
+    static isResponseOk(data: unknown): data is IResponseOk {
+        return (
+            Validate.isRecord(data) &&
+            'ok' in data &&
+            data.ok === true &&
+            'status' in data &&
+            'message' in data &&
+            'data' in data
+        );
+    }
+
+    static doFieldsExist<T extends Record<string, unknown>, IFields>(
+        data: T
+    ): data is T & IFields {
+        return true;
+    }
+}
+
+// export const ValidateTest = (x: unknown) => {
+//     // if (Validate.isArrayEmpty<number[]>(x)) {
+//     // console.log(x[0]);
+//     // }
+
+//     const fields = ['a', 'b', 'c'];
+//     type xdsf = keyof fields;
+//     console.log(f);
+// };

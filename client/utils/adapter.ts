@@ -2,7 +2,7 @@ import {
     Adapter,
     AdapterSession,
     AdapterUser,
-    VerificationToken,
+    VerificationToken
 } from 'next-auth/adapters';
 
 import { Database } from './database.types';
@@ -27,13 +27,6 @@ export function format<T>(obj: Record<string, any>): T {
 
     return obj as T;
 }
-
-// Response{
-//     ok: bool,
-//     status: int,
-//     message: str,
-//     data: any,
-// }
 
 type ResponseType = IResponseOk | IResponseError;
 
