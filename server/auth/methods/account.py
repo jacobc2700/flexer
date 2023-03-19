@@ -13,7 +13,7 @@ from flexer import supabase, logger
 class PathParams(TypedDict):
     # GET -> identifer = username,
     # PATCH & DELETE -> identifer = id
-    providerAccountId: str
+    provider_account_id: str
     provider: str
 
 
@@ -25,7 +25,7 @@ def get_user_by_account(_request: HttpRequest, path_params: PathParams) -> Respo
 
     try:
         resp = supabase.table("accounts").select("users (*)").match({'provider': path_params['provider'],
-                                                                     'providerAccountId': path_params['providerAccountId']}).execute()
+                                                                     'providerAccountId': path_params['provider_account_id']}).execute()
 
         if len(resp.data) != 1:
             return standard_resp(None, status.HTTP_200_OK)

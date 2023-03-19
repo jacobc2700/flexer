@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+# TODO: some thins have slash but some don't?
 urlpatterns = [
     path('id/<str:id>', views.get_user_by_id),
     path('email-address/<str:email_address>', views.get_user_by_email_address),
