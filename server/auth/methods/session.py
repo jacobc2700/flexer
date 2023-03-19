@@ -16,7 +16,7 @@ class PathParams(TypedDict):
     """
     session_token: str
 
-
+# TODO: rename to get_session_and_user
 def get_session(_request: HttpRequest, path_params: PathParams) -> Response:
     """TODO: is this some kind of validation?"""
 

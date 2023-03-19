@@ -18,10 +18,9 @@ const Companies: React.FC = () => {
     //     };
     useEffect(() => {
         async function getData() {
-            let adapter = await ServerAdapter().createSession({
-                sessionToken: '1234556',
-                userId: '5038bdc3-1d93-470c-a3bf-f57e8558762d',
-                expires: new Date()
+            let adapter = await ServerAdapter().useVerificationToken({
+                identifier: '31231asdasdasdads23123123',
+                token: '32123sd1231',
             });
             console.log(adapter);
             return adapter;
@@ -38,7 +37,7 @@ const Companies: React.FC = () => {
     //     fetcher();
     // }, []);
 
-    return (<div>hello</div>);
+    return <div>hello</div>;
 };
 
 export default Companies;
