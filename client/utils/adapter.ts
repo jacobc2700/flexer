@@ -58,17 +58,22 @@ const ServerAdapter = (): Adapter => {
             const data: ResponseType = await resp.json();
 
             if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
+                // data !== undefined &&
+                // data !== null &&
+                // 'ok' in data &&
+                // data.ok === true &&
+                // 'data' in data &&
+                // Array.isArray(data.data) &&
+                // data.data.length > 0
+
+                Validate.isResponseOk(data) &&
+                Validate.isArray(data.data) &&
                 data.data.length > 0
             ) {
                 const fields = data.data[0];
 
                 if (
+                    Validate.isRecord(fields) &&
                     'id' in fields &&
                     'email' in fields &&
                     'emailVerified' in fields

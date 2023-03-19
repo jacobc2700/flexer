@@ -1,4 +1,5 @@
 // import assert from 'assert';
+import { AdapterUser } from 'next-auth/adapters';
 
 // import { AssertionError } from 'assert'
 
@@ -21,6 +22,10 @@ interface IResponseError {
 export default class Validate {
     static isNullish<T>(data: unknown): data is NonNullable<T> {
         return data === undefined && data === null;
+    }
+
+    static isString(data: unknown): data is string {
+        return typeof data === 'string';
     }
 
     static isRecord(data: unknown): data is Record<string, unknown> {
@@ -46,19 +51,22 @@ export default class Validate {
         );
     }
 
-    static doFieldsExist<T extends Record<string, unknown>, IFields>(
-        data: T
-    ): data is T & IFields {
-        return true;
+    static isDateString(str: string): boolean {
+        const date = new Date(str);
+        return date.toString() !== 'Invalid Date' && !isNaN(Date.parse(str));
+    }
+
+    static isAdapterUser(data: unknown): data is AdapterUser {
+        return (
+            Validate.isRecord(data) &&
+            'id' in data &&
+            'email' in data &&
+            'emailVerified' in data &&
+            Validate.isString(data.id) &&
+            Validate.isString(data.email) &&
+            Validate.isString(data.emailVerified) &&
+            (Validate.isNullish(data.emailVerified) ||
+                Validate.isDateString(data.emailVerified))
+        );
     }
 }
-
-// export const ValidateTest = (x: unknown) => {
-//     // if (Validate.isArrayEmpty<number[]>(x)) {
-//     // console.log(x[0]);
-//     // }
-
-//     const fields = ['a', 'b', 'c'];
-//     type xdsf = keyof fields;
-//     console.log(f);
-// };
