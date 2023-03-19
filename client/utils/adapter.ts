@@ -325,7 +325,49 @@ const ServerAdapter = (): Adapter => {
             throw Error('.');
         },
         async createSession({ sessionToken, userId, expires }) {
-            return format<AdapterSession>({});
+            const resp = await fetch(
+                `http://localhost:8000/auth/session`,
+                {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        sessionToken: sessionToken,
+                        userId: userId,
+                        expires: expires
+                    })
+                }
+            );
+
+            const data: ResponseType = await resp.json();
+            console.log(data);
+
+            if (
+                data !== undefined &&
+                data !== null &&
+                'ok' in data &&
+                data.ok === true &&
+                'data' in data &&
+                Array.isArray(data.data) &&
+                data.data.length > 0
+            ) {
+                const fields = data.data[0];
+
+                if (
+                    'sessionToken' in fields &&
+                    'userId' in fields &&
+                    'expires' in fields
+                ) {
+                    const filteredFields: AdapterSession = {
+                        sessionToken: fields.sessionToken,
+                        userId: fields.userId,
+                        expires: fields.expires,
+                    };
+
+                    // return;
+                    return format<AdapterSession>(filteredFields);
+                }
+            }
+
+            throw Error('.');
         },
         async getSessionAndUser(sessionToken) {
             return {

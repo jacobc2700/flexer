@@ -52,9 +52,11 @@ def create_session(request: HttpRequest, _path_params: PathParams) -> Response:
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        session_token = body['session_token']
-        user_id = body['user_ud']
+        print(body)
+        session_token = body['sessionToken']
+        user_id = body['userId']
         expires = body['expires']
+        print(body)
 
         resp = supabase.table("sessions").insert(
             {'sessionToken': session_token, 'userId': user_id, "expires": expires}).execute()

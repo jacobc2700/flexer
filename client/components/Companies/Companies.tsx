@@ -12,47 +12,33 @@ const Companies: React.FC = () => {
 
     // useEffect(() => {
     //     const fetcher = async () => {
-    //         const resp = await fetch('http://localhost:8000/companies/');
+    //         const resp = await fetch('http://localhost:8000/auth/session/');
     //         const data: ICompany[] = (await resp.json())[0][1];
     //         setCompanies(data);
     //     };
     useEffect(() => {
-<<<<<<< HEAD
-        // async function getData() {
-        //     let adapter = await ServerAdapter().updateUser({
-        //         id: '15af9e68-28a7-4f6b-8b90-5cf7e31d8064',
-        //     });
-        //     console.log(adapter);
-        //     return adapter;
-        // }
-
-        // getData();
-
-        ValidateTest(1)
-=======
         async function getData() {
-            let adapter = await ServerAdapter().linkAccount(
-                {userId:'a0c1d851-dc82-49f6-95fc-909b9a847490'}
-            );
+            let adapter = await ServerAdapter().createSession({
+                sessionToken: '1234556',
+                userId: '5038bdc3-1d93-470c-a3bf-f57e8558762d',
+                expires: new Date()
+            });
             console.log(adapter);
             return adapter;
         }
 
         getData();
->>>>>>> c3f1dd3a382d0fdf0331f0e31d72f2a98d5ca927
-    }, []);
+    });
+
+    //     // getData();
+
+    //     ValidateTest(1)
+    // }, []);
 
     //     fetcher();
     // }, []);
 
-    return (
-        // <Container sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        //     {companies.map((c) => (
-        //         <CompanyCard company={c} key={c.name} />
-        //     ))}
-        // </Container>
-        <div>hello</div>
-    );
+    return (<div>hello</div>);
 };
 
 export default Companies;
