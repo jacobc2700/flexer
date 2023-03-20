@@ -1,6 +1,6 @@
-import { ICompany } from '@/types';
 import { Container } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { ICompany } from '../../types';
 
 import ServerAdapter from '../../utils/adapter';
 import Validate from '../../utils/validate';
@@ -20,10 +20,6 @@ const Companies: React.FC = () => {
 
     useEffect(() => {
         async function getData() {
-            // let adapter = await ServerAdapter().useVerificationToken({
-            //     identifier: '31231asdasdasdads23123123',
-            //     token: '32123sd1231',
-            // });
             flag = true;
             // const adapter = await ServerAdapter().createVerificationToken({
             //     expires: new Date(),
