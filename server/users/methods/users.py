@@ -41,16 +41,6 @@ def post(request: HttpRequest, _path_params = None) -> Response:
             'last_name': body['last_name']
         }
 
-        auth_response = supabase.auth.sign_up(new_user_object)
-
-        # id, created at - properties we need generated from Supabase:
-        id_supabase = auth_response.user.id
-        created_at_supabase = auth_response.user.created_at.isoformat()
-
-        new_user_object['id'] = id_supabase
-        new_user_object['created_at'] = created_at_supabase
-        new_user_object['updated_at'] = created_at_supabase
-
         resp = supabase.table("users").insert(new_user_object).execute()
 
         if len(resp.data) != 1:
