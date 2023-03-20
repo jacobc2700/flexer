@@ -1,6 +1,5 @@
 CREATE TABLE users (
-    -- id uuid default uuid_generate_v4(), -- generic id
-    user_id id, -- id FK to auth.users (id)
+    id uuid DEFAULT uuid_generate_v4 (),
     email text,
     password text,
     username text,
@@ -9,6 +8,7 @@ CREATE TABLE users (
     created_at timestamp WITH time zone DEFAULT current_timestamp,
     updated_at timestamp WITH time zone DEFAULT current_timestamp,
     visibility visibility_type DEFAULT "private",
-    FOREIGN KEY (user_id) REFERENCES auth.users (id),
-    primary key (user_id)
+    emailVerified timestamp WITH time zone DEFAULT NULL,
+    image text DEFAULT NULL,
+    primary key (id)
 );
