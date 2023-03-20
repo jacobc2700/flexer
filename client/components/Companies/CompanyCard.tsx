@@ -1,7 +1,5 @@
+import { ICompany } from '@/types';
 import { Card, CardContent, Divider, Typography } from '@mui/material';
-import React from 'react';
-
-import { ICompany } from '../../types';
 
 interface IProps {
     company: ICompany;

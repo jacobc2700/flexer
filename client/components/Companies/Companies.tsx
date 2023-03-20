@@ -1,9 +1,9 @@
+import { ICompany } from '@/types';
 import { Container } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { ICompany } from '../../types';
+import { useEffect, useState } from 'react';
 
-import ServerAdapter from '../../utils/adapter';
-import Validate from '../../utils/validate';
+import ServerAdapter from '@/utils/adapter';
+import Validate from '@/utils/validate';
 import CompanyCard from './CompanyCard';
 
 let flag = false; // TEMP: prevents a second api call from being made in useeffect
