@@ -13,7 +13,7 @@ def get(_request: HttpRequest, _path_params = None) -> Response:
     """get all users in users table"""
 
     try:
-        resp = supabase.table("users").select("*").limit(5).execute()
+        resp = supabase.table("users").select("*").execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
@@ -53,7 +53,10 @@ def post(request: HttpRequest, _path_params = None) -> Response:
 
         resp = supabase.table("users").insert(new_user_object).execute()
 
-        return standard_resp(resp.data, status.HTTP_201_CREATED)
+        if len(resp.data) != 1:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_201_CREATED)
 
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")

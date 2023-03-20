@@ -24,6 +24,10 @@ def get(_request: HttpRequest, path_params: PathParams) -> Response:
     try:
         resp = supabase.table("users").select(
             "*").limit(1).match({'username': path_params["identifier"]}).execute()
+
+        if len(resp.data) != 1:
+            return standard_resp(None, status.HTTP_200_OK)
+
         return standard_resp(resp.data, status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
@@ -58,7 +62,10 @@ def patch(request: HttpRequest, path_params: PathParams) -> Response:
         resp = supabase.table("users").update(
             user_object_changes).eq("id", path_params["identifier"]).execute()
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        if len(resp.data) != 1:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
 
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
@@ -77,7 +84,11 @@ def delete(_request: HttpRequest, path_params: PathParams) -> Response:
     try:
         resp = supabase.table("users").delete().eq(
             "id", path_params["identifier"]).execute()
-        return standard_resp(resp.data, status.HTTP_200_OK)
+
+        if len(resp.data) == 0: # intentially didn't use != -1
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except APIError as err:
         return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:

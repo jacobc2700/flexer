@@ -17,6 +17,10 @@ class PathParams(TypedDict):
     provider: str
 
 
+VALID_KEYS = {'id', 'type', 'provider', 'providerAccountId', 'refresh_token',
+              'access_token', 'expires_at', 'token_type', 'scope', 'id_token', 'session_state', 'oauth_token_secret', 'oauth_token', 'userId'}
+
+
 def get_user_by_account(_request: HttpRequest, path_params: PathParams) -> Response:
     """
     get user by account
@@ -30,7 +34,7 @@ def get_user_by_account(_request: HttpRequest, path_params: PathParams) -> Respo
         if len(resp.data) != 1:
             return standard_resp(None, status.HTTP_200_OK)
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        return standard_resp(resp.data[0]['users'], status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
@@ -41,37 +45,20 @@ def get_user_by_account(_request: HttpRequest, path_params: PathParams) -> Respo
 def link_account(request: HttpRequest, _path_params: PathParams) -> Response:
     """link account to user"""
 
-    # account = {
-    #     id?: string
-    #     type?: string | null
-    #     provider?: string | null
-    #     providerAccountId?: string | null
-    #     refresh_token?: string | null
-    #     access_token?: string | null
-    #     expires_at?: number | null
-    #     token_type?: string | null
-    #     scope?: string | null
-    #     id_token?: string | null
-    #     session_state?: string | null
-    #     oauth_token_secret?: string | null
-    #     oauth_token?: string | null
-    #     userId?: string | null
-    # }
-
-    # }
-
-    # TODO: must validate all the fields are present within account object.
-
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
 
-        resp = supabase.table("accounts").insert(body['account']).execute()
+        # filters out all body params that aren't defined to the valid_keys set.
+        account = {key: body[key]
+                   for key in VALID_KEYS if body.get(key) != None}
+
+        resp = supabase.table("accounts").insert(account).execute()
 
         if len(resp.data) != 1:
             return standard_resp(None, status.HTTP_200_OK)
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except APIError as err:
@@ -91,7 +78,10 @@ def unlink_account(request: HttpRequest, _path_params: PathParams) -> Response:
         resp = supabase.table("accounts").delete().match({'provider': body['provider'],
                                                           'providerAccountId': body['providerAccountId']}).execute()
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        if len(resp.data) == 0: # intentially not using != 1
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except APIError as err:

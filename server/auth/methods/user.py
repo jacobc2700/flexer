@@ -26,7 +26,10 @@ def get_user_by_id(_request: HttpRequest, path_params: PathParams) -> Response:
         resp = supabase.table("users").select(
             "*").limit(1).match({'id': path_params["identifier"]}).execute()
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        if len(resp.data) != 1:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
@@ -41,7 +44,10 @@ def get_user_by_email_address(_request: HttpRequest, path_params: PathParams) ->
         resp = supabase.table("users").select(
             "*").limit(1).match({'email': path_params["identifier"]}).execute()
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        if len(resp.data) != 1:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:

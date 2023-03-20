@@ -2,10 +2,11 @@ import { ICompany } from '@/types';
 import { Container } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-// @ == ../
 import ServerAdapter from '../../utils/adapter';
-import { ValidateTest } from '../../utils/validate';
+import Validate from '../../utils/validate';
 import CompanyCard from './CompanyCard';
+
+let flag = false; // TEMP: prevents a second api call from being made in useeffect
 
 const Companies: React.FC = () => {
     // const [companies, setCompanies] = useState<ICompany[]>([]);
@@ -16,26 +17,28 @@ const Companies: React.FC = () => {
     //         const data: ICompany[] = (await resp.json())[0][1];
     //         setCompanies(data);
     //     };
+
     useEffect(() => {
         async function getData() {
-            let adapter = await ServerAdapter().useVerificationToken({
-                identifier: '31231asdasdasdads23123123',
-                token: '32123sd1231',
+            // let adapter = await ServerAdapter().useVerificationToken({
+            //     identifier: '31231asdasdasdads23123123',
+            //     token: '32123sd1231',
+            // });
+            flag = true;
+            // const adapter = await ServerAdapter().createVerificationToken({
+            //     expires: new Date(),
+            //     identifier: Math.floor(Math.random() * 1000000).toString(),
+            //     token: Math.floor(Math.random() * 1000000).toString(),
+            // });
+            const adapter = await ServerAdapter().useVerificationToken({
+                token: '9006',
+                identifier: '457843',
             });
             console.log(adapter);
-            return adapter;
         }
 
-        getData();
-    });
-
-    //     // getData();
-
-    //     ValidateTest(1)
-    // }, []);
-
-    //     fetcher();
-    // }, []);
+        if (flag === false) getData();
+    }, []);
 
     return <div>hello</div>;
 };

@@ -52,7 +52,7 @@ def create_session(request: HttpRequest) -> Response:
     """
     return exec_method(request, post=sessions_methods.create_session)
 
-@api_view(['GET', 'DELETE', 'POST'])
+@api_view(['GET', 'DELETE', 'PATCH'])
 def specific_session(request: HttpRequest, session_token: str) -> Response:
     """
     A user may have any number of sessions.
@@ -60,7 +60,7 @@ def specific_session(request: HttpRequest, session_token: str) -> Response:
     DELETE: Deletes a session by its session token.
     POST: Creates a new session for a user.
     """
-    return exec_method(request, {"session_token": session_token}, get=sessions_methods.get_session, post=sessions_methods.update_session, delete=sessions_methods.delete_session)
+    return exec_method(request, {"session_token": session_token}, get=sessions_methods.get_session_and_user, patch=sessions_methods.update_session, delete=sessions_methods.delete_session)
 
 @api_view(['POST', 'DELETE'])
 def handle_token(request: HttpRequest) -> Response:
