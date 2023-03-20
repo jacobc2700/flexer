@@ -28,7 +28,35 @@ const ServerAdapter = (): Adapter => {
     return {
         // same problem as updateUser, needs body
         async createUser(user) {
-            return format<AdapterUser>({});
+            const rawResp = await fetch(`http://localhost:8000/users/`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    ...user,
+                    password: Math.floor(
+                        Math.random() * 10000000000
+                    ).toString(),
+                    username: 'bingbong',
+                    first_name: 'bing',
+                    last_name: 'bong',
+                }),
+            });
+            const resp: unknown = await rawResp.json();
+
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
+
+                if (Validate.isAdapterUser(fields)) {
+                    const filteredFields: AdapterUser = {
+                        id: fields.id,
+                        email: fields.email,
+                        emailVerified: fields.emailVerified,
+                    };
+
+                    return format<AdapterUser>(filteredFields);
+                }
+            }
+
+            throw Error('TEMP: create user failed');
         },
         async getUser(user_id) {
             const rawResp = await fetch(
@@ -80,6 +108,7 @@ const ServerAdapter = (): Adapter => {
                 `http://localhost:8000/auth/getUserByAccount/${provider}/${providerAccountId}`
             );
             const resp: unknown = await rawResp.json();
+
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
 
@@ -166,6 +195,7 @@ const ServerAdapter = (): Adapter => {
 
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
+
                 if (Validate.isAdapterAccount(fields)) return;
             }
 
@@ -229,11 +259,13 @@ const ServerAdapter = (): Adapter => {
 
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
-
                 let userFilteredFields: AdapterUser | null = null;
                 let sessionFilteredFields: AdapterSession | null = null;
-
-                if ('users' in fields && Validate.isAdapterUser(fields.users)) {
+                if (
+                    Validate.isNotNullish(fields) &&
+                    'users' in fields &&
+                    Validate.isAdapterUser(fields.users)
+                ) {
                     userFilteredFields = {
                         id: fields.users.id,
                         email: fields.users.email,
