@@ -12,19 +12,27 @@ from flexer import supabase, logger
 
 class PathParams(TypedDict):
     """
-    only used by get_session
+    only used by get_session_and_user
     """
     session_token: str
 
-# TODO: rename to get_session_and_user
-def get_session(_request: HttpRequest, path_params: PathParams) -> Response:
-    """TODO: is this some kind of validation?"""
+
+def get_session_and_user(_request: HttpRequest, path_params: PathParams) -> Response:
+    """get user associated with a session (joins user & session)"""
 
     try:
+        print("PRINT SPMETHING")
         resp = supabase.table("sessions").select(
             "*, users (*)").eq("sessionToken", path_params['session_token']).execute()
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        print(resp.data)
+
+        if len(resp.data) != 1:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        print(resp.data[0])
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
@@ -32,36 +40,24 @@ def get_session(_request: HttpRequest, path_params: PathParams) -> Response:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# {/
-    # "sessionToken": "abc",
-    # "userId": "5038bdc3-1d93-470c-a3bf-f57e8558762d",
-    # "expires": "2011-01-01 00:00:00"
-# }
 def create_session(request: HttpRequest, _path_params: PathParams) -> Response:
     """Create a new session for a user"""
-
-    # ??????
-    # def toISOString(date):
-    #     return date.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    # expires?: string | null
-    #       sessionToken?: string | null
-    #       userId?: string | null
-    #       id?: string
 
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        print(body)
+
         session_token = body['sessionToken']
         user_id = body['userId']
         expires = body['expires']
-        print(body)
 
         resp = supabase.table("sessions").insert(
             {'sessionToken': session_token, 'userId': user_id, "expires": expires}).execute()
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        if len(resp.data) != 1:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except APIError as err:
@@ -72,28 +68,26 @@ def create_session(request: HttpRequest, _path_params: PathParams) -> Response:
 
 
 def update_session(request: HttpRequest, path_params: PathParams) -> Response:
-    """TODO: what does this do exactly?"""
+    """updates an existing session by updating the expires date"""
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     session_token = path_params['session_token']
-    user_id = body['user_id']
-    expires = body['expires']
 
-    # ??????
-    # def toISOString(date):
-    #     return date.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    # expires?: string | null
-    #       sessionToken?: string | null
-    #       userId?: string | null
-    #       id?: string
+    update_dict = {}
+    if (body.get('user_id') != None):
+        update_dict['user_id'] = body['user_id']
+    if (body.get('expires') != None):
+        update_dict['expires'] = body['expires']
 
     try:
-        resp = supabase.table("sessions").update(
-            {'userId': user_id, "expires": expires}).eq('sessionToken', session_token).execute()
+        resp = supabase.table("sessions").update(update_dict).eq(
+            'sessionToken', session_token).execute()
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        if len(resp.data) == 0:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
@@ -109,7 +103,11 @@ def delete_session(_request: HttpRequest, path_params: PathParams) -> Response:
     try:
         resp = supabase.table("sessions").delete().eq(
             "sessionToken", session_token).execute()
-        return standard_resp(resp.data, status.HTTP_200_OK)
+
+        if len(resp.data) == 0:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except APIError as err:
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:

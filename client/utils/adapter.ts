@@ -2,26 +2,20 @@ import {
     Adapter,
     AdapterSession,
     AdapterUser,
-    VerificationToken,
+    VerificationToken
 } from 'next-auth/adapters';
 
-import { Database } from './database.types';
+// import { Database } from './database.types';
 import Validate from './validate';
-
-function isDate(date: any) {
-    return (
-        new Date(date).toString() !== 'Invalid Date' && !isNaN(Date.parse(date))
-    );
-}
 
 // TODO: make this file more organized
 export function format<T>(obj: Record<string, any>): T {
     for (const [key, value] of Object.entries(obj)) {
-        if (value === null) {
+        if (Validate.isNullish(value)) {
             delete obj[key];
         }
 
-        if (isDate(value)) {
+        if (Validate.isString(value) && Validate.isDateString(value)) {
             obj[key] = new Date(value);
         }
     }
@@ -29,51 +23,51 @@ export function format<T>(obj: Record<string, any>): T {
     return obj as T;
 }
 
-type ResponseType = IResponseOk | IResponseError;
-
-interface IResponseOk {
-    ok: true;
-    status: number;
-    message: string;
-    data: Record<string, unknown>;
-}
-
-interface IResponseError {
-    ok: false;
-    status: number;
-    message: string;
-    data: null;
-}
-
 // TODO: validate, return proper errors.
 const ServerAdapter = (): Adapter => {
     return {
         // same problem as updateUser, needs body
         async createUser(user) {
-            return format<AdapterUser>({});
+            const rawResp = await fetch(`http://localhost:8000/users/`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    ...user,
+                    password: Math.floor(
+                        Math.random() * 10000000000
+                    ).toString(),
+                    username: 'bingbong',
+                    first_name: 'bing',
+                    last_name: 'bong',
+                }),
+            });
+            const resp: unknown = await rawResp.json();
+
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
+
+                if (Validate.isAdapterUser(fields)) {
+                    const filteredFields: AdapterUser = {
+                        id: fields.id,
+                        email: fields.email,
+                        emailVerified: fields.emailVerified,
+                    };
+
+                    return format<AdapterUser>(filteredFields);
+                }
+            }
+
+            throw Error('TEMP: create user failed');
         },
         async getUser(user_id) {
-            const resp = await fetch(
+            const rawResp = await fetch(
                 `http://localhost:8000/auth/id/${user_id}`
             );
-            const data: ResponseType = await resp.json();
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-                if (
-                    'id' in fields &&
-                    'email' in fields &&
-                    'emailVerified' in fields
-                ) {
+                if (Validate.isAdapterUser(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
@@ -87,27 +81,15 @@ const ServerAdapter = (): Adapter => {
             return null;
         },
         async getUserByEmail(email_address) {
-            const resp = await fetch(
+            const rawResp = await fetch(
                 `http://localhost:8000/auth/email-address/${email_address}`
             );
-            const data: ResponseType = await resp.json();
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-                if (
-                    'id' in fields &&
-                    'email' in fields &&
-                    'emailVerified' in fields
-                ) {
+                if (Validate.isAdapterUser(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
@@ -122,33 +104,19 @@ const ServerAdapter = (): Adapter => {
         },
         // (http://localhost:8000/auth/5038bdc3-1d93-470c-a3bf-f57e8558762d)
         async getUserByAccount({ providerAccountId, provider }) {
-            const resp = await fetch(
+            const rawResp = await fetch(
                 `http://localhost:8000/auth/getUserByAccount/${provider}/${providerAccountId}`
             );
-            const data: ResponseType = await resp.json();
-            console.log(data);
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-                if (
-                    'users' in fields &&
-                    'id' in fields.users &&
-                    'email' in fields.users &&
-                    'emailVerified' in fields.users
-                ) {
+                if (Validate.isAdapterUser(fields)) {
                     const filteredFields: AdapterUser = {
-                        id: fields.users.id,
-                        email: fields.users.email,
-                        emailVerified: fields.users.emailVerified,
+                        id: fields.id,
+                        email: fields.email,
+                        emailVerified: fields.emailVerified,
                     };
 
                     return format<AdapterUser>(filteredFields);
@@ -157,38 +125,25 @@ const ServerAdapter = (): Adapter => {
 
             return null;
         },
-        // TODO: pass rest of body
+        // TODO: pass rest of body (figure out how to add more fields to the adapter user or find some other way to add more fields)
         async updateUser(user) {
-            const resp = await fetch(`http://localhost:8000/users/${user.id}`, {
-                method: 'PATCH',
-                body: JSON.stringify({
-                    ...user,
-                    email: 'joeys@gmail.com',
-                    password: 'PASSWORD',
-                    username: 'someuser',
-                    first_name: 'f',
-                    last_name: 'l',
-                }),
-            });
-            const data: ResponseType = await resp.json();
-            console.log(data);
+            const rawResp = await fetch(
+                `http://localhost:8000/users/${user.id}`,
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        ...user,
+                        // TEMP: randomly generates a new username for now.
+                        username: Math.floor(Math.random() * 10000).toString(),
+                    }),
+                }
+            );
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-                if (
-                    'id' in fields &&
-                    'email' in fields &&
-                    'emailVerified' in fields
-                ) {
+                if (Validate.isAdapterUser(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
@@ -199,133 +154,77 @@ const ServerAdapter = (): Adapter => {
                 }
             }
 
-            throw Error('.');
-            // return null;
+            throw Error('TEMP: update user failed');
         },
         async deleteUser(userId) {
-            const resp = await fetch(`http://localhost:8000/users/${userId}`, {
-                method: 'DELETE',
-            });
-            const data: ResponseType = await resp.json();
-            console.log(data);
-
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
-
-                if (
-                    'id' in fields &&
-                    'email' in fields &&
-                    'emailVerified' in fields
-                ) {
-                    const filteredFields: AdapterUser = {
-                        id: fields.id,
-                        email: fields.email,
-                        emailVerified: fields.emailVerified,
-                    };
-
-                    return format<AdapterUser>(filteredFields);
-                }
-            }
-
-            throw Error('.');
-        },
-        // same problem as the createUser, updateUser
-        async linkAccount(account) {
-            const resp = await fetch(`http://localhost:8000/auth/linkAccount`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    account: {
-                        type: '1234231xc2435',
-                        provider: 'abcdd2312s34123ddasdxcasddd',
-                        providerAccountId: 'bcaxcxasdxcs4c123123',
-                        userId: account.userId,
-                    },
-                }),
-            });
-            const data: ResponseType = await resp.json();
-            console.log(data);
-
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
-
-                if (
-                    'id' in fields &&
-                    'email' in fields &&
-                    'emailVerified' in fields
-                ) {
-                    const filteredFields: AdapterUser = {
-                        id: fields.id,
-                        email: fields.email,
-                        emailVerified: fields.emailVerified,
-                    };
-
-                    return;
-                    // return format<AdapterUser>(filteredFields);
-                }
-            }
-
-            // return format<AdapterUser>();
-            throw Error('.');
-            // return null;
-        },
-        async unlinkAccount({ providerAccountId, provider }) {
-            const resp = await fetch(
-                `http://localhost:8000/auth/unlink_account/${provider}/${providerAccountId}`,
+            // currently not used by next-auth
+            const rawResp = await fetch(
+                `http://localhost:8000/users/${userId}`,
                 {
                     method: 'DELETE',
                 }
             );
+            const resp: unknown = await rawResp.json();
 
-            const data: ResponseType = await resp.json();
-            console.log(data);
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
-
-                if (
-                    'id' in fields &&
-                    'email' in fields &&
-                    'emailVerified' in fields
-                ) {
+                if (Validate.isAdapterUser(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
                         emailVerified: fields.emailVerified,
                     };
 
-                    return;
-                    // return format<AdapterUser>(filteredFields);
+                    return format<AdapterUser>(filteredFields);
                 }
             }
 
-            throw Error('.');
+            throw Error('TEMP: delete user failed');
+        },
+
+        async linkAccount(account) {
+            const rawResp = await fetch(
+                `http://localhost:8000/auth/linkAccount`,
+                {
+                    method: 'POST',
+                    body: JSON.stringify(account),
+                }
+            );
+            const resp: unknown = await rawResp.json();
+
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
+
+                if (Validate.isAdapterAccount(fields)) return;
+            }
+
+            throw Error('TEMP: link account failed');
+        },
+        async unlinkAccount({ providerAccountId, provider }) {
+            // currently not used by next-auth
+            const rawResp = await fetch(
+                `http://localhost:8000/auth/unlinkAccount`,
+                {
+                    method: 'DELETE',
+                    body: JSON.stringify({
+                        provider,
+                        providerAccountId,
+                    }),
+                }
+            );
+
+            const resp: unknown = await rawResp.json();
+
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
+                if (Validate.isAdapterAccount(fields)) return;
+            }
+
+            throw Error('TEMP: unlink account failed');
         },
         async createSession({ sessionToken, userId, expires }) {
-            const resp = await fetch(`http://localhost:8000/auth/session`, {
+            const rawResp = await fetch(`http://localhost:8000/auth/session`, {
                 method: 'POST',
                 body: JSON.stringify({
                     sessionToken: sessionToken,
@@ -334,84 +233,62 @@ const ServerAdapter = (): Adapter => {
                 }),
             });
 
-            const data: ResponseType = await resp.json();
-            console.log(data);
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-                if (
-                    'sessionToken' in fields &&
-                    'userId' in fields &&
-                    'expires' in fields
-                ) {
+                if (Validate.isAdapterSessionWithDateString(fields)) {
                     const filteredFields: AdapterSession = {
                         sessionToken: fields.sessionToken,
                         userId: fields.userId,
-                        expires: fields.expires,
+                        expires: new Date(fields.expires),
                     };
 
-                    // return;
                     return format<AdapterSession>(filteredFields);
                 }
             }
 
-            throw Error('.');
+            throw Error('TEMP: create session failed');
         },
-        // returns <user, session>:
         async getSessionAndUser(sessionToken) {
-            const resp = await fetch(
+            const rawResp = await fetch(
                 `http://localhost:8000/auth/session/${sessionToken}`
             );
-            const data: ResponseType = await resp.json();
-            console.log(data);
-            console.log('here');
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
-
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
+                let userFilteredFields: AdapterUser | null = null;
+                let sessionFilteredFields: AdapterSession | null = null;
                 if (
+                    Validate.isNotNullish(fields) &&
                     'users' in fields &&
-                    'id' in fields.users &&
-                    'email' in fields.users &&
-                    'emailVerified' in fields.users &&
-                    'sessionToken' in fields &&
-                    'userId' in fields &&
-                    'expires' in fields
+                    Validate.isAdapterUser(fields.users)
                 ) {
-                    const userFilteredFields: AdapterUser = {
+                    userFilteredFields = {
                         id: fields.users.id,
                         email: fields.users.email,
                         emailVerified: fields.users.emailVerified,
                     };
+                }
 
-                    const sessionFilteredFields: AdapterSession = {
+                if (Validate.isAdapterSessionWithDateString(fields)) {
+                    sessionFilteredFields = {
                         sessionToken: fields.sessionToken,
                         userId: fields.userId,
-                        expires: fields.expires,
+                        expires: new Date(fields.expires),
                     };
+                }
 
+                if (
+                    Validate.isNotNullish(userFilteredFields) &&
+                    Validate.isNotNullish(sessionFilteredFields)
+                ) {
                     return {
                         user: format<AdapterUser>(userFilteredFields),
                         session: format<AdapterSession>(sessionFilteredFields),
                     };
-                    // return format<AdapterUser>(filteredFields);
                 }
             }
 
@@ -423,179 +300,110 @@ const ServerAdapter = (): Adapter => {
             //     session: format<AdapterSession>({}),
             // };
         },
-        // update session based on sessionToken, updating the userid, expires?
         async updateSession(session) {
-            // const someDate: Date = new Date();
-            // const blahDate: any = someDate - Math.random() * 1e12;
-            const resp = await fetch(
+            const rawResp = await fetch(
                 `http://localhost:8000/auth/session/${session.sessionToken}`,
                 {
-                    method: 'POST',
+                    method: 'PATCH',
                     body: JSON.stringify({
-                        user_id: '5038bdc3-1d93-470c-a3bf-f57e8558762d',
-                        expires: new Date(),
+                        userId: session.userId,
+                        expires: session.expires,
                     }),
                 }
             );
 
-            const data: ResponseType = await resp.json();
-            console.log(data);
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-                if (
-                    'sessionToken' in fields &&
-                    'userId' in fields &&
-                    'expires' in fields
-                ) {
+                if (Validate.isAdapterSessionWithDateString(fields)) {
                     const filteredFields: AdapterSession = {
                         sessionToken: fields.sessionToken,
                         userId: fields.userId,
-                        expires: fields.expires,
+                        expires: new Date(fields.expires),
                     };
 
-                    // return;
                     return format<AdapterSession>(filteredFields);
                 }
             }
 
-            throw Error('.');
+            throw Error('TEMP: update session failed');
         },
         async deleteSession(sessionToken) {
-            const resp = await fetch(
+            const rawResp = await fetch(
                 `http://localhost:8000/auth/session/${sessionToken}`,
                 {
                     method: 'DELETE',
                 }
             );
-            const data: ResponseType = await resp.json();
-            console.log(data);
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            const resp: unknown = await rawResp.json();
 
-                if (
-                    'id' in fields &&
-                    'email' in fields &&
-                    'emailVerified' in fields
-                ) {
-                    const filteredFields: AdapterUser = {
-                        id: fields.id,
-                        email: fields.email,
-                        emailVerified: fields.emailVerified,
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
+
+                if (Validate.isAdapterSessionWithDateString(fields)) {
+                    const filteredFields: AdapterSession = {
+                        sessionToken: fields.sessionToken,
+                        userId: fields.userId,
+                        expires: new Date(fields.expires),
                     };
 
-                    return; // successfully deleted.
-                    // return format<AdapterUser>(filteredFields);
+                    return format<AdapterSession>(filteredFields);
                 }
             }
 
-            throw Error('.');
+            throw Error('TEMP: delete session failed');
         },
         async createVerificationToken(token) {
-            const resp = await fetch(`http://localhost:8000/auth/token`, {
+            const rawResp = await fetch(`http://localhost:8000/auth/token`, {
                 method: 'POST',
-                body: JSON.stringify({
-                    token: {
-                        identifier: token.identifier,
-                        expires: token.expires,
-                        token: token.token,
-                    },
-                }),
+                body: JSON.stringify(token),
             });
-            const data: ResponseType = await resp.json();
-            console.log(data);
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-                if (
-                    'identifier' in fields &&
-                    'expires' in fields &&
-                    'token' in fields
-                ) {
+                if (Validate.isVerificationTokenWithDateString(fields)) {
                     const tokenFields: VerificationToken = {
                         identifier: fields.identifier,
-                        expires: fields.expires,
+                        expires: new Date(fields.expires),
                         token: fields.token,
                     };
 
-                    // return;
                     return format<VerificationToken>(tokenFields);
                 }
             }
 
-            // return format<AdapterUser>();
-            throw Error('.');
-            // return null;
-            // return format<VerificationToken>({});
+            throw Error('TEMP: create verification token failed');
         },
         async useVerificationToken({ identifier, token }) {
-            const resp = await fetch(`http://localhost:8000/auth/token`, {
+            const rawResp = await fetch(`http://localhost:8000/auth/token`, {
                 method: 'DELETE',
                 body: JSON.stringify({
-                    // token: {
                     identifier: identifier,
                     token: token,
-                    // },
                 }),
             });
-            const data: ResponseType = await resp.json();
-            console.log(data);
+            const resp: unknown = await rawResp.json();
 
-            if (
-                data !== undefined &&
-                data !== null &&
-                'ok' in data &&
-                data.ok === true &&
-                'data' in data &&
-                Array.isArray(data.data) &&
-                data.data.length > 0
-            ) {
-                const fields = data.data[0];
+            if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
+                const fields = resp.data;
 
-                if (
-                    'identifier' in fields &&
-                    'expires' in fields &&
-                    'token' in fields
-                ) {
+                if (Validate.isVerificationTokenWithDateString(fields)) {
                     const tokenFields: VerificationToken = {
                         identifier: fields.identifier,
-                        expires: fields.expires,
+                        expires: new Date(fields.expires),
                         token: fields.token,
                     };
 
-                    // return;
                     return format<VerificationToken>(tokenFields);
                 }
             }
 
-            throw Error('.');
+            throw Error('TEMP: use verification token failed');
         },
     };
 };

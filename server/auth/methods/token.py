@@ -21,39 +21,20 @@ class PathParams(TypedDict):
 def create_token(request: HttpRequest, _path_params: PathParams) -> Response:
     """create a token for a user"""
 
-    # account = {
-    #     id?: string
-    #     type?: string | null
-    #     provider?: string | null
-    #     providerAccountId?: string | null
-    #     refresh_token?: string | null
-    #     access_token?: string | null
-    #     expires_at?: number | null
-    #     token_type?: string | null
-    #     scope?: string | null
-    #     id_token?: string | null
-    #     session_state?: string | null
-    #     oauth_token_secret?: string | null
-    #     oauth_token?: string | null
-    #     userId?: string | null
-    # }
-
-    # id: number
-    #           identifier: string | null
-    #           token: string | null
-    #           expires: string | null
-    # }
-
-    # TODO: must validate all the fields are present within account object.
-
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
 
-        resp = supabase.table("verification_tokens").insert(
-            body['token']).execute()
+        # filters out all body params that aren't defined to the valid_keys set.
+        token = {key: body[key]
+                 for key in {'identifier', 'token', 'expires'} if body.get(key) != None}
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        resp = supabase.table("verification_tokens").insert(token).execute()
+
+        if len(resp.data) == 0:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except APIError as err:
@@ -89,7 +70,10 @@ def delete_token(request: HttpRequest, _path_params: PathParams) -> Response:
         resp = supabase.table("verification_tokens").delete().match(
             {"identifier": identifier, "token": token}).execute()
 
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        if len(resp.data) == 0:
+            return standard_resp(None, status.HTTP_200_OK)
+
+        return standard_resp(resp.data[0], status.HTTP_200_OK)
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except APIError as err:

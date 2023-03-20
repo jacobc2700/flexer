@@ -1,5 +1,8 @@
 {
     "parser": "@typescript-eslint/parser",
+    "rules": {
+        "@next/next/no-html-link-for-pages": ["error", "./client"]
+    },
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
