@@ -113,3 +113,5 @@ Leetcode API:
 
 - GET leetcode.something/completed_problems: get solved problems
 - GET leetcode.something/user_data: get LeetCode data for a user with a LeetCode account (signed in)
+
+### Project Structure:

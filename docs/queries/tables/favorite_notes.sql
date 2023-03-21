@@ -1,11 +1,10 @@
-CREATE TABLE
-  favorite_notes (
-    id uuid DEFAULT uuid_generate_v4 (),
-    created_at timestamp WITH time zone DEFAULT current_timestamp,
-    user_id uuid not null,
-    note_id uuid not null,
-    type note_type
-    FOREIGN KEY (user_id) REFERENCES auth.users (id),
-    FOREIGN KEY (note_id) REFERENCES notes (id),
-    PRIMARY key (id)
-  );
+CREATE TABLE favorite_notes (
+  id uuid DEFAULT uuid_generate_v4() NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp NOT NULL,
+  user_id uuid NOT NULL,
+  note_id uuid NOT NULL,
+  type note_type NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (note_id) REFERENCES notes (id),
+  PRIMARY KEY (id)
+);

@@ -1,6 +1,6 @@
-create table companies (
-    id uuid default uuid_generate_v4(),
-    created_at timestamp WITH time zone DEFAULT current_timestamp,
-    company_name text unique,
-    primary key (id)
-)
+CREATE TABLE companies (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp NOT NULL,
+    company_name TEXT UNIQUE NOT NULL,
+    PRIMARY KEY (id)
+);
