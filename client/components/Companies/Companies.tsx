@@ -31,10 +31,7 @@ const Companies: React.FC = () => {
             //     identifier: Math.floor(Math.random() * 1000000).toString(),
             //     token: Math.floor(Math.random() * 1000000).toString(),
             // });
-            // const adapter = await ServerAdapter().useVerificationToken({
-            //     token: '9006',
-            //     identifier: '457843',
-            // });
+            const adapter = await ServerAdapter().getUser("6ece3765-64c8-4b96-b685-2ee5d636127e");
             // console.log(adapter);
         }
 
