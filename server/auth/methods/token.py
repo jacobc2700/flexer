@@ -60,7 +60,6 @@ def delete_token(request: HttpRequest, _path_params: PathParams) -> Response:
     # }
 
     # TODO: must validate all the fields are present within account object.
-    print("here")
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)

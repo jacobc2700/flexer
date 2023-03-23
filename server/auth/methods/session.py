@@ -21,16 +21,11 @@ def get_session_and_user(_request: HttpRequest, path_params: PathParams) -> Resp
     """get user associated with a session (joins user & session)"""
 
     try:
-        print("PRINT SPMETHING")
         resp = supabase.table("sessions").select(
             "*, users (*)").eq("sessionToken", path_params['session_token']).execute()
 
-        print(resp.data)
-
         if len(resp.data) != 1:
             return standard_resp(None, status.HTTP_200_OK)
-
-        print(resp.data[0])
 
         return standard_resp(resp.data[0], status.HTTP_200_OK)
     except APIError as err:

@@ -1,23 +1,25 @@
 import ServerAdapter from '@/utils/adapter';
-import type { NextApiRequest, NextApiResponse } from "next";
-import NextAuth, { AuthOptions } from "next-auth";
-import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import NextAuth, { AuthOptions } from 'next-auth';
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
 
 export const authOptions: AuthOptions = {
     adapter: ServerAdapter(),
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+            clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
         }),
     ],
     callbacks: {
         async signIn({ account, profile }) {
+            // console.log(account, profile);
+            // console.log("signin")
             // if (account && account.provider === "google") {
-                // const prof: GoogleProfile = profile as GoogleProfile;
-                // if (prof.email_verified && prof.email.endsWith("@gmail.com"))
-                    // return true;
-                // else if (!prof.email_verified) return "/auth/verify";
+            // const prof: GoogleProfile = profile as GoogleProfile;
+            // if (prof.email_verified && prof.email.endsWith("@gmail.com"))
+            // return true;
+            // else if (!prof.email_verified) return "/auth/verify";
             // }
             // return false;
             return true;

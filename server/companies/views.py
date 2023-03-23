@@ -10,8 +10,8 @@ def get_all_companies(request: HttpRequest) -> Response:
     """get overview data for all companies"""
 
     # TODO: fix
-    data = supabase.table("levels").select("*").limit(5).execute()
-    data = supabase.table("levels").select('company_id, *, companies (id)').limit(5).execute()
+    # data = supabase.table("levels").select("*").limit(5).execute()
+    # data = supabase.table("levels").select('company_id, *, companies (id)').limit(5).execute()
     data = supabase.table("joined_tables").select("*").execute()
     assert len(data.data) > 0
     return Response(data)

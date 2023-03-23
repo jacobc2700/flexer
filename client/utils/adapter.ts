@@ -236,6 +236,7 @@ const ServerAdapter = (): Adapter => {
             throw Error('TEMP: unlink account failed');
         },
         async createSession({ sessionToken, userId, expires }) {
+            console.log('createsession');
             const rawResp = await fetch(`http://localhost:8000/auth/session`, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -268,7 +269,6 @@ const ServerAdapter = (): Adapter => {
                 `http://localhost:8000/auth/session/${sessionToken}`
             );
             const resp: unknown = await rawResp.json();
-
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
                 let userFilteredFields: AdapterUser | null = null;
@@ -276,13 +276,13 @@ const ServerAdapter = (): Adapter => {
                 if (
                     Validate.isNotNullish(fields) &&
                     'users' in fields &&
-                    Validate.isAdapterUserWithDateString(fields)
+                    Validate.isAdapterUserWithDateString(fields.users)
                 ) {
                     userFilteredFields = {
-                        id: fields.id,
-                        email: fields.email,
-                        emailVerified: fields.emailVerified
-                            ? new Date(fields.emailVerified)
+                        id: fields.users.id,
+                        email: fields.users.email,
+                        emailVerified: fields.users.emailVerified
+                            ? new Date(fields.users.emailVerified)
                             : null,
                     };
                 }
@@ -315,6 +315,7 @@ const ServerAdapter = (): Adapter => {
             // };
         },
         async updateSession(session) {
+            console.log('updatesession');
             const rawResp = await fetch(
                 `http://localhost:8000/auth/session/${session.sessionToken}`,
                 {
