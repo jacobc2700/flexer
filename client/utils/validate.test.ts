@@ -1,5 +1,11 @@
 import { ApiResponseType } from '@/types';
-import { AdapterUser } from 'next-auth/adapters';
+import {
+    AdapterAccount,
+    AdapterSession,
+    AdapterUser,
+    VerificationToken
+} from 'next-auth/adapters';
+import { ProviderType } from 'next-auth/providers';
 
 import Validate from './validate';
 
@@ -181,7 +187,7 @@ describe('Validate class', () => {
         });
     });
 
-    describe('isAdapterUser method', () => {
+    describe('isAdapterUserWithDateString method', () => {
         it('should return true when given a valid adapter user object', () => {
             const vals: (Omit<AdapterUser, 'emailVerified'> & {
                 emailVerified: string | null;
@@ -191,6 +197,157 @@ describe('Validate class', () => {
             ];
             for (const v of vals)
                 expect(Validate.isAdapterUserWithDateString(v)).toBe(true);
+        });
+
+        it('should return false when given an invalid adapter user object', () => {
+            const vals = [
+                { id: 1, email: '', emailVerified: null },
+                { id: '', email: null, emailVerified: null },
+                { id: '', email: null, emailVerified: 'hello' },
+                { id: '', email: null, emailVerified: new Date() },
+                { email: '', emailVerified: null },
+                { id: '', emailVerified: null },
+                { id: '', email: '' },
+            ];
+            for (const v of vals)
+                expect(Validate.isAdapterUserWithDateString(v)).toBe(false);
+        });
+    });
+
+    describe('isAdapterAccount method', () => {
+        it('should return true when given a valid adapter account object', () => {
+            const vals: AdapterAccount[] = [
+                {
+                    userId: '',
+                    type: 'oauth',
+                    provider: '',
+                    providerAccountId: '',
+                    refresh_token: '',
+                    access_token: '',
+                    expires_at: 1,
+                    token_type: '',
+                    scope: '',
+                    id_token: '',
+                    session_state: '',
+                    oauth_token_secret: '',
+                    oauth_token: '',
+                },
+                {
+                    userId: '',
+                    type: 'oauth',
+                    provider: '',
+                    providerAccountId: '',
+                    refresh_token: undefined,
+                    access_token: undefined,
+                    expires_at: undefined,
+                    token_type: undefined,
+                    scope: undefined,
+                    id_token: undefined,
+                    session_state: undefined,
+                    oauth_token_secret: undefined,
+                    oauth_token: undefined,
+                },
+            ];
+
+            const types: ProviderType[] = ['credentials', 'email', 'oauth'];
+            for (const v of vals) {
+                for (const type of types) {
+                    v.type = type;
+                    expect(Validate.isAdapterAccount(v)).toBe(true);
+                }
+            }
+        });
+
+        it('should return false when given an invalid adapter account object', () => {
+            const val: Record<string, unknown> = {
+                userId: '',
+                type: 'oauth',
+                provider: '',
+                providerAccountId: '',
+                refresh_token: '',
+                access_token: '',
+                expires_at: 1,
+                token_type: '',
+                scope: '',
+                id_token: '',
+                session_state: '',
+                oauth_token_secret: '',
+                oauth_token: '',
+            };
+
+            expect(Validate.isAdapterAccount(null)).toBe(false);
+
+            for (const k of Object.keys(val)) {
+                // test with missing keys
+                const clone = JSON.parse(JSON.stringify(val));
+                delete clone[k];
+                expect(Validate.isAdapterAccount(clone)).toBe(false);
+            }
+
+            // tests with invalid value types
+            let clone = JSON.parse(JSON.stringify(val));
+            clone.type = 'hello';
+            expect(Validate.isAdapterAccount(clone)).toBe(false);
+
+            clone = JSON.parse(JSON.stringify(val));
+            clone.expires_at = '1';
+            expect(Validate.isAdapterAccount(clone)).toBe(false);
+        });
+    });
+
+    describe('isAdapterSessionWithDateString method', () => {
+        it('should return true when given a valid adapter session object', () => {
+            const val: Omit<AdapterSession, 'expires'> & {
+                expires: string;
+            } = {
+                sessionToken: '',
+                userId: '',
+                expires: new Date().toString(),
+            };
+
+            expect(Validate.isAdapterSessionWithDateString(val)).toBe(true);
+        });
+
+        it('should return false when given an invalid adapter session object', () => {
+            const vals = [
+                { sessionToken: 1, userId: '', expires: '010101' },
+                { sessionToken: '', userId: null, expires: '010101' },
+                { sessionToken: '', userId: '', expires: '' },
+                { userId: '', expires: '010101' },
+                { sessionToken: '', expires: '010101' },
+                { sessionToken: '', userId: '' },
+            ];
+            for (const v of vals)
+                expect(Validate.isAdapterSessionWithDateString(v)).toBe(false);
+        });
+    });
+
+    describe('isVerificationTokenWithDateString method', () => {
+        it('should return true when given a valid verification token object', () => {
+            const val: Omit<VerificationToken, 'expires'> & {
+                expires: string;
+            } = {
+                expires: new Date().toString(),
+                identifier: '',
+                token: '',
+            };
+            expect(Validate.isVerificationTokenWithDateString(val)).toBe(true);
+        });
+
+        it('should return false when given an invalid verification token object', () => {
+            const vals = [
+                { expires: '', identifier: '', token: '' },
+                { expires: new Date().toString(), identifier: 1, token: '' },
+                { expires: new Date().toString(), identifier: '', token: 1 },
+                { identifier: '', token: '' },
+                { expires: new Date().toString(), token: '' },
+                { expires: new Date().toString(), identifier: '' },
+            ];
+            for (const v of vals) {
+                expect(Validate.isVerificationTokenWithDateString(v)).toBe(
+                    false
+                );
+            }
         });
     });
 });
