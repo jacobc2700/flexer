@@ -45,11 +45,13 @@ const ServerAdapter = (): Adapter => {
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
 
-                if (Validate.isAdapterUser(fields)) {
+                if (Validate.isAdapterUserWithDateString(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
-                        emailVerified: fields.emailVerified,
+                        emailVerified: fields.emailVerified
+                            ? new Date(fields.emailVerified)
+                            : null,
                     };
 
                     return format<AdapterUser>(filteredFields);
@@ -67,11 +69,13 @@ const ServerAdapter = (): Adapter => {
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
 
-                if (Validate.isAdapterUser(fields)) {
+                if (Validate.isAdapterUserWithDateString(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
-                        emailVerified: fields.emailVerified,
+                        emailVerified: fields.emailVerified
+                            ? new Date(fields.emailVerified)
+                            : null,
                     };
 
                     return format<AdapterUser>(filteredFields);
@@ -89,11 +93,13 @@ const ServerAdapter = (): Adapter => {
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
 
-                if (Validate.isAdapterUser(fields)) {
+                if (Validate.isAdapterUserWithDateString(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
-                        emailVerified: fields.emailVerified,
+                        emailVerified: fields.emailVerified
+                            ? new Date(fields.emailVerified)
+                            : null,
                     };
 
                     return format<AdapterUser>(filteredFields);
@@ -112,11 +118,13 @@ const ServerAdapter = (): Adapter => {
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
 
-                if (Validate.isAdapterUser(fields)) {
+                if (Validate.isAdapterUserWithDateString(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
-                        emailVerified: fields.emailVerified,
+                        emailVerified: fields.emailVerified
+                            ? new Date(fields.emailVerified)
+                            : null,
                     };
 
                     return format<AdapterUser>(filteredFields);
@@ -143,11 +151,13 @@ const ServerAdapter = (): Adapter => {
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
 
-                if (Validate.isAdapterUser(fields)) {
+                if (Validate.isAdapterUserWithDateString(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
-                        emailVerified: fields.emailVerified,
+                        emailVerified: fields.emailVerified
+                            ? new Date(fields.emailVerified)
+                            : null,
                     };
 
                     return format<AdapterUser>(filteredFields);
@@ -169,11 +179,13 @@ const ServerAdapter = (): Adapter => {
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
 
-                if (Validate.isAdapterUser(fields)) {
+                if (Validate.isAdapterUserWithDateString(fields)) {
                     const filteredFields: AdapterUser = {
                         id: fields.id,
                         email: fields.email,
-                        emailVerified: fields.emailVerified,
+                        emailVerified: fields.emailVerified
+                            ? new Date(fields.emailVerified)
+                            : null,
                     };
 
                     return format<AdapterUser>(filteredFields);
@@ -264,12 +276,14 @@ const ServerAdapter = (): Adapter => {
                 if (
                     Validate.isNotNullish(fields) &&
                     'users' in fields &&
-                    Validate.isAdapterUser(fields.users)
+                    Validate.isAdapterUserWithDateString(fields)
                 ) {
                     userFilteredFields = {
-                        id: fields.users.id,
-                        email: fields.users.email,
-                        emailVerified: fields.users.emailVerified,
+                        id: fields.id,
+                        email: fields.email,
+                        emailVerified: fields.emailVerified
+                            ? new Date(fields.emailVerified)
+                            : null,
                     };
                 }
 

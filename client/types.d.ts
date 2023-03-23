@@ -19,12 +19,12 @@ export interface IResponseOk {
     ok: true;
     status: number;
     message: string;
-    data: Record<string, unknown>;
+    data: unknown;
 }
 
 export interface IResponseError {
     ok: false;
     status: number;
     message: string;
-    data: null;
+    data: unknown;
 }
