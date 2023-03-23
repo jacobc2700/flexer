@@ -1,8 +1,10 @@
+-- TODO: remove
+
 CREATE TABLE users (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
-    email TEXT NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
     password TEXT,
-    username TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE,
     first_name TEXT DEFAULT "",
     last_name TEXT DEFAULT "",
     created_at TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp,

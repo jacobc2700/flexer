@@ -1,3 +1,5 @@
+-- TODO: remove
+
 CREATE TABLE sessions (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     expires TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp NOT NULL,

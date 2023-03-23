@@ -1,5 +1,5 @@
 CREATE TABLE problems (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL UNIQUE,
     question_id INT,
     question_title TEXT,
     question_title_slug TEXT,

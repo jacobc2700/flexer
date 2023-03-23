@@ -1,5 +1,5 @@
 CREATE TABLE notes (
-  id uuid DEFAULT uuid_generate_v4(),
+  id uuid DEFAULT uuid_generate_v4() UNIQUE,
   user_id uuid NOT NULL,
   title text DEFAULT "",
   description text DEFAULT "",

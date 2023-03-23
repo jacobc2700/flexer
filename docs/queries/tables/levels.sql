@@ -1,11 +1,11 @@
 CREATE TABLE levels (
-    id uuid default uuid_generate_v4() NOT NULL,
+    id uuid default uuid_generate_v4() NOT NULL UNIQUE,
     company_id uuid NOT NULL,
     title TEXT,
     location TEXT,
     level TEXT,
     tag TEXT,
-    notes TEXT,
+    notes TEXT ,
     created_at TIMESTAMP WITH TIME ZONE,
     updated_at TIMESTAMP WITH TIME ZONE,
     years_of_experience SMALLINT,
@@ -14,7 +14,7 @@ CREATE TABLE levels (
     stock_grant_value INT,
     bonus INT,
     yearly_compensation INT,
-    gender gender,
+    gender gender DEFAULT "UNSPECIFIED",
     FOREIGN KEY (company_id) REFERENCES companies (id),
     PRIMARY KEY (id)
 );

@@ -1,5 +1,7 @@
+-- TODO: remove
+
 CREATE TABLE accounts (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL UNIQUE,
     type TEXT,
     provider TEXT NOT NULL,
     providerAccountId TEXT NOT NULL,

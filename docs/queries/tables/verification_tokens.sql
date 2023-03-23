@@ -1,3 +1,5 @@
+-- TODO: remove
+
 CREATE TABLE verification_tokens (
     token TEXT NOT NULL,
     identifier TEXT NOT NULL,
