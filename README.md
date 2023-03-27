@@ -75,9 +75,9 @@ Notes:
 - GET http://127.0.0.1:8000/username/notes/note_title[?type=___&favorite]: ???
 - GET http://127.0.0.1:8000/username/notes/company/company_name/: get notes associated with specific company
 - GET http://127.0.0.1:8000/username/notes/problem/problem_name/: get notes associated with specific problem
-- DELETE http://127.0.0.1:8000/username/notes/note_id: delete an existing note
+- DELETE http://127.0.0.1:8000/username/notes: delete an existing note
 - POST http://127.0.0.1:8000/username/notes: create a new note
-- PATCH http://127.0.0.1:8000/username/notes/note_id: update an existing note
+- PATCH http://127.0.0.1:8000/username/notes: update an existing note
 
 Companies:
 

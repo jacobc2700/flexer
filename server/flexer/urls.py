@@ -22,5 +22,6 @@ urlpatterns = [
      # our custom endpoints
     path('companies/', include('companies.urls')),
     path('users/', include('users.urls')),
-    path('auth/', include('auth.urls'))
+    path('auth/', include('auth.urls')),
+    path('notes/', include('notes.urls'))
 ]
