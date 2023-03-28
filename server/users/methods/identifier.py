@@ -1,3 +1,4 @@
+''' This module handles the implementation for the methods for the /users/ endpoint. '''
 from typing import TypedDict
 from json import JSONDecodeError
 import json
@@ -9,7 +10,6 @@ from postgrest import APIError
 from utils import is_pass_valid, standard_resp
 from flexer import supabase, logger
 
-
 class PathParams(TypedDict):
     """
     GET -> identifer = username,
@@ -17,27 +17,31 @@ class PathParams(TypedDict):
     """
     identifier: str
 
-
+# http://127.0.0.1:8000/users/username/
 def get(_request: HttpRequest, path_params: PathParams) -> Response:
-    """get user by username"""
+    """ Get a user by username. """
+
+    username = None if "identifier" not in path_params else path_params["identifier"]
+
+    if not username:
+        return standard_resp({}, status.HTTP_400_BAD_REQUEST, "Missing username.")
 
     try:
-        resp = supabase.table("users").select(
-            "*").limit(1).match({'username': path_params["identifier"]}).execute()
+        resp = supabase.table("users").select("*").limit(1).match({'username': path_params["identifier"]}).execute()
 
         if len(resp.data) != 1:
             return standard_resp(None, status.HTTP_200_OK)
-
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        return standard_resp(data=resp.data, status_code=status.HTTP_200_OK)
     except APIError as err:
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
-    except Exception as ex:
+        msg = f"{err.code} - {err.message}"
+        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+    except Exception as ex: # pylint: disable=broad-except
         logger.exception(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
+# http://127.0.0.1:8000/users/id/ with [request body]
 def patch(request: HttpRequest, path_params: PathParams) -> Response:
-    """update user by id"""
+    """ Update a user by ID (specifying any number of parameters to update in the body). """
 
     try:
         body_unicode = request.body.decode('utf-8')
@@ -45,9 +49,9 @@ def patch(request: HttpRequest, path_params: PathParams) -> Response:
 
         user_object_changes = {}
 
-        # TODO: validation
         if 'email' in body:
             user_object_changes['email'] = body['email']
+        
         if 'password' in body:
             if not is_pass_valid(path_params['identifier']):
                 raise ValueError('Password must be at least 6 characters.')
@@ -59,13 +63,19 @@ def patch(request: HttpRequest, path_params: PathParams) -> Response:
         if 'last_name' in body:
             user_object_changes['last_name'] = body['last_name']
 
-        resp = supabase.table("users").update(
-            user_object_changes).eq("id", path_params["identifier"]).execute()
+        try:
+            resp = supabase.table("users").update(
+                user_object_changes).eq("id", path_params["identifier"]).execute()
 
-        if len(resp.data) != 1:
-            return standard_resp(None, status.HTTP_200_OK)
-
-        return standard_resp(resp.data[0], status.HTTP_200_OK)
+            if len(resp.data) != 1:
+                return standard_resp(None, status.HTTP_200_OK)
+            return standard_resp(data=resp.data[0], status_code=status.HTTP_200_OK)
+        except APIError as err:
+            msg = f"{err.code} - {err.message}"
+            return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+        except Exception as ex: # pylint: disable=broad-except
+            logger.exception(ex)
+            return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
@@ -73,7 +83,7 @@ def patch(request: HttpRequest, path_params: PathParams) -> Response:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))
     except APIError as err:
         return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
-    except Exception as ex:
+    except Exception as ex: # pylint: disable=broad-except
         logger.exception(ex)
         return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -91,6 +101,6 @@ def delete(_request: HttpRequest, path_params: PathParams) -> Response:
         return standard_resp(resp.data[0], status.HTTP_200_OK)
     except APIError as err:
         return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
-    except Exception as ex:
+    except Exception as ex: # pylint: disable=broad-except
         logger.exception(ex)
         return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)

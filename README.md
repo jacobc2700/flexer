@@ -17,13 +17,13 @@ Database:
 python manage.py makemigrations
 python manage.py migrate
 
-Run the app (backend):
+Run the app (back-end server):
 cd server
 pip install -r requirements.txt
 python manage.py runserver
 ==> http://127.0.0.1:8000/
 
-Run the app (frontend):
+Run the app (front-end client):
 cd client
 npm install
 npm run dev
@@ -31,41 +31,44 @@ npm run dev
 
 Unit tests:
 python manage.py test
+
+Pylint checks:
+pylint ./server (root directory)
 ```
 
 ### API Endpoints:
 
 Conventions:
 
-- https://restfulapi.net/resource-naming/
-- https://medium.com/@nadinCodeHat/rest-api-naming-conventions-and-best-practices-1c4e781eb6a5
+- https://restfulapi.net/resource-naming/.
+- https://medium.com/@nadinCodeHat/rest-api-naming-conventions-and-best-practices-1c4e781eb6a5.
 - Supabase returns a max of 1000 records -> requires pagination if more than 1000 records.
 - Notes and companies may be added specifically for users themselves, while problems cannot be created (pulled from LeetCode API).
 
-GET routes:
+GET:
 
-- only used for read operations (no db modification allowed)
-- pass data to server using exclusively query parameters
-- should be easy for a user to type in the URL to get this data returned
+- Only used for read operations (no database modification allowed).
+- Pass data to server using exclusively query parameters.
+- Should be easy for a user to type in the URL to get this data returned.
 
-DELETE/POST/PATCH routes:
+DELETE, POST, PATCH:
 
-- these operations will modify the db
-- pass data to server using request body
+- These operations will modify the database.
+- Pass data to the server using request body.
 
-username/.. routes:
+For the username/... routes:
 
-- must check authenticated status of user
-- must check if the user specified in URL matches the user making the request
-- if URL user != request user -> only return data if the resource is marked as public
+- Must check authenticated status of user.
+- Must check if the user specified in URL matches the user making the request.
+- If the URL user != request user ==> only return data if the resource is marked as public.
 
 Users:
 
-- GET http://127.0.0.1:8000/users: get all users (an admin route only - not public)
-- GET http://127.0.0.1:8000/username: get a user profile by username
-- DELETE http://127.0.0.1:8000/username: delete a user by their username
-- POST http://127.0.0.1:8000/users: create a new user (provide user info in request body)
-- PATCH http://127.0.0.1:8000/username: update an existing user profile by their username
+- GET http://127.0.0.1:8000/users: get all users (an admin route only ==> not public). ✓
+- GET http://127.0.0.1:8000/username: get a user profile by username. ✓
+- DELETE http://127.0.0.1:8000/username: delete a user by their username (test) \*
+- POST http://127.0.0.1:8000/users: create a new user (provide user info in request body) (test) \*
+- PATCH http://127.0.0.1:8000/username: update an existing user profile by their username (test) \*
 
 Notes:
 
