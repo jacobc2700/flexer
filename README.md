@@ -72,15 +72,31 @@ Users:
 
 Notes:
 
+-- Currently Unused --
 - GET http://127.0.0.1:8000/username/notes: get all the notes for a user (filtering by type can be done on the front end)
 - GET http://127.0.0.1:8000/username/notes/note_title: get note by note title
 - GET http://127.0.0.1:8000/username/notes[?type=___&favorite]: filter returned notes by their type or favorite status
 - GET http://127.0.0.1:8000/username/notes/note_title[?type=___&favorite]: ???
 - GET http://127.0.0.1:8000/username/notes/company/company_name/: get notes associated with specific company
 - GET http://127.0.0.1:8000/username/notes/problem/problem_name/: get notes associated with specific problem
-- DELETE http://127.0.0.1:8000/username/notes: delete an existing note
-- POST http://127.0.0.1:8000/username/notes: create a new note
-- PATCH http://127.0.0.1:8000/username/notes: update an existing note
+-- Currently Unused --
+
+
+- GET http://127.0.0.1:8000/companies/company_name/notes: get all public notes associcated with a company
+- GET http://127.0.0.1:8000/problems/problem_slug/notes: get all public notes associcated with a problem
+
+- GET http://127.0.0.1:8000/username/companies/company_name/notes: get all notes associated with a company for a specific user
+- GET http://127.0.0.1:8000/username/problems/problem_slug/notes: get all notes associated with a company for a specific user
+
+- GET http://127.0.0.1:8000/problems/problem_slug/notes: get notes associated with specific problem
+
+- GET http://127.0.0.1:8000/users/username/notes: get all notes for a user ✓
+- GET http://127.0.0.1:8000/users/username/notes/note_id: get a single note ✓
+
+(There is not GET associated with /notes/)
+- DELETE http://127.0.0.1:8000/notes/: delete an existing note ✓
+- POST http://127.0.0.1:8000/notes/: create a new note ✓
+- PATCH http://127.0.0.1:8000/notes/: update an existing note ✓
 
 Companies:
 
