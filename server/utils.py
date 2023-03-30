@@ -1,10 +1,19 @@
 ''' This file contains utility functions that are used in multiple places. '''
 import re
-from typing import Callable, Optional
+from typing import Callable, Optional, TypedDict
 from rest_framework import status
 from rest_framework.response import Response
 from django.http import HttpRequest
+
 from flexer import logger
+
+class Methods(TypedDict, total=False):
+    '''A dictionary of allowed HTTP methods. (each value is a function)'''
+    get: Callable
+    post: Callable
+    patch: Callable
+    delete: Callable
+    put: Callable
 
 class MethodNotAllowedError(TypeError):
     """Used when 405 (method not allowed) error occurs."""
@@ -41,7 +50,7 @@ def standard_resp(data, status_code: int, message: 'Optional[str]' = ""):
 def exec_method( # pylint: disable=too-many-return-statements disable=inconsistent-return-statements
     request: HttpRequest,
     path_params: 'Optional[dict]' = None,
-    methods: 'Optional[dict[str, Callable]]' = None
+    methods: 'Optional[Methods]' = None
     ) -> Response:
     """
     Executes the correct HTTP request method depending on the request.method property.

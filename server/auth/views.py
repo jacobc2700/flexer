@@ -14,14 +14,14 @@ def get_user_by_id(request: HttpRequest, id: str) -> Response:
     """
     Gets user data by id.
     """
-    return exec_method(request, {"identifier": id}, users_methods.get_user_by_id, None)
+    return exec_method(request, {"identifier": id}, {"get": users_methods.get_user_by_id})
 
 @api_view(['GET'])
 def get_user_by_email_address(request: HttpRequest, email_address: str) -> Response:
     """
     Gets user data by email address.
     """
-    return exec_method(request, {"identifier": email_address}, users_methods.get_user_by_email_address, None)
+    return exec_method(request, {"identifier": email_address}, {"get": users_methods.get_user_by_email_address})
 
 @api_view(['GET'])
 def get_user_by_account(request: HttpRequest, provider: str, provider_account_id: str) -> Response:
@@ -29,28 +29,28 @@ def get_user_by_account(request: HttpRequest, provider: str, provider_account_id
     Get user data by their account.
     An account contains the method the user uses to login. A single user may have multiple accounts.
     """
-    return exec_method(request, {"provider": provider, "provider_account_id": provider_account_id}, accounts_methods.get_user_by_account, None)
+    return exec_method(request, {"provider": provider, "provider_account_id": provider_account_id}, {"get": users_methods.get_user_by_account})
 
 @api_view(['POST'])
 def link_account(request: HttpRequest) -> Response:
     """
     Create a new account and link or associate it with an existing user.
     """
-    return exec_method(request, post=accounts_methods.link_account)
+    return exec_method(request, None, {"post": accounts_methods.link_account})
 
 @api_view(['DELETE'])
 def unlink_account(request: HttpRequest) -> Response:
     """
     Delete an existing account which is associated with an existing user.
     """
-    return exec_method(request, delete=accounts_methods.unlink_account)
+    return exec_method(request, None, {"delete": accounts_methods.unlink_account})
 
 @api_view(['POST'])
 def create_session(request: HttpRequest) -> Response:
     """
     Creates a session for a user.
     """
-    return exec_method(request, post=sessions_methods.create_session)
+    return exec_method(request, None, {"post": sessions_methods.create_session})
 
 @api_view(['GET', 'DELETE', 'PATCH'])
 def specific_session(request: HttpRequest, session_token: str) -> Response:
@@ -60,7 +60,7 @@ def specific_session(request: HttpRequest, session_token: str) -> Response:
     DELETE: Deletes a session by its session token.
     POST: Creates a new session for a user.
     """
-    return exec_method(request, {"session_token": session_token}, get=sessions_methods.get_session_and_user, patch=sessions_methods.update_session, delete=sessions_methods.delete_session)
+    return exec_method(request, {"session_token": session_token}, {"get": sessions_methods.get_session_and_user, "delete": sessions_methods.delete_session, "patch": sessions_methods.update_session})
 
 @api_view(['POST', 'DELETE'])
 def handle_token(request: HttpRequest) -> Response:
@@ -68,4 +68,4 @@ def handle_token(request: HttpRequest) -> Response:
     POST: Creates a new token for a user.
     DELETE: Deletes/uses a token for a user.
     """
-    return exec_method(request, post=tokens_methods.create_token, delete=tokens_methods.delete_token)
+    return exec_method(request, None, {"post": tokens_methods.create_token, "delete": tokens_methods.delete_token})
