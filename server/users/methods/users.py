@@ -1,4 +1,4 @@
-''' This module handles the implementation for the methods for the /users endpoint. '''
+''' This module handles the implementation for the methods for the /users/ endpoint. '''
 import json
 from json import JSONDecodeError
 from rest_framework import status
@@ -38,18 +38,15 @@ def post(request: HttpRequest, _path_params = None) -> Response:
         if not is_pass_valid(body['password']):
             raise ValueError('Password does not conform to requirements.')
 
-        is_email = 'email' in body and len(body['email']) > 0
-        is_username = 'username' in body and len(body['username']) > 0
-        is_first_name = 'first_name' in body and len(body['first_name']) > 0
-        is_last_name = 'last_name' in body and len(body['last_name']) > 0
-        is_password = 'password' in body and len(body['password']) > 0
+        is_email = 'email' in body and len(body['email'].strip().replace(" ", "_")) > 0
+        is_username = 'username' in body and len(body['username'].strip().replace(" ", "_")) > 0
+        is_first_name = 'first_name' in body and len(body['first_name'].strip().replace(" ", "_")) > 0
+        is_last_name = 'last_name' in body and len(body['last_name'].strip().replace(" ", "_")) > 0
+        is_password = 'password' in body and len(body['password'].strip().replace(" ", "_")) > 0
         valid_fields = is_email and is_username and is_first_name and is_last_name and is_password
 
         if not valid_fields:
             raise ValueError('Missing required fields.')
-
-        if len(body.keys()) != 5:
-            raise ValueError('Too many fields.')
 
         same_username = users.select("*").match({'username': body['username']}).execute()
 

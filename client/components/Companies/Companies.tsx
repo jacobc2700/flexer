@@ -5,6 +5,7 @@ import { Container } from '@mui/material';
 // import { TextField } from '@mui/material/TextField';
 import { signIn, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+
 import SearchBar from '../UI/SearchBar';
 import CompanyCard from './CompanyCard';
 
@@ -27,20 +28,20 @@ const Companies: React.FC = () => {
             id: '1',
             name: 'Facebook',
             reviews: 123,
-            salary: 100000
+            salary: 100000,
         },
         {
             id: '2',
             name: 'Google',
             reviews: 124,
-            salary: 105000
+            salary: 105000,
         },
         {
             id: '3',
             name: 'Amazon',
             reviews: 125,
-            salary: 120000
-        }
+            salary: 120000,
+        },
     ]);
 
     // const { data: session, status } = useSession();
@@ -64,16 +65,13 @@ const Companies: React.FC = () => {
 
     return (
         <Container>
-        <SearchBar/>
-        {/* <TextField id="standard-basic" label="Standard" variant="standard" /> */}
-        <div>
-            {companies.map((c) => (
-                <CompanyCard
-                    key={c.id}
-                    company={c}
-                />
-            ))}
-        </div>
+            <SearchBar />
+            {/* <TextField id="standard-basic" label="Standard" variant="standard" /> */}
+            <div>
+                {companies.map((c) => (
+                    <CompanyCard key={c.id} company={c} />
+                ))}
+            </div>
         </Container>
         // <SearchBar/>
         // // <TextField id="standard-basic" label="Standard" variant="standard" />

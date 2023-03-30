@@ -1,60 +1,27 @@
 import { ICompany } from '@/types';
 import ServerAdapter from '@/utils/adapter';
 import Validate from '@/utils/validate';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Container } from '@mui/material';
 // import { TextField } from '@mui/material/TextField';
 import { signIn, useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
+
 import SearchBar from '../UI/SearchBar';
 import CompanyCard from './CompanyCard';
 
-// let flag = false; // TEMP: prevents a second api call from being made in useeffect
-
-// function createCompanyCard(company: ICompany) {
-//     return (
-//       <CompanyCard
-//         id={company.id}
-//         name={company.name}
-//         reviews={company.reviews}
-//         salary={company.salary}
-//       />
-//     );
-//   }
-
 const Company: React.FC = (props) => {
+    // Make a new API call to get the company data
     return (
         <Container>
-        <SearchBar/>
-        {/* <TextField id="standard-basic" label="Standard" variant="standard" /> */}
-        <div>
-            {companies.map((c) => (
-                <CompanyCard
-                    key={c.id}
-                    company={c}
-                />
-            ))}
-        </div>
+            {/* <TextField id="standard-basic" label="Standard" variant="standard" /> */}
+            <Link style={{ color: 'white' }} href='/companies/'>
+                <ArrowBackIcon />
+            </Link>
+            <div>a company name goes here</div>
         </Container>
-        // <SearchBar/>
-        // // <TextField id="standard-basic" label="Standard" variant="standard" />
-        // <div>
-        //     {companies.map((c) => (
-        //         <CompanyCard
-        //             key={c.id}
-        //             company={c}
-        //         />
-        //     ))}
-        // </div>
-        // <div>
-        //     <button onClick={() => signIn()}>fd</button>
-        //     {status === 'authenticated' && session && 'user' in session && (
-        //         <p>Signed in as {session.user?.email ?? 'die'}</p>
-        //     )}
-        //     {status !== 'authenticated' && (
-        //         <a href='/api/auth/signin'>Sign in</a>
-        //     )}
-        // </div>
     );
 };
 
-export default Companies;
+export default Company;
