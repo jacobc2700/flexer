@@ -1,33 +1,43 @@
+''' This module contains the URL endpoints for companies. '''
 from django.http import HttpRequest
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-import asyncio
 from flexer import supabase
+from utils import exec_method
 
-# /companies
+from .methods import companies as companies_methods
+from .methods import identifier as identifier_methods
+
 @api_view(['GET'])
-def get_all_companies(request: HttpRequest) -> Response:
-    """get overview data for all companies"""
+def companies(request: HttpRequest) -> Response:
+    """
+    /companies
+    GET: view all companies.
 
-    # TODO: make this join better:
-    data = supabase.table("get_companies").select("*").execute()
-    assert len(data.data) > 0
-    return Response(data)
+    http://127.0.0.1:8000/companies/ (GET)
+    """
 
-# /companies/company_name
+    methods = {
+        'get': companies_methods.get
+    }
+
+    return exec_method(request=request, path_params=None, methods=methods)
+
 @api_view(['GET'])
-def get_company(request, company_name):
-    """get detailed info of a single company"""
+def identifier(request: HttpRequest, id: str) -> Response:
+    """
+    /companies/company_name
+    GET: gets data back about a single company by company name.
 
-    data = supabase.table("get_companies").select("*").limit(1).eq("name", company_name).execute()
-    assert len(data.data) > 0
-    return Response(data)
+    http://127.0.0.1:8000/companies/company_name/ (GET)
+    """
 
-# # /companies/company_name/notes
-# @api_view(['GET'])
-# def get_company_notes(request, company_name):
-#     """get all notes for a single company"""
+    path_params = {
+        "identifier": id
+    }
 
-#     data = supabase.table("get_company_notes").select("*").eq("name", company_name).execute()
-#     assert len(data.data) > 0
-#     return Response(data)
+    methods = {
+        'get': identifier_methods.get
+    }
+
+    return exec_method(request=request, path_params=path_params, methods=methods)

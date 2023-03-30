@@ -1,4 +1,4 @@
-''' This module handles the implementation for the methods for the /users/ endpoint. '''
+''' This module handles the implementation for the methods for the /users/[identifier] endpoint. '''
 from typing import TypedDict
 from json import JSONDecodeError
 import json
