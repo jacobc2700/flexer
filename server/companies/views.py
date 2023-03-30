@@ -7,6 +7,7 @@ from utils import exec_method
 
 from .methods import companies as companies_methods
 from .methods import identifier as identifier_methods
+from .methods import notes as notes_methods
 
 @api_view(['GET'])
 def companies(request: HttpRequest) -> Response:
@@ -38,6 +39,23 @@ def identifier(request: HttpRequest, id: str) -> Response:
 
     methods = {
         'get': identifier_methods.get
+    }
+
+    return exec_method(request=request, path_params=path_params, methods=methods)
+
+@api_view(['GET'])
+def company_notes(request: HttpRequest, company_name: str) -> Response:
+    """
+    /companies/company_name/notes
+    GET: gets notes about a single company by company name.
+    """
+    
+    path_params = {
+        "company_name": company_name
+    }
+
+    methods = {
+        'get': notes_methods.get_notes
     }
 
     return exec_method(request=request, path_params=path_params, methods=methods)
