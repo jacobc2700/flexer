@@ -82,8 +82,8 @@ Notes:
 -- Currently Unused --
 
 
-- GET http://127.0.0.1:8000/companies/company_name/notes: get all public notes associcated with a company
-- GET http://127.0.0.1:8000/problems/problem_slug/notes: get all public notes associcated with a problem
+- GET http://127.0.0.1:8000/companies/company_name/notes: get all public notes associcated with a company ✓
+- GET http://127.0.0.1:8000/problems/problem_slug/notes: get all public notes associcated with a problem 
 
 - GET http://127.0.0.1:8000/username/companies/company_name/notes: get all notes associated with a company for a specific user
 - GET http://127.0.0.1:8000/username/problems/problem_slug/notes: get all notes associated with a company for a specific user
