@@ -1,3 +1,4 @@
+import re
 from typing import TypedDict
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,7 +14,7 @@ class PathParams(TypedDict):
     """
     company_name: str
 
-def get_notes(_request: HttpRequest, path_params=None) -> Response:
+def get_notes(_request: HttpRequest, path_params: PathParams) -> Response:
     """
     Gets all notes associated with a company
     """
@@ -24,9 +25,13 @@ def get_notes(_request: HttpRequest, path_params=None) -> Response:
         if not company_name:
             return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Missing company name.")
 
-        # resp = supabase.table("").select(
-        #     "*").match({'user_id': user_id}).execute()
-        resp = supabase.table("get_company_notes").select("*").eq("company_name", company_name).execute()
+        # remove unneccessary whitespace and make uppercase
+        company_name = company_name.strip().upper()
+        company_name = re.sub('\s+', ' ', company_name)
+
+        resp = supabase.table("get_company_notes").select(
+            "*").match({"company_name": company_name}).execute()
+
         return standard_resp(resp.data, status.HTTP_200_OK)
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))

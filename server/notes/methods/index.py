@@ -62,6 +62,11 @@ def post(request: HttpRequest, _path_params=None) -> Response:
             "type": note_type
         }
 
+        if note_type == "COMPANY" and body.get('company_id') is not None:
+            new_note_dict["company_id"] = body['company_id']
+        if note_type == "PROBLEM" and body.get('problem_id') is not None:
+            new_note_dict["problem_id"] = body['problem_id']
+
         resp = supabase.table("notes").insert(new_note_dict).execute()
 
         if len(resp.data) != 1:
@@ -96,22 +101,31 @@ def patch(request: HttpRequest, _path_params=None) -> Response:
         if body.get('note_id') is None:
             raise ValueError('note_id is required')
 
-        note_type = body.get('type')
-        visibility = body.get('visibility')
-
-        if note_type not in ["COMPANY", "PROBLEM", "UNSPECIFIED"]:
-            note_type = "UNSPECIFIED"
-        if visibility not in ["PRIVATE", "PUBLIC"]:
-            visibility = "PRIVATE"
-
         new_note_dict = {
-            "title": body.get('title', ""),
-            "description": body.get('description', ""),
-            "body": body.get('body', ""),
-            "type": note_type,
-            "visibility": visibility,
             "updated_at": datetime.datetime.now().isoformat()
         }
+
+        if body.get('title') is not None:
+            new_note_dict["title"] = body['title']
+        if body.get('description') is not None:
+            new_note_dict["description"] = body['description']
+        if body.get('body') is not None:
+            new_note_dict["body"] = body['body']
+        if body.get('type') is not None:
+            note_type = body.get('type')
+            if note_type == "COMPANY" and body.get('company_id') is not None:
+                new_note_dict['type'] = note_type
+                new_note_dict["company_id"] = body['company_id']
+            elif note_type == "PROBLEM" and body.get('problem_id') is not None:
+                new_note_dict['type'] = note_type
+                new_note_dict["problem_id"] = body['problem_id']
+            elif note_type == "UNSPECIFIED":
+                new_note_dict['type'] = note_type
+                new_note_dict["company_id"] = None
+                new_note_dict["problem_id"] = None
+        if body.get('visibility') is not None:
+            if body.get('visibility') in ["PRIVATE", "PUBLIC"]:
+                new_note_dict["visibility"] = body.get('visibility')
 
         resp = supabase.table("notes").update(new_note_dict).match(
             {"user_id": body['user_id'], "id": body['note_id']}).execute()
