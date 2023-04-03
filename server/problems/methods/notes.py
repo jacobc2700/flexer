@@ -13,20 +13,20 @@ class PathParams(TypedDict):
     """
     company_name: str
 
-def get_notes(_request: HttpRequest, path_params=None) -> Response:
+def get_notes_for_problem(_request: HttpRequest, path_params=None) -> Response:
     """
-    Gets all notes associated with a company
+    Gets all notes associated with a problem
     """
 
     try:
-        company_name = None if "company_name" not in path_params else path_params["company_name"]
+        # company_name = None if "company_name" not in path_params else path_params["company_name"]
+        
+        question_slug = None if "identifier" not in path_params else path_params["identifier"]
 
-        if not company_name:
-            return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Missing company name.")
+        if not question_slug:
+            return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Missing question slug.")
 
-        # resp = supabase.table("").select(
-        #     "*").match({'user_id': user_id}).execute()
-        resp = supabase.table("get_company_notes").select("*").eq("company_name", company_name).execute()
+        resp = supabase.table("get_problem_notes").select("*").eq("question_title_slug", question_slug).execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))

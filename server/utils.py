@@ -8,7 +8,7 @@ from django.http import HttpRequest
 from flexer import logger
 
 class Methods(TypedDict, total=False):
-    '''A dictionary of allowed HTTP methods. (each value is a function)'''
+    '''A dictionary of allowed HTTP methods (key=string, value=function).'''
     get: Callable
     post: Callable
     patch: Callable

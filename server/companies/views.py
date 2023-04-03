@@ -2,7 +2,6 @@
 from django.http import HttpRequest
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from flexer import supabase
 from utils import exec_method
 
 from .methods import companies as companies_methods
@@ -48,8 +47,10 @@ def company_notes(request: HttpRequest, company_name: str) -> Response:
     """
     /companies/company_name/notes
     GET: gets notes about a single company by company name.
+
+    http://127.0.0.1:8000/companies/company_name/notes (GET)
     """
-    
+
     path_params = {
         "company_name": company_name
     }
