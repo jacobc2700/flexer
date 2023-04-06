@@ -14,7 +14,7 @@ def get(_request: HttpRequest, _path_params = None) -> Response:
     """ Get all companies in the same table. """
 
     try:
-        resp = supabase.table("companies").select("*").execute()
+        resp = supabase.table("get_companies").select("*").execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
     except APIError as err:
         error_message = f"{err.code} - {err.message}"

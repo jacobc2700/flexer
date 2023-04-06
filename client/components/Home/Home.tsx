@@ -1,3 +1,4 @@
+import AppContext from '@/contexts/AppContext';
 import Validate from '@/utils/validate';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -16,7 +17,7 @@ import {
 } from '@mui/material';
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 type uuid = string;
 type visibility = 'PRIVATE' | 'PUBLIC';
@@ -52,6 +53,9 @@ const Home: React.FC = () => {
         emailVerified: null,
         image: 'https://picsum.photos/200/300',
     });
+
+    const notes = useContext(AppContext);
+    console.log(notes)
 
     // useEffect(() => {
     //     const getUserData = async () => {

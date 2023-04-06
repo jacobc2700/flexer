@@ -1,8 +1,8 @@
 // import '@/styles/globals.css';
+import AppThemeProvider from '@/components/UI/Theme';
+import { AppContextProvider } from '@/contexts/AppContext';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
-
-import AppThemeProvider from '../components/UI/Theme';
 
 export default function App({
     Component,
@@ -10,9 +10,11 @@ export default function App({
 }: AppProps) {
     return (
         <SessionProvider session={session}>
-            <AppThemeProvider>
-                <Component {...pageProps} />
-            </AppThemeProvider>
+            <AppContextProvider>
+                <AppThemeProvider>
+                    <Component {...pageProps} />
+                </AppThemeProvider>
+            </AppContextProvider>
         </SessionProvider>
     );
 }

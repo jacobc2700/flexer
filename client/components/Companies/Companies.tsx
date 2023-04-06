@@ -1,48 +1,36 @@
+import AppContext from '@/contexts/AppContext';
 import { ICompany } from '@/types';
 import ServerAdapter from '@/utils/adapter';
 import Validate from '@/utils/validate';
 import { Container } from '@mui/material';
-// import { TextField } from '@mui/material/TextField';
 import { signIn, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-
+import { useContext, useEffect, useState } from 'react';
 import SearchBar from '../UI/SearchBar';
 import CompanyCard from './CompanyCard';
 
-// let flag = false; // TEMP: prevents a second api call from being made in useeffect
-
-// function createCompanyCard(company: ICompany) {
-//     return (
-//       <CompanyCard
-//         id={company.id}
-//         name={company.name}
-//         reviews={company.reviews}
-//         salary={company.salary}
-//       />
-//     );
-//   }
-
 const Companies: React.FC = () => {
-    const [companies, setCompanies] = useState<ICompany[]>([
-        {
-            id: '1',
-            name: 'Facebook',
-            reviews: 123,
-            salary: 100000,
-        },
-        {
-            id: '2',
-            name: 'Google',
-            reviews: 124,
-            salary: 105000,
-        },
-        {
-            id: '3',
-            name: 'Amazon',
-            reviews: 125,
-            salary: 120000,
-        },
-    ]);
+    const companies = useContext(AppContext).companies;
+    console.log(companies);
+    // const [companies, setCompanies] = useState<ICompany[]>([
+    //     {
+    //         id: '1',
+    //         name: 'Facebook',
+    //         reviews: 123,
+    //         salary: 100000,
+    //     },
+    //     {
+    //         id: '2',
+    //         name: 'Google',
+    //         reviews: 124,
+    //         salary: 105000,
+    //     },
+    //     {
+    //         id: '3',
+    //         name: 'Amazon',
+    //         reviews: 125,
+    //         salary: 120000,
+    //     },
+    // ]);
 
     // const { data: session, status } = useSession();
 
