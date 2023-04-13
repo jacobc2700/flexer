@@ -1,4 +1,5 @@
 import AppContext from '@/contexts/AppContext';
+import AuthContext from '@/contexts/AuthContext';
 import Validate from '@/utils/validate';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -13,7 +14,7 @@ import {
     Grid,
     Paper,
     Stack,
-    Typography
+    Typography,
 } from '@mui/material';
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -37,25 +38,47 @@ interface IUser {
 }
 
 const Home: React.FC = () => {
+    const { user, updateEmail } = useContext(AuthContext);
+
     // const {data: session, status} = useSession();
     const [isEditable, setIsEditable] = useState(false);
 
-    const [user, setUser] = useState<IUser | null>({
-        id: '6ece3765-64c8-4b96-b685-2ee5d636127e',
-        email: 'andrewzhlee@gmail.com',
-        password: '155309252',
-        username: 'bingbong',
-        first_name: 'bing',
-        last_name: 'bong',
-        created_at: '2023-03-20T03:12:48.472237+00:00',
-        updated_at: '2023-03-20T03:12:48.472237+00:00',
-        visibility: 'PRIVATE',
-        emailVerified: null,
-        image: 'https://picsum.photos/200/300',
-    });
+    // const [user, setUser] = useState<IUser | null>({
+    //     id: '6ece3765-64c8-4b96-b685-2ee5d636127e',
+    //     email: 'andrewzhlee@gmail.com',
+    //     password: '155309252',
+    //     username: 'bingbong',
+    //     first_name: 'bing',
+    //     last_name: 'bong',
+    //     created_at: '2023-03-20T03:12:48.472237+00:00',
+    //     updated_at: '2023-03-20T03:12:48.472237+00:00',
+    //     visibility: 'PRIVATE',
+    //     emailVerified: null,
+    //     image: 'https://picsum.photos/200/300',
+    // });
 
-    const notes = useContext(AppContext);
-    console.log(notes)
+    // const notes = useContext(AppContext);
+    // console.log(notes)
+
+    const { data, status } = useSession();
+
+    useEffect(() => {
+        console.log(data, status);
+        if (
+            status === 'authenticated' &&
+            data &&
+            'user' in data &&
+            data.user &&
+            'email' in data.user &&
+            data.user.email
+        ) {
+            updateEmail(data.user.email);
+        }
+    }, [data, status, updateEmail]);
+
+    useEffect(() => {
+        console.log(user)
+    }, [user])
 
     // useEffect(() => {
     //     const getUserData = async () => {

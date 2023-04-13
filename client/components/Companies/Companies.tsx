@@ -1,5 +1,5 @@
 import AppContext from '@/contexts/AppContext';
-import { ICompany } from '@/types';
+import { ICompanyPreview } from '@/types';
 import ServerAdapter from '@/utils/adapter';
 import Validate from '@/utils/validate';
 import { Container } from '@mui/material';

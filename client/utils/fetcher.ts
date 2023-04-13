@@ -3,7 +3,7 @@ import { IApiResponse } from '@/types';
 export default async function fetcher(
     url: RequestInfo,
     body?: RequestInit
-): Promise<ApiResponse> {
+): Promise<IApiResponse> {
     try {
         const res = await fetch(url, body);
         return await res.json();

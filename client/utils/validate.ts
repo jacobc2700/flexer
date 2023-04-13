@@ -5,7 +5,7 @@ import {
     VerificationToken
 } from 'next-auth/adapters';
 
-import { ApiResponseType, IResponseError, IResponseOk } from '../types';
+import { IApiResponse, IResponseError, IResponseOk } from '../types';
 
 export default class Validate {
     static isNullish(data: unknown): data is undefined | null {
@@ -40,7 +40,7 @@ export default class Validate {
         return Array.isArray(data);
     }
 
-    static isValidResponse(data: unknown): data is ApiResponseType {
+    static isValidResponse(data: unknown): data is IApiResponse {
         return (
             Validate.isRecord(data) &&
             'ok' in data &&
@@ -53,11 +53,11 @@ export default class Validate {
         );
     }
 
-    static isResponseOk(data: ApiResponseType): data is IResponseOk {
+    static isResponseOk(data: IApiResponse): data is IResponseOk {
         return data.ok === true;
     }
 
-    static isResponseError(data: ApiResponseType): data is IResponseError {
+    static isResponseError(data: IApiResponse): data is IResponseError {
         return data.ok === false;
     }
 

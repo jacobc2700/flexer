@@ -11,8 +11,8 @@ type ProblemDifficulty = 1 | 2 | 3;
 export interface ICompanyPreview {
     id: string;
     company_name: string;
-    total_reviews: number,
-    average_salary: number
+    Reviews: number,
+    Salary: number
 }
 
 // Select a company
@@ -69,8 +69,16 @@ export interface IUser {
 
 
 export interface IApiResponse {
-    ok: true;
+    ok: boolean;
     status: number;
     message: string;
     data: unknown;
+}
+
+export interface IResponseOk extends IApiResponse {
+    ok: true;
+}
+
+export interface IResponseError extends IApiResponse {
+    ok: false;
 }

@@ -22,6 +22,7 @@ export const authOptions: AuthOptions = {
             // else if (!prof.email_verified) return "/auth/verify";
             // }
             // return false;
+            console.log(account, profile)
             return true;
         },
     },
