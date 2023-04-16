@@ -26,11 +26,24 @@ def get(_request: HttpRequest, path_params: PathParams) -> Response:
         return standard_resp({}, status.HTTP_400_BAD_REQUEST, "Missing company name.")
 
     try:
-        resp = supabase.table("get_companies").select("*").limit(1).eq("name", company_name).execute()
+        company_resp = supabase.table("companies").select("id").match({"company_name": company_name}).execute()
 
-        if len(resp.data) != 1:
-            return standard_resp(None, status.HTTP_200_OK)
-        return standard_resp(data=resp.data, status_code=status.HTTP_200_OK)
+        if len(company_resp.data) != 1 or 'id' not in company_resp.data[0]:
+            return standard_resp({}, status.HTTP_404_NOT_FOUND, "Company not found.")
+        
+        # Slow:
+        company_id = company_resp.data[0]['id']
+        notes_resp = supabase.table("get_company_notes").select("*").match({"visibility": "PUBLIC", "company_name": company_name}).execute()
+        problems_resp = supabase.table("get_company_problems").select("*").match({"company_name": company_name}).execute()
+        levels_resp = supabase.table("levels").select("*").match({"company_id": company_id}).execute()
+
+        company_data = {
+            "notes": notes_resp.data,
+            "problems": problems_resp.data,
+            "levels": levels_resp.data
+        }
+        
+        return standard_resp(data=company_data, status_code=status.HTTP_200_OK)
     except APIError as err:
         msg = f"{err.code} - {err.message}"
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
