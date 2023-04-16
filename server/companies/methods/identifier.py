@@ -26,7 +26,7 @@ def get(_request: HttpRequest, path_params: PathParams) -> Response:
         return standard_resp({}, status.HTTP_400_BAD_REQUEST, "Missing company name.")
 
     try:
-        company_resp = supabase.table("companies").select("id").match({"company_name": company_name}).execute()
+        company_resp = supabase.table("companies").select("*").match({"company_name": company_name}).execute()
 
         if len(company_resp.data) != 1 or 'id' not in company_resp.data[0]:
             return standard_resp({}, status.HTTP_404_NOT_FOUND, "Company not found.")
@@ -38,6 +38,7 @@ def get(_request: HttpRequest, path_params: PathParams) -> Response:
         levels_resp = supabase.table("levels").select("*").match({"company_id": company_id}).execute()
 
         company_data = {
+            "company": company_resp.data[0],
             "notes": notes_resp.data,
             "problems": problems_resp.data,
             "levels": levels_resp.data

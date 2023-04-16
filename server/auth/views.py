@@ -29,7 +29,7 @@ def get_user_by_account(request: HttpRequest, provider: str, provider_account_id
     Get user data by their account.
     An account contains the method the user uses to login. A single user may have multiple accounts.
     """
-    return exec_method(request, {"provider": provider, "provider_account_id": provider_account_id}, {"get": users_methods.get_user_by_account})
+    return exec_method(request, {"provider": provider, "provider_account_id": provider_account_id}, {"get": accounts_methods.get_user_by_account})
 
 @api_view(['POST'])
 def link_account(request: HttpRequest) -> Response:
