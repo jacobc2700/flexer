@@ -29,56 +29,56 @@ export const AppContextProvider: React.FC<IProps> = (props) => {
 
     // companies, problems, users,
 
-    // const { data: notesResp } = useSWR(
-    //     'http://localhost:8000/users/bingbong/notes',
-    //     fetcher
-    // );
+    const { data: notesResp } = useSWR(
+        'http://localhost:8000/users/bingbong/notes',
+        fetcher
+    );
 
-    // useEffect(() => {
-    //     // do error handling and load state.
-    //     if (
-    //         Validate.isValidResponse(notesResp) &&
-    //         Validate.isResponseOk(notesResp)
-    //     ) {
-    //         const fields = notesResp.data as unknown[];
-    //         setNotes(fields);
-    //     }
-    // }, [notesResp]);
+    useEffect(() => {
+        // do error handling and load state.
+        if (
+            Validate.isValidResponse(notesResp) &&
+            Validate.isResponseOk(notesResp)
+        ) {
+            const fields = notesResp.data as unknown[];
+            setNotes(fields);
+        }
+    }, [notesResp]);
 
-    // const { data: problemsResp } = useSWR(
-    //     'http://localhost:8000/problems/',
-    //     fetcher
-    // );
+    const { data: problemsResp } = useSWR(
+        'http://localhost:8000/problems/',
+        fetcher
+    );
 
-    // useEffect(() => {
-    //     // do error handling and load state.
-    //     if (
-    //         Validate.isValidResponse(problemsResp) &&
-    //         Validate.isResponseOk(problemsResp)
-    //     ) {
-    //         const fields = problemsResp.data as unknown[];
-    //         setProblems(fields);
-    //     }
-    // }, [problemsResp]);
+    useEffect(() => {
+        // do error handling and load state.
+        if (
+            Validate.isValidResponse(problemsResp) &&
+            Validate.isResponseOk(problemsResp)
+        ) {
+            const fields = problemsResp.data as unknown[];
+            setProblems(fields);
+        }
+    }, [problemsResp]);
 
-    // // COMPNAIES
-    // const { data: companiesResp } = useSWR(
-    //     'http://localhost:8000/companies/',
-    //     fetcher
-    // );
+    // COMPNAIES
+    const { data: companiesResp } = useSWR(
+        'http://localhost:8000/companies/',
+        fetcher
+    );
 
-    // useEffect(() => {
-    //     // do error handling and load state.
-    //     if (
-    //         Validate.isValidResponse(companiesResp) &&
-    //         Validate.isResponseOk(companiesResp)
-    //     ) {
-    //         const fields = companiesResp.data as unknown[];
-    //         setCompanies(fields);
+    useEffect(() => {
+        // do error handling and load state.
+        if (
+            Validate.isValidResponse(companiesResp) &&
+            Validate.isResponseOk(companiesResp)
+        ) {
+            const fields = companiesResp.data as unknown[];
+            setCompanies(fields);
 
-    //         // if (Validate.isAdapterAccount(fields)) return;
-    //     }
-    // }, [companiesResp]);
+            // if (Validate.isAdapterAccount(fields)) return;
+        }
+    }, [companiesResp]);
 
     // do whatever in here
     // API calls
