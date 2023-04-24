@@ -10,13 +10,24 @@ import SearchBar from '../UI/SearchBar';
 
 const Notes: React.FC = () => {
     const notes = useContext(AppContext).notes;
+
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [filteredNotes, setFilteredNotes] = useState<unknown[]>([]);
+
     console.log(notes);
+
+    useEffect(() => {
+        if (searchQuery !== '') 
+            setFilteredNotes(notes.filter((n) => n.title.includes(searchQuery)))
+        else
+            setFilteredNotes(notes);
+    }, [notes, searchQuery]);
 
     return (
         <Container>
-            <SearchBar />
+            <SearchBar updateQuery={(val) => setSearchQuery(val.trim())} />
             <Container>
-                {notes.filter().map((n) => (
+                {filteredNotes.map((n) => (
                     <div key={n.id}>
                         <h1>{n.title}</h1>
                         <p>{n.content}</p>
