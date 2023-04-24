@@ -2,7 +2,7 @@ import {
     Adapter,
     AdapterSession,
     AdapterUser,
-    VerificationToken
+    VerificationToken,
 } from 'next-auth/adapters';
 
 // import { Database } from './database.types';
@@ -23,6 +23,22 @@ export function format<T>(obj: Record<string, any>): T {
     return obj as T;
 }
 
+// delet eit later
+function makeid(length: number) {
+    let result = '';
+    const characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+        );
+        counter += 1;
+    }
+    return result;
+}
+
 // TODO: validate, return proper errors.
 const ServerAdapter = (): Adapter => {
     return {
@@ -32,10 +48,8 @@ const ServerAdapter = (): Adapter => {
                 method: 'POST',
                 body: JSON.stringify({
                     ...user,
-                    password: Math.floor(
-                        Math.random() * 10000000000
-                    ).toString(),
-                    username: 'bingbong',
+                    password: 'Aj203axmcoalwd_',
+                    username: makeid(10),
                     first_name: 'bing',
                     last_name: 'bong',
                 }),

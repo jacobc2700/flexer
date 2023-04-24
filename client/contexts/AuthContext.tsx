@@ -28,7 +28,7 @@ export const AuthContextProvider: React.FC<IProps> = (props) => {
     const { data: userResp } = useSWR(
         email ? `http://localhost:8000/auth/email-address/${email}` : null,
         fetcher,
-        { revalidateOnFocus: false}
+        { revalidateOnFocus: false }
     );
 
     const updateEmail = (newEmail: string) => {
@@ -44,7 +44,7 @@ export const AuthContextProvider: React.FC<IProps> = (props) => {
             Validate.isNotNullish(userResp)
         )
             // TODO: unsafe
-            setUser(userResp.data as IUser)
+            setUser(userResp.data as IUser);
     }, [userResp]);
 
     return (

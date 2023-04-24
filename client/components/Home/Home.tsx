@@ -39,6 +39,7 @@ interface IUser {
 
 const Home: React.FC = () => {
     const { user, updateEmail } = useContext(AuthContext);
+    const { updateUsername } = useContext(AppContext);
 
     // const {data: session, status} = useSession();
     const [isEditable, setIsEditable] = useState(false);
@@ -77,8 +78,12 @@ const Home: React.FC = () => {
     }, [data, status, updateEmail]);
 
     useEffect(() => {
-        console.log(user)
-    }, [user])
+        updateUsername(user?.username ?? '');
+    }, [user, updateUsername]);
+
+    useEffect(() => {
+        console.log(user);
+    }, [user]);
 
     // useEffect(() => {
     //     const getUserData = async () => {

@@ -30,6 +30,11 @@ def post(request: HttpRequest, _path_params = None) -> Response:
     # is_pass_valid(password) ==> needs to be true.
     # [first_name, last_name, email, password, username] ==> needs to be in body.
 
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    print(body)
+    print("creating a new user")
+
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
@@ -73,10 +78,12 @@ def post(request: HttpRequest, _path_params = None) -> Response:
 
         return standard_resp(resp.data[0], status.HTTP_201_CREATED)
     except JSONDecodeError:
+        print("JSON Decode Error")
         msg = "Invalid request body."
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, msg)
     except ValueError as err:
         msg = str(err)
+        print(msg)
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, msg)
     except APIError as err:
         msg = f"{err.code} - {err.message}"

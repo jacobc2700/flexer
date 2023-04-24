@@ -11,21 +11,10 @@ from flexer import supabase, logger
 
 
 def get(request: HttpRequest, _path_params=None) -> Response:
-    """get all notes associated with a user"""
-
-    #
-    # TEMP: should be moved to /users/notes later
-    # /notes?user_id=
-    #
+    """get all the public notes"""
 
     try:
-        user_id = request.query_params.get('user_id')
-
-        if user_id is None:
-            raise ValueError('user_id is required')
-
-        resp = supabase.table("notes").select(
-            "*").match({'user_id': user_id}).execute()
+        resp = supabase.table("get_notes_with_users").select("*").match({'visibility': 'PUBLIC'}).execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))

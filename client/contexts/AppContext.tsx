@@ -8,12 +8,14 @@ interface IAppContext {
     notes: unknown[];
     companies: unknown[];
     problems: unknown[];
+    updateUsername: (username: string) => void;
 }
 
 const defaultValues: IAppContext = {
     notes: [],
     companies: [],
     problems: [],
+    updateUsername: () => ({}),
 };
 
 const AppContext = createContext<IAppContext>(defaultValues);
@@ -23,16 +25,22 @@ interface IProps {
 }
 
 export const AppContextProvider: React.FC<IProps> = (props) => {
-    const [notes, setNotes] = useState<unknown[]>([]);
+    const [notes, setNotes] = useState<unknown[]>([]); //public notes for all notes
     const [problems, setProblems] = useState<unknown[]>([]);
     const [companies, setCompanies] = useState<unknown[]>([]);
+    const [username, setUsername] = useState<string>('');
+
+    // TODO:
+    // const [userNotes, setUserNotes] = useState<unknown[]>([]); //private notes for user
+
+    const updateUsername = (newUsername: string) => {
+        if (newUsername === '') return;
+        setUsername(newUsername);
+    };
 
     // companies, problems, users,
 
-    const { data: notesResp } = useSWR(
-        'http://localhost:8000/users/bingbong/notes',
-        fetcher
-    );
+    const { data: notesResp } = useSWR('http://localhost:8000/notes/', fetcher);
 
     useEffect(() => {
         // do error handling and load state.
@@ -84,7 +92,9 @@ export const AppContextProvider: React.FC<IProps> = (props) => {
     // API calls
 
     return (
-        <AppContext.Provider value={{ notes, problems, companies }}>
+        <AppContext.Provider
+            value={{ notes, problems, companies, updateUsername }}
+        >
             {props.children}
         </AppContext.Provider>
     );
