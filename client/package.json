@@ -11,6 +11,8 @@
         "devall": "concurrently \"python ../server/manage.py runserver\" \"npm run dev\""
     },
     "dependencies": {
+        "@editorjs/editorjs": "^2.26.5",
+        "@editorjs/header": "^2.7.0",
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
         "@mui/icons-material": "^5.11.9",
