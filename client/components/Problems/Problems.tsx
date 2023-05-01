@@ -11,6 +11,7 @@ import { signIn, useSession } from 'next-auth/react';
 import { useContext, useEffect, useState } from 'react';
 
 import SearchBar from '../UI/SearchBar';
+import { Problem } from '@/schema/Problem.schema';
 
 const difficulty = new Map();
 difficulty.set(1, ['E', '#A2DED0']);
@@ -19,11 +20,23 @@ difficulty.set(3, ['H', '#FFC2C2']);
 
 const Problems: React.FC = () => {
     const { problems } = useContext(AppContext);
-    console.log(problems);
+    const [search, setSearch] = useState('');
+    const [filteredProblems, setFilteredProblems] = useState<Problem[]>([]);
+
+    useEffect(() => {
+        if (search === '') {
+            setFilteredProblems(problems);
+            return;
+        }
+
+        setFilteredProblems(
+            problems.filter((p) => p.question_title.toLowerCase().includes(search))
+        );
+    }, [problems, search]);
 
     return (
         <Container>
-            <SearchBar />
+            <SearchBar updateQuery={(val) => setSearch(val.toLowerCase())} />
             <TableContainer component={Paper}>
                 <Table aria-label='problems table'>
                     <TableHead>
@@ -36,7 +49,7 @@ const Problems: React.FC = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {problems.splice(0, 10).map((row) => {
+                        {filteredProblems.slice(0, 10).map((row) => {
                             const [difficulty_name, difficulty_color] =
                                 difficulty.get(row.difficulty);
 
@@ -44,11 +57,11 @@ const Problems: React.FC = () => {
                                 (row.total_accepted / row.total_submitted) *
                                 100
                             ).toFixed(1);
-                            if (row.total_submitted === 0) acceptance = 0;
+                            if (row.total_submitted === 0) acceptance = '0';
 
                             return (
                                 <TableRow
-                                    key={row.name}
+                                    key={row.id}
                                     sx={{
                                         '&:last-child td, &:last-child th': {
                                             border: 0,

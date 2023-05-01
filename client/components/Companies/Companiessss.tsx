@@ -1,54 +1,60 @@
-import { ICompany } from '@/types';
-import ServerAdapter from '@/utils/adapter';
-import Validate from '@/utils/validate';
-import { Container } from '@mui/material';
-import { signIn, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+/*
+NOT BEING USED
+NOT BEING USED
+NOT BEING USED
+*/
 
-import CompanyCard from './CompanyCard';
+// import { ICompany } from '@/types';
+// import ServerAdapter from '@/utils/adapter';
+// import Validate from '@/utils/validate';
+// import { Container } from '@mui/material';
+// import { signIn, useSession } from 'next-auth/react';
+// import { useEffect, useState } from 'react';
 
-let flag = false; // TEMP: prevents a second api call from being made in useeffect
+// import CompanyCard from './CompanyCard';
 
-const Companiessss: React.FC = () => {
-    // const [companies, setCompanies] = useState<ICompany[]>([]);
+// let flag = false; // TEMP: prevents a second api call from being made in useeffect
 
-    // useEffect(() => {
-    //     const fetcher = async () => {
-    //         const resp = await fetch('http://localhost:8000/auth/session/');
-    //         const data: ICompany[] = (await resp.json())[0][1];
-    //         setCompanies(data);
-    //     };
+// const Companiessss: React.FC = () => {
+//     // const [companies, setCompanies] = useState<ICompany[]>([]);
 
-    const { data: session, status } = useSession();
+//     // useEffect(() => {
+//     //     const fetcher = async () => {
+//     //         const resp = await fetch('http://localhost:8000/auth/session/');
+//     //         const data: ICompany[] = (await resp.json())[0][1];
+//     //         setCompanies(data);
+//     //     };
 
-    useEffect(() => {
-        console.log(status);
+//     const { data: session, status } = useSession();
 
-        async function getData() {
-            flag = true;
-            // const adapter = await ServerAdapter().createVerificationToken({
-            //     expires: new Date(),
-            //     identifier: Math.floor(Math.random() * 1000000).toString(),
-            //     token: Math.floor(Math.random() * 1000000).toString(),
-            // });
-            const adapter = await ServerAdapter().getUser("6ece3765-64c8-4b96-b685-2ee5d636127e");
-            // console.log(adapter);
-        }
+//     useEffect(() => {
+//         console.log(status);
 
-        if (flag === false) getData();
-    }, [status]);
+//         async function getData() {
+//             flag = true;
+//             // const adapter = await ServerAdapter().createVerificationToken({
+//             //     expires: new Date(),
+//             //     identifier: Math.floor(Math.random() * 1000000).toString(),
+//             //     token: Math.floor(Math.random() * 1000000).toString(),
+//             // });
+//             const adapter = await ServerAdapter().getUser("6ece3765-64c8-4b96-b685-2ee5d636127e");
+//             // console.log(adapter);
+//         }
 
-    return (
-        <div>
-            <button onClick={() => signIn()}>fd</button>
-            {status === 'authenticated' && session && 'user' in session && (
-                <p>Signed in as {session.user?.email ?? 'die'}</p>
-            )}
-            {status !== 'authenticated' && (
-                <a href='/api/auth/signin'>Sign in</a>
-            )}
-        </div>
-    );
-};
+//         if (flag === false) getData();
+//     }, [status]);
 
-export default Companiessss;
+//     return (
+//         <div>
+//             <button onClick={() => signIn()}>fd</button>
+//             {status === 'authenticated' && session && 'user' in session && (
+//                 <p>Signed in as {session.user?.email ?? 'die'}</p>
+//             )}
+//             {status !== 'authenticated' && (
+//                 <a href='/api/auth/signin'>Sign in</a>
+//             )}
+//         </div>
+//     );
+// };
+
+// export default Companiessss;

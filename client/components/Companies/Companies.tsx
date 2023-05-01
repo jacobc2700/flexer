@@ -1,23 +1,42 @@
 import AppContext from '@/contexts/AppContext';
-import { ICompanyPreview } from '@/types';
 import ServerAdapter from '@/utils/adapter';
-import Validate from '@/utils/validate';
 import { Container } from '@mui/material';
 import { signIn, useSession } from 'next-auth/react';
 import { useContext, useEffect, useState } from 'react';
+
 import SearchBar from '../UI/SearchBar';
 import CompanyCard from './CompanyCard';
+import { CompanyPreview } from '@/schema/CompanyPreview.schema';
 
 const Companies: React.FC = () => {
-    const companies = useContext(AppContext).companies;
-    console.log(companies);
+    const { companies } = useContext(AppContext);
+
+    const [search, setSearch] = useState('');
+    const [filteredCompanies, setFilteredCompanies] = useState<CompanyPreview[]>([]);
+
+    useEffect(() => {
+        if (search === '') {
+            setFilteredCompanies(companies);
+            return;
+        }
+
+        setFilteredCompanies(
+            companies.filter((c) =>
+                c.name.toLowerCase().includes(search)
+            )
+        );
+    }, [companies, search]);
 
     return (
         <Container>
-            <SearchBar />
+            <SearchBar
+                updateQuery={(val) => {
+                    setSearch(val);
+                }}
+            />
             {/* <TextField id="standard-basic" label="Standard" variant="standard" /> */}
             <div>
-                {companies.map((c) => (
+                {filteredCompanies.slice(0, 10).map((c) => (
                     <CompanyCard key={c.id} company={c} />
                 ))}
             </div>
