@@ -20,6 +20,8 @@ import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
 
+import Navigation from '../UI/Navigation';
+
 type uuid = string;
 type visibility = 'PRIVATE' | 'PUBLIC';
 
@@ -117,6 +119,7 @@ const Home: React.FC = () => {
                 justifyContent: 'space-around',
             }}
         >
+            <Navigation />
             <Button
                 sx={{ position: 'absolute', right: 0, top: 0 }}
                 href='#'
