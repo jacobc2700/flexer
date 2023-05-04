@@ -1,48 +1,45 @@
 import EditorJS from '@editorjs/editorjs';
-
 import { Box } from '@mui/material';
+import dynamic from 'next/dynamic';
 import { useRef } from 'react';
+// import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-const DEFAULT_INITIAL_DATA = {
-    time: new Date().getTime(),
-    blocks: [
-        {
-            type: 'header',
-            data: {
-                text: 'This is my awesome editor!',
-                level: 1,
-            },
-        },
-    ],
-};
+const Editor = dynamic(() => import('react-draft-wysiwyg'), {
+    ssr: false,
+});
 
 const Test: React.FC = () => {
-    const ref = useRef<EditorJS | null>(null);
+    // let
+    // let editorRef = useRef<HTMLDivElement | null>(null);
 
-    const init = async () => {
-        const lib = await import('@editorjs/editorjs');
-        const Header = (await import('@editorjs/header')).default;
-        const editor = new lib.default({
-            holder: 'editorjs',
-            onReady: () => {
-                ref.current = editor;
-            },
-            autofocus: true,
-            data: DEFAULT_INITIAL_DATA,
-            onChange: async () => {
-                const content = await editor.saver.save();
+    // const init = async () => {
+    //     // const lib = await import('react-draft-wysiwyg');
+    //     // const { Editor } = await import('react-draft-wysiwyg');
+    //     editorRef.current = (
+    //         <Editor
+    //             // editorState={editorState}
+    //             toolbarClassName='toolbarClassName'
+    //             wrapperClassName='wrapperClassName'
+    //             editorClassName='editorClassName'
+    //             // onEditorStateChange={this.onEditorStateChange}
+    //         />
+    //     );
+    // };
 
-                console.log(content);
-            },
-            tools: {
-                header: Header,
-            },
-        });
-    };
+    // init();
 
-    init();
-
-    return <Box id='editorjs' ref={ref}></Box>;
+    return (
+        <Editor
+            // editorState={editorState}
+            toolbarClassName='toolbarClassName'
+            wrapperClassName='wrapperClassName'
+            editorClassName='editorClassName'
+            // onEditorStateChange={this.onEditorStateChange}
+        />
+    );
+    // return <Box>{Editor}</Box>;
+    // return <Box>{editorRef.current}</Box>;
 };
 
 export default Test;
