@@ -1,17 +1,15 @@
 // Some URLs work without a slash at the end, while some do.
-import { IUser } from '@/types';
-import fetcher from '@/utils/fetcher';
-import Validate from '@/utils/validate';
-import React, { createContext, useEffect, useState } from 'react';
-import useSWR from 'swr';
+import {useState, createContext, useEffect} from 'react';
+import UserSchema, { User } from '@/schema/User.schema';
+import useData from '@/hooks/useData';
 
 interface IAppContext {
-    user: IUser | null;
+    user: User | undefined;
     updateEmail: (email: string) => void;
 }
 
 const defaultValues: IAppContext = {
-    user: null,
+    user: undefined,
     updateEmail: () => ({}),
 };
 
@@ -23,29 +21,18 @@ interface IProps {
 
 export const AuthContextProvider: React.FC<IProps> = (props) => {
     const [email, setEmail] = useState<string | null>(null);
-    const [user, setUser] = useState<IUser | null>(defaultValues.user);
 
-    const { data: userResp } = useSWR(
-        email ? `http://localhost:8000/auth/email-address/${email}` : null,
-        fetcher,
-        { revalidateOnFocus: false }
+    const { data: user } = useData<User>(
+        `http://localhost:8000/auth/email-address/${email}`,
+        UserSchema,
+        { revalidateOnFocus: false },
+        email !== null,
     );
 
     const updateEmail = (newEmail: string) => {
         if (email === newEmail) return;
-        console.log(newEmail);
         setEmail(String(newEmail));
     };
-
-    useEffect(() => {
-        if (
-            Validate.isValidResponse(userResp) &&
-            Validate.isResponseOk(userResp) &&
-            Validate.isNotNullish(userResp)
-        )
-            // TODO: unsafe
-            setUser(userResp.data as IUser);
-    }, [userResp]);
 
     return (
         <AuthContext.Provider value={{ user, updateEmail }}>
