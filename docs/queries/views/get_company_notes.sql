@@ -3,6 +3,6 @@ DROP VIEW IF EXISTS get_company_notes;
 CREATE VIEW get_company_notes AS (
     SELECT C.company_name as company_name, N.*
     FROM companies AS C
-    JOIN notes AS N
+    JOIN get_notes_with_users AS N
     on C.id = N.company_id
 );

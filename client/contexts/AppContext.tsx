@@ -1,13 +1,16 @@
 // Some URLs work without a slash at the end, while some do.
-import fetcher from '@/utils/fetcher';
-import Validate from '@/utils/validate';
-import React, { createContext, useEffect, useState } from 'react';
-import useSWR from 'swr';
+import useData from '@/hooks/useData';
+import CompanyPreviewSchema, {
+    CompanyPreview,
+} from '@/schema/CompanyPreview.schema';
+import NoteSchema, { Note } from '@/schema/Note.schema';
+import ProblemSchema, { Problem } from '@/schema/Problem.schema';
+import { createContext, useState } from 'react';
 
 interface IAppContext {
-    notes: unknown[];
-    companies: unknown[];
-    problems: unknown[];
+    notes: Note[];
+    companies: CompanyPreview[];
+    problems: Problem[];
     updateUsername: (username: string) => void;
 }
 
@@ -25,9 +28,6 @@ interface IProps {
 }
 
 export const AppContextProvider: React.FC<IProps> = (props) => {
-    const [notes, setNotes] = useState<unknown[]>([]); //public notes for all notes
-    const [problems, setProblems] = useState<unknown[]>([]);
-    const [companies, setCompanies] = useState<unknown[]>([]);
     const [username, setUsername] = useState<string>('');
 
     // TODO:
@@ -38,62 +38,32 @@ export const AppContextProvider: React.FC<IProps> = (props) => {
         setUsername(newUsername);
     };
 
-    // companies, problems, users,
+    const { data: notes } = useData<Note[]>(
+        'http://localhost:8000/notes/',
+        NoteSchema.array(),
+        { revalidateOnFocus: false }
+    );
 
-    const { data: notesResp } = useSWR('http://localhost:8000/notes/', fetcher);
-
-    useEffect(() => {
-        // do error handling and load state.
-        if (
-            Validate.isValidResponse(notesResp) &&
-            Validate.isResponseOk(notesResp)
-        ) {
-            const fields = notesResp.data as unknown[];
-            setNotes(fields);
-        }
-    }, [notesResp]);
-
-    const { data: problemsResp } = useSWR(
+    const { data: problems } = useData<Problem[]>(
         'http://localhost:8000/problems/',
-        fetcher
+        ProblemSchema.array(),
+        { revalidateOnFocus: false }
     );
 
-    useEffect(() => {
-        // do error handling and load state.
-        if (
-            Validate.isValidResponse(problemsResp) &&
-            Validate.isResponseOk(problemsResp)
-        ) {
-            const fields = problemsResp.data as unknown[];
-            setProblems(fields);
-        }
-    }, [problemsResp]);
-
-    // COMPNAIES
-    const { data: companiesResp } = useSWR(
+    const { data: companies } = useData<CompanyPreview[]>(
         'http://localhost:8000/companies/',
-        fetcher
+        CompanyPreviewSchema.array(),
+        { revalidateOnFocus: false }
     );
-
-    useEffect(() => {
-        // do error handling and load state.
-        if (
-            Validate.isValidResponse(companiesResp) &&
-            Validate.isResponseOk(companiesResp)
-        ) {
-            const fields = companiesResp.data as unknown[];
-            setCompanies(fields);
-
-            // if (Validate.isAdapterAccount(fields)) return;
-        }
-    }, [companiesResp]);
-
-    // do whatever in here
-    // API calls
 
     return (
         <AppContext.Provider
-            value={{ notes, problems, companies, updateUsername }}
+            value={{
+                notes: notes ?? [],
+                problems: problems ?? [],
+                companies: companies ?? [],
+                updateUsername,
+            }}
         >
             {props.children}
         </AppContext.Provider>

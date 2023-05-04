@@ -5,7 +5,6 @@ import {
     VerificationToken,
 } from 'next-auth/adapters';
 
-// import { Database } from './database.types';
 import Validate from './validate';
 
 // TODO: make this file more organized
