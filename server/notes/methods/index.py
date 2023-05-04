@@ -14,7 +14,7 @@ def get(request: HttpRequest, _path_params=None) -> Response:
     """get all the public notes"""
 
     try:
-        resp = supabase.table("get_notes_with_users").select("*").match({'visibility': 'PUBLIC'}).execute()
+        resp = supabase.table("get_user_notes").select("*").match({'visibility': 'PUBLIC'}).execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))

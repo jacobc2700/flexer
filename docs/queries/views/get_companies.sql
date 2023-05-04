@@ -1,3 +1,4 @@
+-- Get all companies with their preview info: id, name, number of reviews, and average salary:
 DROP VIEW IF EXISTS get_companies;
 
 CREATE VIEW get_companies AS (
