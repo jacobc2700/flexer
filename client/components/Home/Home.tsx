@@ -1,6 +1,5 @@
 import AppContext from '@/contexts/AppContext';
 import AuthContext from '@/contexts/AuthContext';
-import Validate from '@/utils/validate';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -11,33 +10,16 @@ import {
     Box,
     Button,
     Container,
-    Grid,
     Paper,
     Stack,
     Typography,
 } from '@mui/material';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
 
 import Navigation from '../UI/Navigation';
-
-type uuid = string;
-type visibility = 'PRIVATE' | 'PUBLIC';
-
-interface IUser {
-    id: uuid;
-    email: string;
-    password: string;
-    username: string;
-    first_name: string;
-    last_name: string;
-    created_at: string;
-    updated_at: string;
-    visibility: visibility;
-    emailVerified: string | null;
-    image: string;
-}
+import NextAuthSessionSchema from '@/schema/NextAuthSession.schema';
 
 const Home: React.FC = () => {
     const { user, updateEmail } = useContext(AuthContext);
@@ -46,36 +28,15 @@ const Home: React.FC = () => {
     // const {data: session, status} = useSession();
     const [isEditable, setIsEditable] = useState(false);
 
-    // const [user, setUser] = useState<IUser | null>({
-    //     id: '6ece3765-64c8-4b96-b685-2ee5d636127e',
-    //     email: 'andrewzhlee@gmail.com',
-    //     password: '155309252',
-    //     username: 'bingbong',
-    //     first_name: 'bing',
-    //     last_name: 'bong',
-    //     created_at: '2023-03-20T03:12:48.472237+00:00',
-    //     updated_at: '2023-03-20T03:12:48.472237+00:00',
-    //     visibility: 'PRIVATE',
-    //     emailVerified: null,
-    //     image: 'https://picsum.photos/200/300',
-    // });
-
-    // const notes = useContext(AppContext);
-    // console.log(notes)
-
     const { data, status } = useSession();
 
     useEffect(() => {
-        console.log(data, status);
-        if (
-            status === 'authenticated' &&
-            data &&
-            'user' in data &&
-            data.user &&
-            'email' in data.user &&
-            data.user.email
-        ) {
-            updateEmail(data.user.email);
+        console.log(status);
+        if (status === 'authenticated') {
+            const val = NextAuthSessionSchema.safeParse(data);
+            if (val.success) {
+                updateEmail(val.data.user.email);
+            }
         }
     }, [data, status, updateEmail]);
 
@@ -86,27 +47,6 @@ const Home: React.FC = () => {
     useEffect(() => {
         console.log(user);
     }, [user]);
-
-    // useEffect(() => {
-    //     const getUserData = async () => {
-    //         if (session && 'user' in session) {
-    //             const rawResp = await fetch(
-    //                 `http://localhost:8000/auth/email-address/${
-    //                     session.user?.email ?? ''
-    //                 }`
-    //             );
-    //             const resp = await rawResp.json();
-    //             console.log(resp);
-    //             if (
-    //                 Validate.isValidResponse(resp) &&
-    //                 Validate.isResponseOk(resp)
-    //             ) {
-    //                 setUser(resp.data);
-    //             }
-    //         }
-    //     };
-    //     getUserData();
-    // }, [session]);
 
     return (
         <Container
@@ -127,7 +67,6 @@ const Home: React.FC = () => {
             >
                 Edit
             </Button>
-            {/* <button onClick={() => signIn()}>signin</button> */}
             <Box>
                 <Box sx={{ mb: 1 }}>
                     <Image
