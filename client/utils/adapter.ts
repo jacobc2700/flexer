@@ -7,6 +7,8 @@ import {
 
 import Validate from './validate';
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 // TODO: make this file more organized
 export function format<T>(obj: Record<string, any>): T {
     for (const [key, value] of Object.entries(obj)) {
@@ -43,7 +45,7 @@ const ServerAdapter = (): Adapter => {
     return {
         // same problem as updateUser, needs body
         async createUser(user) {
-            const rawResp = await fetch(`http://localhost:8000/users/`, {
+            const rawResp = await fetch(`${BASE_URL}/users/`, {
                 method: 'POST',
                 body: JSON.stringify({
                     ...user,
@@ -75,7 +77,7 @@ const ServerAdapter = (): Adapter => {
         },
         async getUser(user_id) {
             const rawResp = await fetch(
-                `http://localhost:8000/auth/id/${user_id}`
+                `${BASE_URL}/auth/id/${user_id}`
             );
             const resp: unknown = await rawResp.json();
 
@@ -99,7 +101,7 @@ const ServerAdapter = (): Adapter => {
         },
         async getUserByEmail(email_address) {
             const rawResp = await fetch(
-                `http://localhost:8000/auth/email-address/${email_address}`
+                `${BASE_URL}/auth/email-address/${email_address}`
             );
             const resp: unknown = await rawResp.json();
 
@@ -121,10 +123,10 @@ const ServerAdapter = (): Adapter => {
 
             return null;
         },
-        // (http://localhost:8000/auth/5038bdc3-1d93-470c-a3bf-f57e8558762d)
+        // (${BASE_URL}/auth/5038bdc3-1d93-470c-a3bf-f57e8558762d)
         async getUserByAccount({ providerAccountId, provider }) {
             const rawResp = await fetch(
-                `http://localhost:8000/auth/getUserByAccount/${provider}/${providerAccountId}`
+                `${BASE_URL}/auth/getUserByAccount/${provider}/${providerAccountId}`
             );
             const resp: unknown = await rawResp.json();
 
@@ -149,7 +151,7 @@ const ServerAdapter = (): Adapter => {
         // TODO: pass rest of body (figure out how to add more fields to the adapter user or find some other way to add more fields)
         async updateUser(user) {
             const rawResp = await fetch(
-                `http://localhost:8000/users/${user.id}`,
+                `${BASE_URL}/users/${user.id}`,
                 {
                     method: 'PATCH',
                     body: JSON.stringify({
@@ -182,7 +184,7 @@ const ServerAdapter = (): Adapter => {
         async deleteUser(userId) {
             // currently not used by next-auth
             const rawResp = await fetch(
-                `http://localhost:8000/users/${userId}`,
+                `${BASE_URL}/users/${userId}`,
                 {
                     method: 'DELETE',
                 }
@@ -210,7 +212,7 @@ const ServerAdapter = (): Adapter => {
 
         async linkAccount(account) {
             const rawResp = await fetch(
-                `http://localhost:8000/auth/linkAccount`,
+                `${BASE_URL}/auth/linkAccount`,
                 {
                     method: 'POST',
                     body: JSON.stringify(account),
@@ -229,7 +231,7 @@ const ServerAdapter = (): Adapter => {
         async unlinkAccount({ providerAccountId, provider }) {
             // currently not used by next-auth
             const rawResp = await fetch(
-                `http://localhost:8000/auth/unlinkAccount`,
+                `${BASE_URL}/auth/unlinkAccount`,
                 {
                     method: 'DELETE',
                     body: JSON.stringify({
@@ -249,8 +251,7 @@ const ServerAdapter = (): Adapter => {
             throw Error('TEMP: unlink account failed');
         },
         async createSession({ sessionToken, userId, expires }) {
-            console.log('createsession');
-            const rawResp = await fetch(`http://localhost:8000/auth/session`, {
+            const rawResp = await fetch(`${BASE_URL}/auth/session`, {
                 method: 'POST',
                 body: JSON.stringify({
                     sessionToken: sessionToken,
@@ -279,7 +280,7 @@ const ServerAdapter = (): Adapter => {
         },
         async getSessionAndUser(sessionToken) {
             const rawResp = await fetch(
-                `http://localhost:8000/auth/session/${sessionToken}`
+                `${BASE_URL}/auth/session/${sessionToken}`
             );
             const resp: unknown = await rawResp.json();
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
@@ -320,17 +321,10 @@ const ServerAdapter = (): Adapter => {
             }
 
             return null;
-            // return {
-            //     user: format<AdapterUser>(
-            //         {} as Database['public']['Tables']['users']['Row']
-            //     ),
-            //     session: format<AdapterSession>({}),
-            // };
         },
         async updateSession(session) {
-            console.log('updatesession');
             const rawResp = await fetch(
-                `http://localhost:8000/auth/session/${session.sessionToken}`,
+                `${BASE_URL}/auth/session/${session.sessionToken}`,
                 {
                     method: 'PATCH',
                     body: JSON.stringify({
@@ -360,7 +354,7 @@ const ServerAdapter = (): Adapter => {
         },
         async deleteSession(sessionToken) {
             const rawResp = await fetch(
-                `http://localhost:8000/auth/session/${sessionToken}`,
+                `${BASE_URL}/auth/session/${sessionToken}`,
                 {
                     method: 'DELETE',
                 }
@@ -385,7 +379,7 @@ const ServerAdapter = (): Adapter => {
             throw Error('TEMP: delete session failed');
         },
         async createVerificationToken(token) {
-            const rawResp = await fetch(`http://localhost:8000/auth/token`, {
+            const rawResp = await fetch(`${BASE_URL}/auth/token`, {
                 method: 'POST',
                 body: JSON.stringify(token),
             });
@@ -408,7 +402,7 @@ const ServerAdapter = (): Adapter => {
             throw Error('TEMP: create verification token failed');
         },
         async useVerificationToken({ identifier, token }) {
-            const rawResp = await fetch(`http://localhost:8000/auth/token`, {
+            const rawResp = await fetch(`${BASE_URL}/auth/token`, {
                 method: 'DELETE',
                 body: JSON.stringify({
                     identifier: identifier,

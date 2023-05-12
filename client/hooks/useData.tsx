@@ -4,7 +4,7 @@ import useSWR, { KeyedMutator, SWRConfiguration } from 'swr';
 import z from 'zod';
 
 const useData = <T,>(
-    url: string,
+    path: string,
     DataSchema: z.ZodType,
     options?: SWRConfiguration,
     shouldCallApi?: boolean
@@ -15,7 +15,9 @@ const useData = <T,>(
     mutate: KeyedMutator<ApiResponse>;
 } => {
     const { data, error, mutate } = useSWR(
-        shouldCallApi || shouldCallApi === undefined ? url : null,
+        shouldCallApi || shouldCallApi === undefined
+            ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${path}`
+            : null,
         fetcher,
         options
     );
@@ -32,10 +34,11 @@ const useData = <T,>(
         const parse2 = DataSchema.safeParse(parse1.data.data);
         if (!parse2.success) {
             console.log(parse2.error);
-            throw new Error('DEBUG (useData.tsx): Data object doesn\'t match schema. ');
+            throw new Error(
+                "DEBUG (useData.tsx): Data object doesn't match schema. "
+            );
         }
 
-        
         validatedData = parse2.data;
     }
 

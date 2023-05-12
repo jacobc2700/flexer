@@ -18,7 +18,7 @@ interface IProps {
 
 const Company: React.FC<IProps> = (props) => {
     const { data: companyFull, isLoading } = useData<CompanyFull>(
-        `http://localhost:8000/companies/${props.companyName}`,
+        `/companies/${props.companyName}`,
         CompanyFullSchema,
         { revalidateOnFocus: false }
     );

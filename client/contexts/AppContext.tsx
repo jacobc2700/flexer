@@ -39,19 +39,19 @@ export const AppContextProvider: React.FC<IProps> = (props) => {
     };
 
     const { data: notes } = useData<Note[]>(
-        'http://localhost:8000/notes/',
+        '/notes/',
         NoteSchema.array(),
         { revalidateOnFocus: false }
     );
 
     const { data: problems } = useData<Problem[]>(
-        'http://localhost:8000/problems/',
+        '/problems/',
         ProblemSchema.array(),
         { revalidateOnFocus: false }
     );
 
     const { data: companies } = useData<CompanyPreview[]>(
-        'http://localhost:8000/companies/',
+        '/companies/',
         CompanyPreviewSchema.array(),
         { revalidateOnFocus: false }
     );

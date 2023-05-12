@@ -41,8 +41,10 @@ const Home: React.FC = () => {
     }, [data, status, updateEmail]);
 
     useEffect(() => {
-        updateUsername(user?.username ?? '');
-    }, [user, updateUsername]);
+        if (status === 'authenticated') {
+            updateUsername(user?.username ?? '');
+        }
+    }, [user, updateUsername, status]);
 
     useEffect(() => {
         console.log(user);
