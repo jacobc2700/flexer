@@ -5,6 +5,7 @@ import {
     VerificationToken,
 } from 'next-auth/adapters';
 
+import fetcher from './fetcher';
 import Validate from './validate';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -76,9 +77,7 @@ const ServerAdapter = (): Adapter => {
             throw Error('TEMP: create user failed');
         },
         async getUser(user_id) {
-            const rawResp = await fetch(
-                `${BASE_URL}/auth/id/${user_id}`
-            );
+            const rawResp = await fetch(`${BASE_URL}/auth/id/${user_id}`);
             const resp: unknown = await rawResp.json();
 
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
@@ -150,17 +149,14 @@ const ServerAdapter = (): Adapter => {
         },
         // TODO: pass rest of body (figure out how to add more fields to the adapter user or find some other way to add more fields)
         async updateUser(user) {
-            const rawResp = await fetch(
-                `${BASE_URL}/users/${user.id}`,
-                {
-                    method: 'PATCH',
-                    body: JSON.stringify({
-                        ...user,
-                        // TEMP: randomly generates a new username for now.
-                        username: Math.floor(Math.random() * 10000).toString(),
-                    }),
-                }
-            );
+            const rawResp = await fetch(`${BASE_URL}/users/${user.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({
+                    ...user,
+                    // TEMP: randomly generates a new username for now.
+                    username: Math.floor(Math.random() * 10000).toString(),
+                }),
+            });
             const resp: unknown = await rawResp.json();
 
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
@@ -183,12 +179,9 @@ const ServerAdapter = (): Adapter => {
         },
         async deleteUser(userId) {
             // currently not used by next-auth
-            const rawResp = await fetch(
-                `${BASE_URL}/users/${userId}`,
-                {
-                    method: 'DELETE',
-                }
-            );
+            const rawResp = await fetch(`${BASE_URL}/users/${userId}`, {
+                method: 'DELETE',
+            });
             const resp: unknown = await rawResp.json();
 
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
@@ -211,13 +204,10 @@ const ServerAdapter = (): Adapter => {
         },
 
         async linkAccount(account) {
-            const rawResp = await fetch(
-                `${BASE_URL}/auth/linkAccount`,
-                {
-                    method: 'POST',
-                    body: JSON.stringify(account),
-                }
-            );
+            const rawResp = await fetch(`${BASE_URL}/auth/linkAccount`, {
+                method: 'POST',
+                body: JSON.stringify(account),
+            });
             const resp: unknown = await rawResp.json();
 
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
@@ -230,16 +220,13 @@ const ServerAdapter = (): Adapter => {
         },
         async unlinkAccount({ providerAccountId, provider }) {
             // currently not used by next-auth
-            const rawResp = await fetch(
-                `${BASE_URL}/auth/unlinkAccount`,
-                {
-                    method: 'DELETE',
-                    body: JSON.stringify({
-                        provider,
-                        providerAccountId,
-                    }),
-                }
-            );
+            const rawResp = await fetch(`${BASE_URL}/auth/unlinkAccount`, {
+                method: 'DELETE',
+                body: JSON.stringify({
+                    provider,
+                    providerAccountId,
+                }),
+            });
 
             const resp: unknown = await rawResp.json();
 
@@ -283,6 +270,7 @@ const ServerAdapter = (): Adapter => {
                 `${BASE_URL}/auth/session/${sessionToken}`
             );
             const resp: unknown = await rawResp.json();
+
             if (Validate.isValidResponse(resp) && Validate.isResponseOk(resp)) {
                 const fields = resp.data;
                 let userFilteredFields: AdapterUser | null = null;

@@ -13,6 +13,10 @@ from flexer import supabase, logger
 def get(_request: HttpRequest, _path_params = None) -> Response:
     """ Get all companies in the same table. """
 
+    print(_request.COOKIES)
+    # make a supabase request --> see if the token is in the session table
+    # if it is, return favorite companies as well.
+
     try:
         resp = supabase.table("get_companies").select("*").execute()
         return standard_resp(resp.data, status.HTTP_200_OK)
