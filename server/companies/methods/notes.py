@@ -27,7 +27,7 @@ def get_notes(_request: HttpRequest, path_params: PathParams) -> Response:
 
         # remove unneccessary whitespace and make uppercase
         company_name = company_name.strip().upper()
-        company_name = re.sub('\s+', ' ', company_name)
+        company_name = re.sub(r'\s+', ' ', company_name)
 
         resp = supabase.table("get_company_notes").select(
             "*").match({"company_name": company_name}).execute()

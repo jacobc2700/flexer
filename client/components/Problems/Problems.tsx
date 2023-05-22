@@ -42,7 +42,7 @@ const Problems: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Question</TableCell>
-                            <TableCell align='right'></TableCell>
+                            <TableCell align='right'>Starred</TableCell>
                             <TableCell align='right'>Difficulty</TableCell>
                             <TableCell align='right'>Acceptance</TableCell>
                             <TableCell align='right'>Frequency</TableCell>

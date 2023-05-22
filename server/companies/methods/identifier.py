@@ -1,13 +1,11 @@
 ''' This module handles the implementation for the methods for the /companies/[identifier] endpoint. '''
 from typing import TypedDict
-from json import JSONDecodeError
-import json
 from django.http import HttpRequest
 from rest_framework import status
 from rest_framework.response import Response
 from postgrest import APIError
 
-from utils import is_pass_valid, standard_resp
+from utils import standard_resp
 from flexer import supabase, logger
 
 
