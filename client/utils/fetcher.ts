@@ -1,23 +1,4 @@
-// import { ApiResponse } from '@/schema/ApiResponse.schema';
-// export default async function fetcher(
-//     url: RequestInfo,
-//     body?: RequestInit
-// ): Promise<ApiResponse> {
-//     try {
-//         // https://swr.vercel.app/docs/error-handling
-//         const res = await fetch(url, {
-//             ...body,
-//             credentials: 'include',
-//         });
-//         // TODO: validation that res is IApiResponse
-//         return await res.json();
-//     } catch (err) {
-//         console.log('fetcher error');
-//         console.log(err);
-//         throw new Error('Fetcher error');
-//     }
-// }
-import { ApiResponse } from '@/schema/ApiResponse.schema';
+import ApiResponseSchema, { ApiResponse } from '@/schema/ApiResponse.schema';
 
 export default async function fetcher(
     url: RequestInfo,
@@ -29,11 +10,23 @@ export default async function fetcher(
             method: 'POST',
             body: JSON.stringify({ url, body }),
         });
-        // TODO: validation that res is IApiResponse
-        return await res.json();    
+
+        // Check if fetch response conforms to API response schema.
+        // response guaranteed to be JSON b/c of /gateway.
+        const parse = ApiResponseSchema.safeParse(await res.json());
+        if (!parse.success) {
+            console.log(parse.error);
+            throw new Error('Response does not conform to API response schema');
+        }
+
+        return parse.data;
     } catch (err) {
-        console.log('fetcher error');
-        console.log(err);
-        throw new Error('Fetcher error');
+        console.error(err);
+        return {
+            ok: false,
+            status: 400,
+            data: null,
+            message: 'Something went wrong.',
+        };
     }
 }

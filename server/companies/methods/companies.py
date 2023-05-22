@@ -10,19 +10,29 @@ from utils import is_pass_valid, standard_resp
 from flexer import supabase, logger
 
 # http://127.0.0.1:8000/companies/
-def get(_request: HttpRequest, _path_params = None) -> Response:
+
+
+def get(request: HttpRequest, _path_params=None) -> Response:
     """ Get all companies in the same table. """
-
-    print(_request.COOKIES)
-    # make a supabase request --> see if the token is in the session table
-    # if it is, return favorite companies as well.
-
     try:
-        resp = supabase.table("get_companies").select("*").execute()
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        session_tok = request.COOKIES.get("session-token")
+        fav_company_ids = []
+        companies = supabase.table("get_companies").select("*").execute().data
+
+        if session_tok is None:
+            pass
+        else:
+            session = supabase.table("sessions").select(
+                '*', count="exact").eq("sessionToken", session_tok).execute()
+            
+            if session.count == 1:
+                fav_company_ids = supabase.table("favorite_companies").select(
+                    "company_id", count="exact").eq("user_id", session.data[0]["userId"]).execute().data
+
+        return standard_resp({"companies": companies, "favorites": fav_company_ids}, status.HTTP_200_OK)
     except APIError as err:
         error_message = f"{err.code} - {err.message}"
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, error_message)
-    except Exception as ex: # pylint: disable=broad-except
+    except Exception as ex:  # pylint: disable=broad-except
         logger.exception(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)

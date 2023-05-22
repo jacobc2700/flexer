@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 interface IProps {
     company: CompanyPreview;
+    favorite: boolean;
 }
 
 const CompanyCard: React.FC<IProps> = (props) => {
@@ -12,7 +13,7 @@ const CompanyCard: React.FC<IProps> = (props) => {
             <CardContent>
                 <Typography variant='h3' fontSize={18} fontWeight={600}>
                     <Link style={{ color: 'white' }} href='/companies/company'>
-                        {props.company.name}
+                        {props.company.name} {props.favorite ? '★' : ''}
                     </Link>
                 </Typography>
                 <Divider />

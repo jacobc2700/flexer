@@ -25,21 +25,20 @@ const useData = <T,>(
     let validatedData: T | undefined = undefined;
 
     if (data !== undefined) {
-        const parse1 = ApiResponseOkSchema.safeParse(data);
-        if (!parse1.success) {
-            console.log(parse1.error);
+        if (data.ok === true) {
+            const parse = DataSchema.safeParse(data.data);
+            if (!parse.success) {
+                console.log(parse.error);
+                throw new Error(
+                    "DEBUG (useData.tsx): Data object doesn't match schema. "
+                );
+            }
+
+            validatedData = parse.data;
+        }
+        else {
             throw new Error('DEBUG (useData.tsx): API response is not ok. ');
         }
-
-        const parse2 = DataSchema.safeParse(parse1.data.data);
-        if (!parse2.success) {
-            console.log(parse2.error);
-            throw new Error(
-                "DEBUG (useData.tsx): Data object doesn't match schema. "
-            );
-        }
-
-        validatedData = parse2.data;
     }
 
     return {

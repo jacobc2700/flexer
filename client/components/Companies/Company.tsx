@@ -2,7 +2,7 @@ import useData from '@/hooks/useData';
 import CompanyFullSchema, { CompanyFull } from '@/schema/CompanyFull.schema';
 import ServerAdapter from '@/utils/adapter';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Container, Paper } from '@mui/material';
+import { Box, Container, Paper } from '@mui/material';
 // import { TextField } from '@mui/material/TextField';
 import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -26,14 +26,17 @@ const Company: React.FC<IProps> = (props) => {
     return (
         <>
             {isLoading === true ? (
-                <div>Loading...</div>
+                <Box>Loading...</Box>
             ) : (
                 <Container>
                     {/* <TextField id="standard-basic" label="Standard" variant="standard" /> */}
                     <Link style={{ color: 'white' }} href='/companies/'>
                         <ArrowBackIcon />
                     </Link>
-                    <div>{companyFull?.company.company_name}</div>
+                    <Box>
+                        {companyFull?.company.company_name}
+                        {companyFull?.isFavorite ? '★' : ''}
+                    </Box>
                     <Paper sx={{ mb: 2 }}>
                         {companyFull?.levels
                             .slice(0, 3)

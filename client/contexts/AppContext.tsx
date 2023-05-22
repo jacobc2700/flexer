@@ -6,17 +6,21 @@ import CompanyPreviewSchema, {
 import NoteSchema, { Note } from '@/schema/Note.schema';
 import ProblemSchema, { Problem } from '@/schema/Problem.schema';
 import { createContext, useState } from 'react';
+import { z } from 'zod';
 
 interface IAppContext {
     notes: Note[];
-    companies: CompanyPreview[];
+    companies: {
+        favorites: { company_id: string }[];
+        companies: CompanyPreview[];
+    };
     problems: Problem[];
     updateUsername: (username: string) => void;
 }
 
 const defaultValues: IAppContext = {
     notes: [],
-    companies: [],
+    companies: { favorites: [], companies: [] },
     problems: [],
     updateUsername: () => ({}),
 };
@@ -38,30 +42,31 @@ export const AppContextProvider: React.FC<IProps> = (props) => {
         setUsername(newUsername);
     };
 
-    const { data: notes } = useData<Note[]>(
-        '/notes/',
-        NoteSchema.array(),
-        { revalidateOnFocus: false }
-    );
+    const { data: notes } = useData<IAppContext['notes']>('/notes/', NoteSchema.array(), {
+        revalidateOnFocus: false,
+    });
 
-    const { data: problems } = useData<Problem[]>(
+    const { data: problems } = useData<IAppContext['problems']>(
         '/problems/',
         ProblemSchema.array(),
         { revalidateOnFocus: false }
     );
 
-    const { data: companies } = useData<CompanyPreview[]>(
+    const { data: companies } = useData<IAppContext['companies']>(
         '/companies/',
-        CompanyPreviewSchema.array(),
+        z.object({
+            favorites: z.array(z.object({ company_id: z.string().uuid() })),
+            companies: CompanyPreviewSchema.array(),
+        }),
         { revalidateOnFocus: false }
     );
 
     return (
         <AppContext.Provider
             value={{
-                notes: notes ?? [],
-                problems: problems ?? [],
-                companies: companies ?? [],
+                notes: notes ?? defaultValues.notes,
+                problems: problems ?? defaultValues.problems,
+                companies: companies ?? defaultValues.companies,
                 updateUsername,
             }}
         >

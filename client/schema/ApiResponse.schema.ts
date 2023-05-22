@@ -4,12 +4,11 @@ const ApiResponseSchema = z.object({
     ok: z.boolean(),
     status: z.number(),
     message: z.string(),
-    data: z.never(),
+    data: z.unknown(),
 });
 
 export const ApiResponseOkSchema = ApiResponseSchema.extend({
     ok: z.literal(true),
-    data: z.unknown(),
 });
 
 export const ApiResponseErrorSchema = ApiResponseSchema.extend({

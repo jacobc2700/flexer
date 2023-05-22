@@ -1,11 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-type Data = unknown;
-
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Data>
+    res: NextApiResponse<Record<string, unknown>>
 ) {
     const { url, body } = JSON.parse(req.body);
 
@@ -16,7 +14,13 @@ export default async function handler(
         ...body,
         headers: { Cookie: `session-token=${sessionTok ?? ''}` },
     });
-    const jsonResp = await resp.json();
 
-    res.json(jsonResp);
+    try {
+        const respJson = await resp.json();
+        res.json(respJson);
+    }
+    catch (err) {
+        console.error(err);
+        res.json({});
+    }
 }

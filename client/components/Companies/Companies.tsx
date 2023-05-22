@@ -1,31 +1,75 @@
 import AppContext from '@/contexts/AppContext';
+import { CompanyPreview } from '@/schema/CompanyPreview.schema';
 import ServerAdapter from '@/utils/adapter';
-import { Container } from '@mui/material';
+import { Box, Container, Divider, Typography } from '@mui/material';
 import { signIn, useSession } from 'next-auth/react';
 import { useContext, useEffect, useState } from 'react';
 
 import SearchBar from '../UI/SearchBar';
 import CompanyCard from './CompanyCard';
-import { CompanyPreview } from '@/schema/CompanyPreview.schema';
 
 const Companies: React.FC = () => {
-    const { companies } = useContext(AppContext);
+    const { companies: companiesData } = useContext(AppContext);
+    const { status } = useSession();
 
     const [search, setSearch] = useState('');
-    const [filteredCompanies, setFilteredCompanies] = useState<CompanyPreview[]>([]);
+
+    const [companies, setCompanies] = useState<CompanyPreview[]>([]);
+    const [favoriteCompanies, setFavoriteCompanies] = useState<
+        CompanyPreview[]
+    >([]);
+
+    const [filteredCompanies, setFilteredCompanies] = useState<
+        CompanyPreview[]
+    >([]);
+    const [filteredFavCompanies, setFilteredFavCompanies] = useState<
+        CompanyPreview[]
+    >([]);
+
+    useEffect(() => {
+        const favIds = new Set<string>();
+        if (companiesData.favorites.length > 0) {
+            for (const fav of companiesData.favorites) {
+                favIds.add(fav.company_id);
+            }
+        }
+
+        const favorites = [];
+        let notFavorites = [];
+
+        if (favIds.size !== 0) {
+            for (const c of companiesData.companies) {
+                if (favIds.has(c.id)) {
+                    favorites.push(c);
+                    favIds.delete(c.id);
+                } else {
+                    notFavorites.push(c);
+                }
+            }
+        } else {
+            notFavorites = companiesData.companies;
+        }
+
+        setCompanies(notFavorites);
+        setFavoriteCompanies(favorites);
+    }, [companiesData]);
 
     useEffect(() => {
         if (search === '') {
             setFilteredCompanies(companies);
+            setFilteredFavCompanies(favoriteCompanies);
             return;
         }
 
         setFilteredCompanies(
-            companies.filter((c) =>
+            companies.filter((c) => c.name.toLowerCase().includes(search))
+        );
+        setFilteredFavCompanies(
+            favoriteCompanies.filter((c) =>
                 c.name.toLowerCase().includes(search)
             )
         );
-    }, [companies, search]);
+    }, [companies, favoriteCompanies, search]);
 
     return (
         <Container>
@@ -34,32 +78,32 @@ const Companies: React.FC = () => {
                     setSearch(val);
                 }}
             />
-            {/* <TextField id="standard-basic" label="Standard" variant="standard" /> */}
-            <div>
-                {filteredCompanies.slice(0, 10).map((c) => (
-                    <CompanyCard key={c.id} company={c} />
+
+            {status === 'authenticated' && (
+                <>
+                    <Typography variant='h3' fontSize={24} fontWeight={600}>
+                        My Starred Companies:
+                    </Typography>
+                    <Box>
+                        {filteredFavCompanies.map((c) => (
+                            <CompanyCard
+                                key={c.id}
+                                company={c}
+                                favorite={true}
+                            />
+                        ))}
+                    </Box>
+                </>
+            )}
+            <Typography variant='h3' fontSize={24} fontWeight={600}>
+                Companies:
+            </Typography>
+            <Box>
+                {filteredCompanies.slice(0, 50).map((c) => (
+                    <CompanyCard key={c.id} company={c} favorite={false} />
                 ))}
-            </div>
+            </Box>
         </Container>
-        // <SearchBar/>
-        // // <TextField id="standard-basic" label="Standard" variant="standard" />
-        // <div>
-        //     {companies.map((c) => (
-        //         <CompanyCard
-        //             key={c.id}
-        //             company={c}
-        //         />
-        //     ))}
-        // </div>
-        // <div>
-        //     <button onClick={() => signIn()}>fd</button>
-        //     {status === 'authenticated' && session && 'user' in session && (
-        //         <p>Signed in as {session.user?.email ?? 'die'}</p>
-        //     )}
-        //     {status !== 'authenticated' && (
-        //         <a href='/api/auth/signin'>Sign in</a>
-        //     )}
-        // </div>
     );
 };
 
