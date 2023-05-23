@@ -15,19 +15,18 @@ from flexer import supabase, logger
 def get(request: HttpRequest, _path_params=None) -> Response:
     """ Get all companies in the same table. """
     try:
-        session_tok = request.COOKIES.get("session-token")
-        fav_company_ids = []
         companies = supabase.table("get_companies").select("*").execute().data
 
-        if session_tok is None:
-            pass
-        else:
+        fav_company_ids = []
+        session_tok = request.COOKIES.get("session-token")
+
+        if session_tok is not None:
             session = supabase.table("sessions").select(
                 '*', count="exact").eq("sessionToken", session_tok).execute()
-            
+
             if session.count == 1:
                 fav_company_ids = supabase.table("favorite_companies").select(
-                    "company_id", count="exact").eq("user_id", session.data[0]["userId"]).execute().data
+                    "company_id").eq("user_id", session.data[0]["userId"]).execute().data
 
         return standard_resp({"companies": companies, "favorites": fav_company_ids}, status.HTTP_200_OK)
     except APIError as err:

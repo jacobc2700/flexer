@@ -1,16 +1,8 @@
 import useData from '@/hooks/useData';
 import CompanyFullSchema, { CompanyFull } from '@/schema/CompanyFull.schema';
-import ServerAdapter from '@/utils/adapter';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Container, Paper } from '@mui/material';
-// import { TextField } from '@mui/material/TextField';
-import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import useSWR from 'swr';
-
-import SearchBar from '../UI/SearchBar';
-import CompanyCard from './CompanyCard';
 
 interface IProps {
     companyName: string;

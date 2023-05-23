@@ -1,27 +1,30 @@
 // Some URLs work without a slash at the end, while some do.
 import useData from '@/hooks/useData';
-import CompanyPreviewSchema, {
-    CompanyPreview,
-} from '@/schema/CompanyPreview.schema';
+import {
+    CompaniesData,
+    CompaniesDataSchema,
+    NotesData,
+    NotesDataSchema,
+    ProblemsData,
+    ProblemsDataSchema,
+} from '@/schema/ApiData.schema';
+import CompanyPreviewSchema from '@/schema/CompanyPreview.schema';
 import NoteSchema, { Note } from '@/schema/Note.schema';
 import ProblemSchema, { Problem } from '@/schema/Problem.schema';
 import { createContext, useState } from 'react';
 import { z } from 'zod';
 
 interface IAppContext {
-    notes: Note[];
-    companies: {
-        favorites: { company_id: string }[];
-        companies: CompanyPreview[];
-    };
-    problems: Problem[];
+    notes: NotesData;
+    companies: CompaniesData;
+    problems: ProblemsData;
     updateUsername: (username: string) => void;
 }
 
 const defaultValues: IAppContext = {
     notes: [],
     companies: { favorites: [], companies: [] },
-    problems: [],
+    problems: { favorites: [], problems: [] },
     updateUsername: () => ({}),
 };
 
@@ -34,30 +37,26 @@ interface IProps {
 export const AppContextProvider: React.FC<IProps> = (props) => {
     const [username, setUsername] = useState<string>('');
 
-    // TODO:
-    // const [userNotes, setUserNotes] = useState<unknown[]>([]); //private notes for user
-
     const updateUsername = (newUsername: string) => {
         if (newUsername === '') return;
         setUsername(newUsername);
     };
 
-    const { data: notes } = useData<IAppContext['notes']>('/notes/', NoteSchema.array(), {
-        revalidateOnFocus: false,
-    });
+    const { data: notes } = useData<IAppContext['notes']>(
+        '/notes/',
+        NotesDataSchema,
+        { revalidateOnFocus: false }
+    );
 
     const { data: problems } = useData<IAppContext['problems']>(
         '/problems/',
-        ProblemSchema.array(),
+        ProblemsDataSchema,
         { revalidateOnFocus: false }
     );
 
     const { data: companies } = useData<IAppContext['companies']>(
         '/companies/',
-        z.object({
-            favorites: z.array(z.object({ company_id: z.string().uuid() })),
-            companies: CompanyPreviewSchema.array(),
-        }),
+        CompaniesDataSchema,
         { revalidateOnFocus: false }
     );
 

@@ -33,18 +33,30 @@ def get(request: HttpRequest, path_params: PathParams) -> Response:
         if len(company_resp.data) != 1 or 'id' not in company_resp.data[0]:
             return standard_resp({}, status.HTTP_404_NOT_FOUND, "Company not found.")
 
-        # Slow:
+        # The number of DB calls here is not ideal (probably kinda slow):
         company_id = company_resp.data[0]['id']
-        notes_resp = supabase.table("get_company_notes").select(
-            "*").match({"visibility": "PUBLIC", "company_name": company_name}).execute()
         problems_resp = supabase.table("get_company_problems").select(
             "*").match({"company_name": company_name}).execute()
         levels_resp = supabase.table("levels").select(
             "*").match({"company_id": company_id}).execute()
 
+        # check for session token
+        session_tok = request.COOKIES.get("session-token")
+        non_public_notes = []
+        if session_tok is not None:
+            session = supabase.table("sessions").select(
+                '*', count="exact").eq("sessionToken", session_tok).execute()
+
+            if session.count == 1:
+                non_public_notes = supabase.table("get_company_notes").select(
+                    "*").match({"company_name": company_name, "user_id": session.data[0]['userId']}).in_("visibility", ["PRIVATE", "UNLISTED"]).execute().data
+
+        public_notes = supabase.table("get_company_notes").select(
+            "*").match({"visibility": "PUBLIC", "company_name": company_name}).execute().data
+
         company_data = {
             "company": company_resp.data[0],
-            "notes": notes_resp.data,
+            "notes": non_public_notes + public_notes,
             "problems": problems_resp.data,
             "levels": levels_resp.data,
             "isFavorite": False,
