@@ -7,12 +7,9 @@
         "test": "jest",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
-        "devall": "concurrently \"python ../server/manage.py runserver\" \"npm run dev\""
+        "lint": "next lint"
     },
     "dependencies": {
-        "@editorjs/editorjs": "^2.26.5",
-        "@editorjs/header": "^2.7.0",
         "@mui/icons-material": "^5.11.9",
         "@mui/material": "^5.11.10",
         "framer-motion": "^10.10.0",
@@ -32,9 +29,9 @@
         "@types/node": "18.14.2",
         "@types/react": "18.0.28",
         "@types/react-dom": "18.0.11",
+        "@types/react-draft-wysiwyg": "^1.13.4",
         "@typescript-eslint/eslint-plugin": "^5.51.0",
         "@typescript-eslint/parser": "^5.51.0",
-        "concurrently": "^7.6.0",
         "eslint": "8.35.0",
         "eslint-config-next": "13.2.1",
         "eslint-config-prettier": "^8.6.0",

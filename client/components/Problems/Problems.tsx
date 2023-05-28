@@ -14,9 +14,9 @@ import { useContext, useEffect, useState } from 'react';
 import SearchBar from '../UI/SearchBar';
 
 const difficulty = new Map();
-difficulty.set(1, ['E', '#A2DED0']);
-difficulty.set(2, ['M', '#FFE5B4']);
-difficulty.set(3, ['H', '#FFC2C2']);
+difficulty.set(1, ['Easy', '#A2DED0']);
+difficulty.set(2, ['Mid', '#FFE5B4']);
+difficulty.set(3, ['Hard', '#FFC2C2']);
 
 const Problems: React.FC = () => {
     const { problems: problemsData } = useContext(AppContext);
@@ -85,10 +85,10 @@ const Problems: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Question</TableCell>
-                            <TableCell align='right'>Starred</TableCell>
+                            <TableCell align='center'>Starred</TableCell>
                             <TableCell align='right'>Difficulty</TableCell>
                             <TableCell align='right'>Acceptance</TableCell>
-                            <TableCell align='right'>Frequency</TableCell>
+                            <TableCell align='right'>Attempts</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -96,6 +96,8 @@ const Problems: React.FC = () => {
                             .concat(filteredProblems)
                             .slice(0, 50)
                             .map((row, idx) => {
+                                if (idx === 0) console.log(row);
+
                                 const [difficulty_name, difficulty_color] =
                                     difficulty.get(row.difficulty);
 
@@ -125,8 +127,8 @@ const Problems: React.FC = () => {
                                                 {row.question_title}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell align='right'>
-                                            {isFavorite ? '★' : ''}
+                                        <TableCell align='center'>
+                                            <Typography color="yellow">{isFavorite ? '★' : ''}</Typography>
                                         </TableCell>
                                         <TableCell align='right'>
                                             <Typography
@@ -139,7 +141,7 @@ const Problems: React.FC = () => {
                                             {acceptance}%
                                         </TableCell>
                                         <TableCell align='right'>
-                                            TODO
+                                            {row.total_submitted.toLocaleString()}
                                         </TableCell>
                                     </TableRow>
                                 );

@@ -1,45 +1,42 @@
-import EditorJS from '@editorjs/editorjs';
 import { Box } from '@mui/material';
 import dynamic from 'next/dynamic';
-import { useRef } from 'react';
-// import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { useEffect, useRef, useState } from 'react';
+import { EditorState } from 'react-draft-wysiwyg';
 
-const Editor = dynamic(() => import('react-draft-wysiwyg'), {
-    ssr: false,
-});
+// dynamic() can only import react components
+const Editor = dynamic(
+    () => import('react-draft-wysiwyg').then((lib) => lib.Editor),
+    {
+        ssr: false,
+    }
+);
 
 const Test: React.FC = () => {
-    // let
-    // let editorRef = useRef<HTMLDivElement | null>(null);
+    const [editorState, setEditorState] = useState<EditorState | undefined>(
+        undefined
+    );
 
-    // const init = async () => {
-    //     // const lib = await import('react-draft-wysiwyg');
-    //     // const { Editor } = await import('react-draft-wysiwyg');
-    //     editorRef.current = (
-    //         <Editor
-    //             // editorState={editorState}
-    //             toolbarClassName='toolbarClassName'
-    //             wrapperClassName='wrapperClassName'
-    //             editorClassName='editorClassName'
-    //             // onEditorStateChange={this.onEditorStateChange}
-    //         />
-    //     );
-    // };
-
-    // init();
+    useEffect(() => {
+        const initEditor = async () => {
+            const emptyEditorState = (
+                await import('draft-js')
+            ).EditorState.createEmpty();
+            setEditorState(emptyEditorState);
+        };
+        initEditor();
+    }, []);
 
     return (
-        <Editor
-            // editorState={editorState}
-            toolbarClassName='toolbarClassName'
-            wrapperClassName='wrapperClassName'
-            editorClassName='editorClassName'
-            // onEditorStateChange={this.onEditorStateChange}
-        />
+        <Box>
+            <Editor
+                editorState={editorState}
+                toolbarClassName='toolbarClassName'
+                wrapperClassName='wrapperClassName'
+                editorClassName='editorClassName'
+                onEditorStateChange={setEditorState}
+            />
+        </Box>
     );
-    // return <Box>{Editor}</Box>;
-    // return <Box>{editorRef.current}</Box>;
 };
 
 export default Test;
