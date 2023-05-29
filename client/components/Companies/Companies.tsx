@@ -28,6 +28,8 @@ const Companies: React.FC = () => {
 
     useEffect(() => {
         const favIds = new Set<string>();
+
+        // [{company_id: uuid}, {company_id: uuid}, {company_id: uuid}] --> {uuid, uuid, uuid}
         if (companiesData.favorites.length > 0) {
             for (const fav of companiesData.favorites) {
                 favIds.add(fav.company_id);
@@ -36,7 +38,8 @@ const Companies: React.FC = () => {
 
         const favorites = [];
         let notFavorites = [];
-
+        
+        // getting preview data based on company ids
         if (favIds.size !== 0) {
             for (const c of companiesData.companies) {
                 if (favIds.has(c.id)) {

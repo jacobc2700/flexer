@@ -21,22 +21,17 @@ class PathParams(TypedDict):
 def get(request: HttpRequest, path_params: PathParams) -> Response:
     """ Get a company by name. """
 
-
     company_name = None if "identifier" not in path_params else path_params["identifier"]
-
 
     if not company_name:
         return standard_resp({}, status.HTTP_400_BAD_REQUEST, "Missing company name.")
-
 
     try:
         company_resp = supabase.table("companies").select(
             "*").match({"company_name": company_name}).execute()
 
-
         if len(company_resp.data) != 1 or 'id' not in company_resp.data[0]:
             return standard_resp({}, status.HTTP_404_NOT_FOUND, "Company not found.")
-
 
         # The number of DB calls here is not ideal (probably kinda slow):
         company_id = company_resp.data[0]['id']
@@ -45,23 +40,31 @@ def get(request: HttpRequest, path_params: PathParams) -> Response:
         levels_resp = supabase.table("levels").select(
             "*").match({"company_id": company_id}).execute()
 
-
         # check for session token
         session_tok = request.COOKIES.get("session-token")
         non_public_notes = []
+        public_notes = []
+        session = None
+
         if session_tok is not None:
             session = supabase.table("sessions").select(
                 '*', count="exact").eq("sessionToken", session_tok).execute()
 
-
             if session.count == 1:
+                # notes by this user that are any visibility
                 non_public_notes = supabase.table("get_company_notes").select(
-                    "*").match({"company_name": company_name, "user_id": session.data[0]['userId']}).in_("visibility", ["PRIVATE", "UNLISTED"]).execute().data
+                    "*").match({"company_name": company_name, "user_id": session.data[0]['userId']}).execute().data
 
+        # if the session exists, remove all the notes by this user in this call
+        # if the session DNE, just get all the public notes
 
         public_notes = supabase.table("get_company_notes").select(
-            "*").match({"visibility": "PUBLIC", "company_name": company_name}).execute().data
+            "*").match({"visibility": "PUBLIC", "company_name": company_name})
 
+        if session and session.count == 1:
+            public_notes = public_notes.neq('user_id', session.data[0]['userId'])
+
+        public_notes = public_notes.execute().data
 
         company_data = {
             "company": company_resp.data[0],
@@ -71,20 +74,11 @@ def get(request: HttpRequest, path_params: PathParams) -> Response:
             "isFavorite": False,
         }
 
-
-        # check if favorited
-        session_tok = request.COOKIES.get("session-token")
-        if session_tok is not None:
-            session = supabase.table("sessions").select(
-                '*', count="exact").eq("sessionToken", session_tok).execute()
-
-
-            if session.count == 1:
-                fav_resp = supabase.table("favorite_companies").select(
-                    "*", count="exact").match({"user_id": session.data[0]['userId'], "company_id": company_id}).execute()
-                if fav_resp.count == 1:
-                    company_data["isFavorite"] = True
-
+        if session and session.count == 1:
+            fav_resp = supabase.table("favorite_companies").select(
+                "*", count="exact").match({"user_id": session.data[0]['userId'], "company_id": company_id}).execute()
+            if fav_resp.count == 1:
+                company_data["isFavorite"] = True
 
         return standard_resp(data=company_data, status_code=status.HTTP_200_OK)
     except APIError as err:
