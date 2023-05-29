@@ -19,10 +19,10 @@ def get(request: HttpRequest, _path_params=None) -> Response:
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))
     except APIError as err:
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
         logger.exception(ex)
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def post(request: HttpRequest, _path_params=None) -> Response:
@@ -59,19 +59,19 @@ def post(request: HttpRequest, _path_params=None) -> Response:
         resp = supabase.table("notes").insert(new_note_dict).execute()
 
         if len(resp.data) != 1:
-            return standard_resp(None, status.HTTP_200_OK)
+            return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Failed to create note")
 
-        return standard_resp(resp.data[0], status.HTTP_201_CREATED)
+        return standard_resp(None, status.HTTP_201_CREATED)
 
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))
     except APIError as err:
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
         logger.exception(ex)
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def patch(request: HttpRequest, _path_params=None) -> Response:
@@ -120,18 +120,18 @@ def patch(request: HttpRequest, _path_params=None) -> Response:
             {"user_id": body['user_id'], "id": body['note_id']}).execute()
         
         if len(resp.data) != 1:
-            return standard_resp(None, status.HTTP_200_OK)
+            return standard_resp(None, status.HTTP_404_NOT_FOUND, "Failed to update note")
 
-        return standard_resp(resp.data[0], status.HTTP_200_OK)
+        return standard_resp(None, status.HTTP_204_NO_CONTENT)
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))
     except APIError as err:
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
         logger.exception(ex)
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def delete(request: HttpRequest, _path_params=None) -> Response:
@@ -153,15 +153,15 @@ def delete(request: HttpRequest, _path_params=None) -> Response:
             {'id': body['note_id'], 'user_id': body['user_id']}).execute()
         
         if len(resp.data) == 0:
-            return standard_resp(None, status.HTTP_200_OK)
+            return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Failed to delete note")
 
-        return standard_resp(resp.data[0], status.HTTP_200_OK)
+        return standard_resp(None, status.HTTP_204_NO_CONTENT)
     except JSONDecodeError:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Invalid request body")
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))
     except APIError as err:
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, f"{err.code} - {err.message}")
     except Exception as ex:
         logger.exception(ex)
-        return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)
