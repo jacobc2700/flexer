@@ -1,0 +1,136 @@
+/*
+* CUSTOM QUILL EDITOR STYLES
+* (overrides default styles provided by quill)
+*/
+
+:root {
+    --quill-tool-color: #eee;
+    --quill-tool-color-accent: blue;
+    --quill-background-color: #1e1e1e;
+}
+
+/* Edit toolbar colors */
+#editor_wrapper .ql-toolbar .ql-picker-label::before,
+#editor_wrapper .ql-toolbar .ql-picker-item {
+    color: var(--quill-tool-color);
+}
+#editor_wrapper .ql-toolbar .ql-picker-item:hover,
+#editor_wrapper .ql-toolbar .ql-stroke {
+    stroke: var(--quill-tool-color);
+}
+
+#editor_wrapper .ql-toolbar .ql-fill {
+    fill: var(--quill-tool-color);
+}
+
+#editor_wrapper .ql-toolbar button:hover,
+#editor_wrapper .ql-toolbar button:focus,
+#editor_wrapper .ql-toolbar .ql-picker-label:hover::before,
+#editor_wrapper .ql-toolbar .ql-picker-label.ql-active::before,
+#editor_wrapper .ql-toolbar .ql-picker-item:hover,
+#editor_wrapper .ql-toolbar .ql-picker-item.ql-selected {
+    color: var(--quill-tool-color-accent);
+}
+#editor_wrapper .ql-toolbar button:hover .ql-fill,
+#editor_wrapper .ql-toolbar button:focus .ql-fill,
+#editor_wrapper .ql-toolbar button.ql-active .ql-fill,
+#editor_wrapper .ql-toolbar .ql-picker-label:hover .ql-fill,
+#editor_wrapper .ql-toolbar .ql-picker-label.ql-active .ql-fill,
+#editor_wrapper .ql-toolbar .ql-picker-item:hover .ql-fill,
+#editor_wrapper .ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+#editor_wrapper .ql-toolbar button:hover .ql-stroke.ql-fill,
+#editor_wrapper .ql-toolbar button:focus .ql-stroke.ql-fill,
+#editor_wrapper .ql-toolbar button.ql-active .ql-stroke.ql-fill,
+#editor_wrapper .ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
+#editor_wrapper .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+#editor_wrapper .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
+#editor_wrapper .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
+    fill: var(--quill-tool-color-accent);
+}
+#editor_wrapper .ql-toolbar button:hover .ql-stroke,
+#editor_wrapper .ql-toolbar button:focus .ql-stroke,
+#editor_wrapper .ql-toolbar button.ql-active .ql-stroke,
+#editor_wrapper .ql-toolbar .ql-picker-label:hover .ql-stroke,
+#editor_wrapper .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+#editor_wrapper .ql-toolbar .ql-picker-item:hover .ql-stroke,
+#editor_wrapper .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+#editor_wrapper .ql-toolbar button:hover .ql-stroke-miter,
+#editor_wrapper .ql-toolbar button:focus .ql-stroke-miter,
+#editor_wrapper .ql-toolbar button.ql-active .ql-stroke-miter,
+#editor_wrapper .ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+#editor_wrapper .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+#editor_wrapper .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+#editor_wrapper .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
+    stroke: var(--quill-tool-color-accent);
+}
+
+.ql-picker-options {
+    background-color: var(--quill-background-color) !important;
+}
+
+/* reduce width of font size picker */
+.ql-picker.ql-size {
+    width: 64px !important;
+}
+
+/* fix the labels in the font size picker */
+.ql-picker.ql-size :is(.ql-picker-label, .ql-picker-item)::before {
+    content: attr(data-value) !important;
+}
+
+/* custom font size classes */
+.ql-size-8px {
+    font-size: 8px;
+}
+
+.ql-size-9px {
+    font-size: 9px;
+}
+
+.ql-size-10px {
+    font-size: 10px;
+}
+
+.ql-size-12px {
+    font-size: 12px;
+}
+
+.ql-size-14px {
+    font-size: 14px;
+}
+
+.ql-size-16px {
+    font-size: 16px;
+}
+
+.ql-size-20px {
+    font-size: 20px;
+}
+
+.ql-size-24px {
+    font-size: 24px;
+}
+
+.ql-size-32px {
+    font-size: 32px;
+}
+
+.ql-size-42px {
+    font-size: 42px;
+}
+
+.ql-size-54px {
+    font-size: 54px;
+}
+
+.ql-size-68px {
+    font-size: 68px;
+}
+
+.ql-size-84px {
+    font-size: 84px;
+}
+
+.ql-size-98px {
+    font-size: 98px;
+}

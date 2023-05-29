@@ -1,8 +1,16 @@
-import { ApiResponse, ApiResponseOkSchema } from '@/schema/ApiResponse.schema';
+import { ApiResponse } from '@/schema/ApiResponse.schema';
 import fetcher from '@/utils/fetcher';
 import useSWR, { KeyedMutator, SWRConfiguration } from 'swr';
 import z from 'zod';
 
+/**
+ * Custom hook to make request to API using SWR (should only be used for GET requests). 
+ * @param path localhost:8000[/path] (include leading slash)
+ * @param DataSchema a zod schema
+ * @param options SWR options object
+ * @param shouldCallApi makes request when true
+ * @returns 
+ */
 const useData = <T,>(
     path: string,
     DataSchema: z.ZodType,
@@ -23,7 +31,7 @@ const useData = <T,>(
     );
 
     let validatedData: T | undefined = undefined;
-
+    // console.log(data);
     if (data !== undefined) {
         if (data.ok === true) {
             const parse = DataSchema.safeParse(data.data);

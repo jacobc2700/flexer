@@ -5,7 +5,6 @@ export default async function fetcher(
     body?: RequestInit
 ): Promise<ApiResponse> {
     try {
-        // https://swr.vercel.app/docs/error-handling
         const res = await fetch('http://localhost:3000/api/gateway', {
             method: 'POST',
             body: JSON.stringify({ url, body }),

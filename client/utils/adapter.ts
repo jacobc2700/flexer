@@ -5,7 +5,6 @@ import {
     VerificationToken,
 } from 'next-auth/adapters';
 
-import fetcher from './fetcher';
 import Validate from './validate';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
