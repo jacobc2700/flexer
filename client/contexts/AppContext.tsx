@@ -8,11 +8,7 @@ import {
     ProblemsData,
     ProblemsDataSchema,
 } from '@/schema/ApiData.schema';
-import CompanyPreviewSchema from '@/schema/CompanyPreview.schema';
-import NoteSchema, { Note } from '@/schema/Note.schema';
-import ProblemSchema, { Problem } from '@/schema/Problem.schema';
 import { createContext, useState } from 'react';
-import { z } from 'zod';
 
 interface IAppContext {
     notes: NotesData;
