@@ -31,7 +31,7 @@ const useData = <T,>(
     );
 
     let validatedData: T | undefined = undefined;
-    // console.log(data);
+    console.log(data);
     if (data !== undefined) {
         if (data.ok === true) {
             const parse = DataSchema.safeParse(data.data);

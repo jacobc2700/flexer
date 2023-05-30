@@ -30,7 +30,8 @@ export const AuthContextProvider: React.FC<IProps> = (props) => {
     );
 
     const updateEmail = (newEmail: string) => {
-        if (email === newEmail || email === null || email === undefined) return;
+        if (email === newEmail || newEmail === null || newEmail === undefined)
+            return;
         setEmail(String(newEmail));
     };
 

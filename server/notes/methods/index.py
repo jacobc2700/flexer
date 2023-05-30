@@ -11,11 +11,25 @@ from flexer import supabase, logger
 
 
 def get(request: HttpRequest, _path_params=None) -> Response:
-    """get all the public notes"""
+    """get all notes of a user"""
 
     try:
-        resp = supabase.table("get_user_notes").select("*").match({'visibility': 'PUBLIC'}).execute()
-        return standard_resp(resp.data, status.HTTP_200_OK)
+        user_notes = []
+        session_tok = request.COOKIES.get("session-token")
+
+        if session_tok is None:
+            return standard_resp(None, status.HTTP_401_UNAUTHORIZED)
+        else:
+            session = supabase.table("sessions").select(
+                '*', count="exact").eq("sessionToken", session_tok).execute()
+
+            if session.count == 1:
+                user_notes = supabase.table("get_user_notes").select(
+                    "*").eq("user_id", session.data[0]['userId']).execute().data
+            else:
+                return standard_resp(None, status.HTTP_401_UNAUTHORIZED)
+
+        return standard_resp(user_notes, status.HTTP_200_OK)
     except ValueError as err:
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, str(err))
     except APIError as err:
@@ -118,7 +132,7 @@ def patch(request: HttpRequest, _path_params=None) -> Response:
 
         resp = supabase.table("notes").update(new_note_dict).match(
             {"user_id": body['user_id'], "id": body['note_id']}).execute()
-        
+
         if len(resp.data) != 1:
             return standard_resp(None, status.HTTP_404_NOT_FOUND, "Failed to update note")
 
@@ -151,7 +165,7 @@ def delete(request: HttpRequest, _path_params=None) -> Response:
 
         resp = supabase.table("notes").delete().match(
             {'id': body['note_id'], 'user_id': body['user_id']}).execute()
-        
+
         if len(resp.data) == 0:
             return standard_resp(None, status.HTTP_400_BAD_REQUEST, "Failed to delete note")
 

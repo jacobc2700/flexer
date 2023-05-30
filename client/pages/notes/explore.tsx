@@ -1,11 +1,11 @@
-import MyNotes from '@/components/Notes/MyNotes';
+import PublicNotes from '@/components/Notes/PublicNotes';
 import { useSession } from 'next-auth/react';
 
 export default function NotesPage() {
     const { status } = useSession();
 
     if (status === 'authenticated') {
-        return <MyNotes />;
+        return <PublicNotes />;
     } else if (status === 'loading') {
         return <div>Loading...</div>;
     } else {

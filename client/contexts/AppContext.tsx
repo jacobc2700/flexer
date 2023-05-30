@@ -8,22 +8,26 @@ import {
     ProblemsData,
     ProblemsDataSchema,
 } from '@/schema/ApiData.schema';
+import { useSession } from 'next-auth/react';
 import { createContext, useState } from 'react';
 
 interface IAppContext {
     notes: NotesData;
     companies: CompaniesData;
     problems: ProblemsData;
-    updateUsername: (username: string) => void;
+    myNotes: NotesData;
 }
 
 const defaultValues: IAppContext = {
     notes: [],
     companies: { favorites: [], companies: [] },
     problems: { favorites: [], problems: [] },
-    updateUsername: () => ({}),
+    myNotes: [],
 };
 
+/**
+ * Context for storing public data.
+ */
 const AppContext = createContext<IAppContext>(defaultValues);
 
 interface IProps {
@@ -31,15 +35,10 @@ interface IProps {
 }
 
 export const AppContextProvider: React.FC<IProps> = (props) => {
-    const [username, setUsername] = useState<string>('');
-
-    const updateUsername = (newUsername: string) => {
-        if (newUsername === '') return;
-        setUsername(newUsername);
-    };
+    const { status } = useSession();
 
     const { data: notes } = useData<IAppContext['notes']>(
-        '/notes/',
+        '/notes/explore',
         NotesDataSchema,
         { revalidateOnFocus: false }
     );
@@ -56,13 +55,20 @@ export const AppContextProvider: React.FC<IProps> = (props) => {
         { revalidateOnFocus: false }
     );
 
+    const { data: myNotes } = useData<IAppContext['notes']>(
+        '/notes',
+        NotesDataSchema,
+        { revalidateOnFocus: false },
+        status === 'authenticated'
+    );
+
     return (
         <AppContext.Provider
             value={{
                 notes: notes ?? defaultValues.notes,
                 problems: problems ?? defaultValues.problems,
                 companies: companies ?? defaultValues.companies,
-                updateUsername,
+                myNotes: myNotes ?? defaultValues.myNotes,
             }}
         >
             {props.children}

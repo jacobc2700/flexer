@@ -1,11 +1,3 @@
-import Home from '@/components/Home/Home';
-
-import AppThemeProvider from '../components/UI/Theme';
-
 export default function Index() {
-    return (
-        <>
-            <Home />
-        </>
-    );
+    return <div>Index page (what should we put here?)</div>;
 }
