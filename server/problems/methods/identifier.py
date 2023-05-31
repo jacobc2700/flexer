@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from postgrest import APIError
 
-from utils import is_pass_valid, standard_resp
+from utils import standard_resp
 from flexer import supabase, logger
 
 class PathParams(TypedDict):

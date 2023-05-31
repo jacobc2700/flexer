@@ -1,6 +1,6 @@
 ''' This file contains utility functions that are used in multiple places. '''
 import re
-from typing import Callable, Optional, TypedDict
+from typing import Callable, Optional, TypedDict, Union
 from rest_framework import status
 from rest_framework.response import Response
 from django.http import HttpRequest
@@ -101,5 +101,35 @@ def is_pass_valid(password: str):
         return False
     if not re.search("[0-9]", password):
         return False
+
+    return True
+
+def is_email_valid(email: str):
+    """Make sure that the email is valid."""
+    if not re.search(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
+        return False
+
+    return True
+
+def is_name_valid(username: str, allow_spaces: bool = False):
+    """Make sure that the username/fname/lname is valid."""
+    if allow_spaces:
+        if not re.search(r"^[a-zA-Z0-9_.- ]+$", username):
+            return False
+    else:
+        if not re.search(r"^[a-zA-Z0-9_.-]+$", username):
+            return False
+
+    return True
+
+def is_link_valid(link: str, domain: Union[str, None]):
+    """Make sure that the link is valid."""
+    if domain:
+        # allows for http://, https://, and www. before the domain name.
+        if not re.search(rf"^(?:http://|https://)?(?:www.)?{domain}", link):
+            return False
+    else:
+        if not re.search(r"^(?:http://|https://)", link):
+            return False
 
     return True

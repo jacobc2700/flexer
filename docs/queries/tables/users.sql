@@ -1,5 +1,3 @@
--- TODO: remove
-
 CREATE TABLE users (
     id uuid DEFAULT uuid_generate_v4() NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
@@ -11,6 +9,12 @@ CREATE TABLE users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp,
     visibility visibility_type DEFAULT "PRIVATE",
     emailVerified TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+    github TEXT DEFAULT "",
+    linkedin TEXT DEFAULT "",
+    website TEXT DEFAULT "",
+    twitter TEXT DEFAULT "",
+    facebook TEXT DEFAULT "",
+    youtube TEXT DEFAULT "",
     image TEXT DEFAULT NULL,
     PRIMARY KEY (id)
 );

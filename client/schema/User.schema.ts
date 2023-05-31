@@ -14,6 +14,12 @@ const UserSchema = z.object({
     visibility: Visibility,
     emailVerified: z.string().optional().nullable(),
     image: z.string().optional().nullable(),
+    github: z.string(),
+    linkedin: z.string(),
+    website: z.string(),
+    twitter: z.string(),
+    facebook: z.string(),
+    youtube: z.string(),
 });
 
 export type User = z.infer<typeof UserSchema>;

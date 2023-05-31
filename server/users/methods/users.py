@@ -6,11 +6,13 @@ from rest_framework.response import Response
 from django.http import HttpRequest
 from postgrest import APIError
 
-from utils import is_pass_valid, standard_resp
+from utils import is_email_valid, is_name_valid, is_pass_valid, standard_resp
 from flexer import supabase, logger
 
 # http://127.0.0.1:8000/users/
-def get(_request: HttpRequest, _path_params = None) -> Response:
+
+
+def get(_request: HttpRequest, _path_params=None) -> Response:
     """ Get all users in the same table. """
 
     try:
@@ -19,53 +21,42 @@ def get(_request: HttpRequest, _path_params = None) -> Response:
     except APIError as err:
         error_message = f"{err.code} - {err.message}"
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR, error_message)
-    except Exception as ex: # pylint: disable=broad-except
+    except Exception as ex:  # pylint: disable=broad-except
         logger.exception(ex)
         return standard_resp({}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # http://127.0.0.1:8000/users/ with [request body]
-def post(request: HttpRequest, _path_params = None) -> Response:
+
+
+def post(request: HttpRequest, _path_params=None) -> Response:
     """ Create a single new user (if body is valid). """
     # username, email ==> needs to be unique.
-    # is_pass_valid(password) ==> needs to be true.
-    # [first_name, last_name, email, password, username] ==> needs to be in body.
+    # FUTURE: is_pass_valid(password) ==> needs to be true.
+    # [first_name, last_name, email, FUTURE: password, username] ==> needs to be in body.
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    print(body)
-    print("creating a new user")
 
     try:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         users = supabase.table("users")
 
-        if not is_pass_valid(body['password']):
-            raise ValueError('Password does not conform to requirements.')
+        assert 'email' in body and is_email_valid(body['email']), 'Invalid email.'
+        assert 'username' in body and is_name_valid(body['username']), 'Invalid username.'
+        assert 'first_name' in body and is_name_valid(body['first_name'], True), 'Invalid first name.'
+        assert 'last_name' in body and is_name_valid(body['last_name'], True), 'Invalid last name.'
 
-        is_email = 'email' in body and len(body['email'].strip().replace(" ", "_")) > 0
-        is_username = 'username' in body and len(body['username'].strip().replace(" ", "_")) > 0
-        is_first_name = 'first_name' in body and len(body['first_name'].strip().replace(" ", "_")) > 0
-        is_last_name = 'last_name' in body and len(body['last_name'].strip().replace(" ", "_")) > 0
-        is_password = 'password' in body and len(body['password'].strip().replace(" ", "_")) > 0
-        valid_fields = is_email and is_username and is_first_name and is_last_name and is_password
+        unique_username = supabase.table("users").select(
+            "*").match({'username': body['username']}).execute()
+        assert len(unique_username.data) != 0, 'Username already exists.'
 
-        if not valid_fields:
-            raise ValueError('Missing required fields.')
-
-        same_username = users.select("*").match({'username': body['username']}).execute()
-
-        if len(same_username.data) != 0:
-            raise ValueError('Username already exists.')
-
-        same_email = users.select("*").match({'email': body['email']}).execute()
-
-        if len(same_email.data) != 0:
-            raise ValueError('Email already exists.')
+        unique_email = supabase.table("users").select(
+            "*").match({'email': body['email']}).execute()
+        assert len(unique_email.data) != 0, 'Email already exists.'
 
         new_user_object = {
             'email': body['email'],
-            'password': body['password'],
             'username': body['username'],
             'first_name': body['first_name'],
             'last_name': body['last_name']
@@ -74,20 +65,19 @@ def post(request: HttpRequest, _path_params = None) -> Response:
         resp = users.insert(new_user_object).execute()
 
         if len(resp.data) != 1:
-            return standard_resp(data=None, status_code=status.HTTP_200_OK)
-
+            raise Exception("Failed to create user.")
+        
         return standard_resp(resp.data[0], status.HTTP_201_CREATED)
     except JSONDecodeError:
         print("JSON Decode Error")
         msg = "Invalid request body."
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, msg)
-    except ValueError as err:
+    except AssertionError as err:
         msg = str(err)
-        print(msg)
         return standard_resp(None, status.HTTP_400_BAD_REQUEST, msg)
     except APIError as err:
         msg = f"{err.code} - {err.message}"
         return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
-    except Exception as ex: # pylint: disable=broad-except
+    except Exception as ex:  # pylint: disable=broad-except
         logger.exception(ex)
         return standard_resp(None, status.HTTP_500_INTERNAL_SERVER_ERROR)

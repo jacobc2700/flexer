@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from django.http import HttpRequest
 from postgrest import APIError
 
-from utils import is_pass_valid, standard_resp
+from utils import standard_resp
 from flexer import supabase, logger
 
 # http://127.0.0.1:8000/companies/
