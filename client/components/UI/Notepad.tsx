@@ -44,7 +44,6 @@ const Notepad: React.FC<Props> = (props) => {
 
     const {
         executeRequest,
-        data: saveResp,
         isLoading,
         isError,
     } = useSendData('/notes/', 'PATCH'); // hook for updating note through API

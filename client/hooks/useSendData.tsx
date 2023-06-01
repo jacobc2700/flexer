@@ -10,20 +10,18 @@ import z from 'zod';
  * @param method 'POST' | 'PUT' | 'DELETE' | 'PATCH'
  * @returns
  */
-const useSendData = (
+const useSendData = <T extends Record<string, unknown>,>(
     path: string,
     method: 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 ): {
-    executeRequest: (requestBody?: Record<string, unknown>) => Promise<void>;
-    data?: ApiResponseOk;
+    executeRequest: (requestBody?: T) => Promise<void>;
     isLoading: boolean;
     isError: string;
 } => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [reqResp, setReqResp] = useState<T | undefined>(undefined);
 
-    const executeRequest = async (requestBody?: Record<string, unknown>) => {
+    const executeRequest = async (requestBody?: T) => {
         setIsLoading(true);
         setError('');
 
@@ -50,7 +48,6 @@ const useSendData = (
 
     return {
         executeRequest,
-        data: reqResp,
         isLoading: isLoading,
         isError: error,
     };

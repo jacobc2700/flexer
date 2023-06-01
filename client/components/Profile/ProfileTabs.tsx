@@ -1,5 +1,5 @@
 import { User } from '@/schema/User.schema';
-import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 
 import AccountTab from './Tabs/AccountTab';
 import SocialsTab from './Tabs/SocialsTab';
@@ -8,6 +8,7 @@ interface IProps {
     user: User;
     activeTab: number;
     changeActiveTab: (event: React.SyntheticEvent, tab: number) => void;
+    updateProfile: (changes: Partial<User>) => void;
 }
 
 interface TabPanelProps {
@@ -34,7 +35,12 @@ const TabPanel: React.FC<TabPanelProps> = (props) => {
 
 const ProfileTabs: React.FC<IProps> = (props) => {
     return (
-        <Box>
+        <Box
+            sx={{
+                maxWidth: '600px',
+                margin: 'auto',
+            }}
+        >
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs
                     value={props.activeTab}
@@ -52,10 +58,6 @@ const ProfileTabs: React.FC<IProps> = (props) => {
                         label='Socials'
                         sx={{ textTransform: 'capitalize', letterSpacing: 1 }}
                     />
-                    <Tab
-                        label='Settings'
-                        sx={{ textTransform: 'capitalize', letterSpacing: 1 }}
-                    />
                 </Tabs>
             </Box>
             <TabPanel value={props.activeTab} index={0}>
@@ -65,11 +67,10 @@ const ProfileTabs: React.FC<IProps> = (props) => {
                 />
             </TabPanel>
             <TabPanel value={props.activeTab} index={1}>
-                {/* TODO: actually get the social links to be saved in the database */}
-                <SocialsTab socials={{}} />
-            </TabPanel>
-            <TabPanel value={props.activeTab} index={2}>
-                Settings
+                <SocialsTab
+                    user={props.user}
+                    updateProfile={props.updateProfile}
+                />
             </TabPanel>
         </Box>
     );

@@ -122,7 +122,7 @@ def is_name_valid(username: str, allow_spaces: bool = False):
 
     return True
 
-def is_link_valid(link: str, domain: Union[str, None]):
+def is_link_valid(link: str, domain: Union[str, None] = None):
     """Make sure that the link is valid."""
     if domain:
         # allows for http://, https://, and www. before the domain name.

@@ -58,6 +58,20 @@ def patch(request: HttpRequest, path_params: PathParams) -> Response:
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
 
+        # validate session before updating user
+        try:
+            session_tok = request.COOKIES.get("session-token")
+
+            # if session exists, try to find a note that matches the user_id & note_id
+            if session_tok is not None and "id" in body:
+                session = supabase.table("sessions").select(
+                    '*', count="exact").eq("sessionToken", session_tok).execute()
+
+                assert session.count == 1, "Invalid session token."
+                assert session.data[0]['userId'] == body['id'], "Invalid user id."
+        except AssertionError as err:
+            return standard_resp(None, status.HTTP_401_UNAUTHORIZED, str(err))
+
         # filter out any keys that aren't in the keys set
         changes = {k: body[k] for k in body.keys() if k in keys}
 
