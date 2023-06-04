@@ -1,0 +1,12 @@
+/* Workaround for https://stackoverflow.com/questions/34357434/html-body-100-causing-scrollbar-to-appear */
+html {
+    overflow-y: hidden;
+}
+
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div {
+    height: 100%;
+}

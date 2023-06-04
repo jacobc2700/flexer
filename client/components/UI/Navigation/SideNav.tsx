@@ -57,12 +57,12 @@ export default function SideNav() {
 
     return (
         <>
-            <Button onClick={toggleDrawer(true)}>left</Button>
+            <Button onClick={() => toggleDrawer(true)}>left</Button>
             <SwipeableDrawer
                 anchor='left'
                 open={state}
-                onClose={toggleDrawer(false)}
-                onOpen={toggleDrawer(true)}
+                onClose={() => toggleDrawer(false)}
+                onOpen={() => toggleDrawer(true)}
             >
                 left
             </SwipeableDrawer>

@@ -2,6 +2,7 @@
 import AppThemeProvider from '@/components/UI/Theme';
 import { AppContextProvider } from '@/contexts/AppContext';
 import { AuthContextProvider } from '@/contexts/AuthContext';
+import '@/styles/globals.css';
 import '@/styles/quill-custom.css';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';

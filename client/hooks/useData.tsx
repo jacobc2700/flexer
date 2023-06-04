@@ -1,15 +1,16 @@
 import { ApiResponse } from '@/schema/ApiResponse.schema';
 import fetcher from '@/utils/fetcher';
+import { useState } from 'react';
 import useSWR, { KeyedMutator, SWRConfiguration } from 'swr';
 import z from 'zod';
 
 /**
- * Custom hook to make request to API using SWR (should only be used for GET requests). 
+ * Custom hook to make request to API using SWR (should only be used for GET requests).
  * @param path localhost:8000[/path] (include leading slash)
  * @param DataSchema a zod schema
  * @param options SWR options object
  * @param shouldCallApi makes request when true
- * @returns 
+ * @returns
  */
 const useData = <T,>(
     path: string,
@@ -22,17 +23,24 @@ const useData = <T,>(
     isError: string;
     mutate: KeyedMutator<ApiResponse>;
 } => {
+    const [validatedData, setValidatedData] = useState<T | undefined>();
+    const [shouldValidateData, setShouldValidateData] = useState(false);
+
     const { data, error, mutate } = useSWR(
         shouldCallApi || shouldCallApi === undefined
             ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${path}`
             : null,
         fetcher,
-        options
+        {
+            ...options,
+            onError: () => setShouldValidateData(true),
+            onSuccess: () => setShouldValidateData(true),
+        }
     );
 
-    let validatedData: T | undefined = undefined;
-    console.log(data);
-    if (data !== undefined) {
+    if (shouldValidateData && data !== undefined) {
+        setShouldValidateData(false);
+        console.log(data);
         if (data.ok === true) {
             const parse = DataSchema.safeParse(data.data);
             if (!parse.success) {
@@ -42,9 +50,8 @@ const useData = <T,>(
                 );
             }
 
-            validatedData = parse.data;
-        }
-        else {
+            setValidatedData(parse.data);
+        } else {
             throw new Error('DEBUG (useData.tsx): API response is not ok. ');
         }
     }
