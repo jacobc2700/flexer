@@ -22,20 +22,8 @@ const theme = createTheme({
         secondary: {
             main: '#976bff',
         },
-        paper: {
-            main: 'rgba(255,255,255,0.05)',
-            light: 'rgba(255,255,255,0.1)',
-        },
 
         // primary, secondary, success, info, warning, error, text
-
-        // muted: {
-        //     main: grey[500],
-        //     dark: grey[700],
-        // },
-        // divider: "rgba(255, 255, 255, 0.25)",
-        // overlay: "rgba(255, 255, 255, 0.04)",
-        // white: "#fff",
     },
     typography: {
         // Default font for <Typography /> component

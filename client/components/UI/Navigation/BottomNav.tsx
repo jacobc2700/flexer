@@ -26,14 +26,14 @@ const BottomNav: React.FC<IProps> = (props) => {
             onChange={(_event, newValue) => {
                 setActiveNav(newValue);
             }}
-            sx={{
+            sx={(theme) => ({
                 height: props.navHeight,
-                backgroundColor: '#212121',
-                borderTop: '1px solid #777',
-            }}
+                backgroundColor: theme.palette.grey[900],
+                borderTop: `1px solid ${theme.palette.grey[600]}`,
+            })}
         >
             <BottomNavigationAction label='Home' icon={<HomeIcon />} />
-            <BottomNavigationAction label='Companies' icon={<BusinessIcon />} />
+            <BottomNavigationAction label='Notes' icon={<LibraryBooksIcon />} />
             <Box sx={{ px: 1, m: 'auto' }}>
                 <Fab
                     color='primary'
@@ -47,7 +47,7 @@ const BottomNav: React.FC<IProps> = (props) => {
                     />
                 </Fab>
             </Box>
-            <BottomNavigationAction label='Notes' icon={<LibraryBooksIcon />} />
+            <BottomNavigationAction label='Companies' icon={<BusinessIcon />} />
             <BottomNavigationAction
                 label='Problems'
                 icon={<DataObjectIcon />}
