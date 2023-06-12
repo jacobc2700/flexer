@@ -1,14 +1,15 @@
-import BusinessIcon from '@mui/icons-material/Business';
-import DataObjectIcon from '@mui/icons-material/DataObject';
-import HomeIcon from '@mui/icons-material/Home';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { Avatar, Box, Fab, useMediaQuery, useTheme } from '@mui/material';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+import { navItem } from '../Layouts/NavigationLayout';
 
 interface IProps {
     navHeight: number;
+    navItems: navItem[];
+    updateActiveNav: (navIdx: number) => void;
+    activeNav: number;
 }
 
 const BottomNav: React.FC<IProps> = (props) => {
@@ -17,14 +18,12 @@ const BottomNav: React.FC<IProps> = (props) => {
         `(max-width: ${theme.breakpoints.values.sm / 1.5}px)`
     );
 
-    const [activeNav, setActiveNav] = useState(0);
-
     return (
         <BottomNavigation
             showLabels={!isXsQuery}
-            value={activeNav}
+            value={props.activeNav}
             onChange={(_event, newValue) => {
-                setActiveNav(newValue);
+                props.updateActiveNav(newValue);
             }}
             sx={(theme) => ({
                 height: props.navHeight,
@@ -32,26 +31,28 @@ const BottomNav: React.FC<IProps> = (props) => {
                 borderTop: `1px solid ${theme.palette.grey[600]}`,
             })}
         >
-            <BottomNavigationAction label='Home' icon={<HomeIcon />} />
-            <BottomNavigationAction label='Notes' icon={<LibraryBooksIcon />} />
-            <Box sx={{ px: 1, m: 'auto' }}>
-                <Fab
-                    color='primary'
-                    aria-label='add'
-                    sx={{ height: 40, width: 40 }}
-                >
-                    <Avatar
-                        alt='Remy Sharp'
-                        src='https://picsum.photos/seed/picsum/200'
-                        sx={{ border: '2px solid #fff' }}
+            {props.navItems.map((item, idx) =>
+                idx !== 2 ? (
+                    <BottomNavigationAction
+                        key={`bottom-nav-${item.title}`}
+                        label={item.title}
+                        icon={item.icon}
                     />
-                </Fab>
-            </Box>
-            <BottomNavigationAction label='Companies' icon={<BusinessIcon />} />
-            <BottomNavigationAction
-                label='Problems'
-                icon={<DataObjectIcon />}
-            />
+                ) : (
+                    <Box
+                        sx={{ px: 1, m: 'auto' }}
+                        key={`bottom-nav-${item.title}`}
+                    >
+                        <Fab
+                            color='primary'
+                            aria-label='add'
+                            sx={{ height: 40, width: 40 }}
+                        >
+                            {item.icon}
+                        </Fab>
+                    </Box>
+                )
+            )}
         </BottomNavigation>
     );
 };

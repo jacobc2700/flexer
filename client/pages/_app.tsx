@@ -1,4 +1,4 @@
-// import '@/styles/globals.css';
+import SessionEmailLayout from '@/components/UI/Layouts/SessionEmailLayout';
 import AppThemeProvider from '@/components/UI/Theme';
 import { AppContextProvider } from '@/contexts/AppContext';
 import { AuthContextProvider } from '@/contexts/AuthContext';
@@ -16,7 +16,9 @@ export default function App({
             <AuthContextProvider>
                 <AppContextProvider>
                     <AppThemeProvider>
-                        <Component {...pageProps} />
+                        <SessionEmailLayout>
+                            <Component {...pageProps} />
+                        </SessionEmailLayout>
                     </AppThemeProvider>
                 </AppContextProvider>
             </AuthContextProvider>

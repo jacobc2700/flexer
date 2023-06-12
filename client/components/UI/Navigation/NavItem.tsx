@@ -1,20 +1,34 @@
-import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+} from '@mui/material';
+
+import { navItem } from '../Layouts/NavigationLayout';
 
 interface IProps {
-    text: string;
-    icon: JSX.Element;
+    navItem: navItem;
     isCollapsed: boolean;
+    isActive: boolean;
+    updateActiveNav: () => void;
 }
 
 const NavItem: React.FC<IProps> = (props) => {
     return (
-        <ListItem key={props.text} disablePadding sx={{ display: 'block' }}>
+        <ListItem
+            key={props.navItem.title}
+            disablePadding
+            sx={{ display: 'block' }}
+        >
             <ListItemButton
                 sx={{
                     minHeight: 48,
                     justifyContent: !props.isCollapsed ? 'initial' : 'center',
                     px: 2.5,
                 }}
+                selected={props.isActive}
+                onClick={props.updateActiveNav}
             >
                 <ListItemIcon
                     sx={{
@@ -23,9 +37,12 @@ const NavItem: React.FC<IProps> = (props) => {
                         justifyContent: 'center',
                     }}
                 >
-                    {props.icon}
+                    {props.navItem.icon}
                 </ListItemIcon>
-                <ListItemText primary={props.text} sx={{ opacity: !props.isCollapsed ? 1 : 0 }} />
+                <ListItemText
+                    primary={props.navItem.title}
+                    sx={{ opacity: !props.isCollapsed ? 1 : 0 }}
+                />
             </ListItemButton>
         </ListItem>
     );

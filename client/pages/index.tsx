@@ -1,4 +1,4 @@
-import Navigation from '@/components/UI/Navigation/Navigation';
+import NavigationLayout from '@/components/UI/Layouts/NavigationLayout';
 import { Button, Stack } from '@mui/material';
 import { signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -19,8 +19,8 @@ const QuickAccess = () => {
 
 export default function Index() {
     return (
-        <Navigation>
+        <NavigationLayout>
             <QuickAccess />
-        </Navigation>
+        </NavigationLayout>
     );
 }

@@ -1,12 +1,9 @@
 import AdbIcon from '@mui/icons-material/Adb';
-import BusinessIcon from '@mui/icons-material/Business';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import DataObjectIcon from '@mui/icons-material/DataObject';
-import HomeIcon from '@mui/icons-material/Home';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {
     Box,
+    Button,
     CSSObject,
     Divider,
     List,
@@ -14,11 +11,18 @@ import {
     IconButton as MuiIconButton,
     Theme,
     styled,
-    useTheme,
 } from '@mui/material';
 import { useState } from 'react';
 
+import { navItem } from '../Layouts/NavigationLayout';
 import NavItem from './NavItem';
+
+interface IProps {
+    navItems: navItem[];
+    activeNav: number;
+    updateActiveNav: (navIdx: number) => void;
+    children?: React.ReactNode;
+}
 
 const drawerWidthFull = 200; // px
 const drawerWidthCollapsed = 65; // px
@@ -75,8 +79,7 @@ const IconButton = styled(MuiIconButton)(({ theme }) => ({
     backgroundColor: theme.palette.grey[900],
 }));
 
-export default function MiniDrawer() {
-    const theme = useTheme();
+const SideNav: React.FC<IProps> = (props) => {
     const [open, setOpen] = useState(true);
 
     const handleDrawerOpen = () => {
@@ -99,7 +102,9 @@ export default function MiniDrawer() {
                     ...(open && { display: 'none' }),
                 }}
             >
-                <ViewSidebarIcon sx={{ transform: 'scale(-1)' }} />
+                <ChevronRightIcon
+                    sx={{ zIndex: (theme) => theme.zIndex.drawer }}
+                />
             </IconButton>
             <Drawer
                 variant='permanent'
@@ -119,31 +124,54 @@ export default function MiniDrawer() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    <NavItem
-                        icon={<HomeIcon />}
-                        text='Home'
-                        isCollapsed={!open}
-                    />
-                    <NavItem
-                        icon={<LibraryBooksIcon />}
-                        text='Notes'
-                        isCollapsed={!open}
-                    />
-                    <NavItem
-                        icon={<BusinessIcon />}
-                        text='Companies'
-                        isCollapsed={!open}
-                    />
-                    <NavItem
-                        icon={<DataObjectIcon />}
-                        text='Problems'
-                        isCollapsed={!open}
-                    />
+                    {props.navItems.map((item, idx) =>
+                        idx !== 2 ? (
+                            <NavItem
+                                key={item.title}
+                                navItem={item}
+                                isCollapsed={!open}
+                                isActive={idx === props.activeNav}
+                                updateActiveNav={() =>
+                                    props.updateActiveNav(idx)
+                                }
+                            />
+                        ) : null
+                    )}
                 </List>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        mt: 'auto',
+                        mb: 1,
+                    }}
+                >
+                    {open ? (
+                        <Button
+                            variant='outlined'
+                            startIcon={props.navItems[2].icon}
+                            sx={{
+                                textTransform: 'none',
+                                color: 'white',
+                                borderColor: 'white',
+                                px: 3,
+                                fontSize: 16,
+                                fontWeight: 400,
+                                mx: 'auto',
+                            }}
+                        >
+                            My Profile
+                        </Button>
+                    ) : (
+                        props.navItems[2].icon
+                    )}
+                </Box>
             </Drawer>
-            {/* <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
-            </Box> */}
+            <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
+                {props.children}
+            </Box>
         </Box>
     );
-}
+};
+
+export default SideNav;
