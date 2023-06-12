@@ -3,15 +3,15 @@ import { Raleway } from 'next/font/google';
 
 const raleway = Raleway({ subsets: ['latin'] });
 
-declare module '@mui/material/styles' {
-    interface Palette {
-        paper: Palette['primary'];
-    }
+// declare module '@mui/material/styles' {
+//     interface Palette {
+//         paper: Palette['primary'];
+//     }
 
-    interface PaletteOptions {
-        paper?: PaletteOptions['primary'];
-    }
-}
+//     interface PaletteOptions {
+//         paper?: PaletteOptions['primary'];
+//     }
+// }
 
 const theme = createTheme({
     palette: {
@@ -20,7 +20,8 @@ const theme = createTheme({
             main: '#6dc4eb',
         },
         secondary: {
-            main: '#976bff',
+            // main: '#976bff',
+            main: '#fdfd96'
         },
 
         // primary, secondary, success, info, warning, error, text
