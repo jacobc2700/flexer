@@ -1,136 +1,87 @@
 # Flexer
 
-[untitled company name]
+Flexer is a social media website for developers to maintain a career portfolio and connect with other users to increase their chance at landing a software engineering job.
 
-### Run the app locally:
+### Features:
+
+- Create a personal portfolio consisting of your work experience, social media links, and public notes.
+- Connect with other users on the site.
+- Browse coding interview problems from LeetCode.
+- Browse salaries for companies from Levels.fyi.
+- Create public and private notes.
+- Maintain a collection of your favorite problems, companies, and notes.
+- Sign in with your Google account.
+
+### How to run the application locally:
 
 ```
-Create venv:
+Create .env files in client and root with valid secret keys.
+
+Create virtual environment:
 python -m venv venv
 venv\Scripts\activate
 
-Run venv:
-activate venv (ubuntu)
-source venv/bin/activate (windows)
+Active virtual environment:
+activate venv (for Ubuntu)
+source venv/bin/activate (for Windows)
 
-Database:
+Database migrations:
 python manage.py makemigrations
 python manage.py migrate
 
-Run the app (back-end server):
+Run the back-end:
 cd server
 pip install -r requirements.txt
 python manage.py runserver
-==> http://127.0.0.1:8000/
+Go to http://127.0.0.1:8000/
 
-Run the app (front-end client):
+Run the front-end:
 cd client
 npm install
 npm run dev
-==> http://localhost:3000/
+Go to http://localhost:3000/
 
-Unit tests:
+Run back-end unit tests:
 python manage.py test
 
-Pylint checks:
+Pylint style checks:
 pylint ./server (root directory)
 ```
 
-### API Endpoints:
+### Sample Endpoints:
 
-Conventions:
+- http://127.0.0.1:8000/users.
+- http://127.0.0.1:8000/username.
+- http://127.0.0.1:8000/username/notes.
+- http://127.0.0.1:8000/username/notes/note_title.
+- http://127.0.0.1:8000/username/notes[?type=___&favorite].
+- http://127.0.0.1:8000/companies/company_name/notes.
+- http://127.0.0.1:8000/problems/problem_slug/note.
+- http://127.0.0.1:8000/username/companies/company_name/notes.
+- http://127.0.0.1:8000/username/problems/problem_slug/notes.
+- http://127.0.0.1:8000/problems/problem_slug/notes.
+- http://127.0.0.1:8000/users/username/notes.
+- http://127.0.0.1:8000/users/username/notes/note_id.
+- http://127.0.0.1:8000/companies.
+- http://127.0.0.1:8000/companies/company_name.
+- http://127.0.0.1:8000/companies/company_name/problems.
+- http://127.0.0.1:8000/companies/company_name/notes.
+- http://127.0.0.1:8000/problems.
+- http://127.0.0.1:8000/problems/problem_name.
+- http://127.0.0.1:8000/problems/problem_name/companies.
+- http://127.0.0.1:8000/problems/problem_name/notes.
+- http://127.0.0.1:8000/user_id/notes/favorites[?type=notes&favorite].
+- http://127.0.0.1:8000/user_id/notes/favorites[?note_id=id].
+- http://127.0.0.1:8000/user_id/notes/favorites[?type=notes&note_id=id].
+- http://127.0.0.1:8000/user_id/notes/note_id/favorite.
+- http://127.0.0.1:8000/user_id/notes/note_id/favorite.
+- http://127.0.0.1:8000/users/username/favorites/problems.
+- http://127.0.0.1:8000/users/user_id/favorites/companies.
 
-- https://restfulapi.net/resource-naming/.
-- https://medium.com/@nadinCodeHat/rest-api-naming-conventions-and-best-practices-1c4e781eb6a5.
-- Supabase returns a max of 1000 records -> requires pagination if more than 1000 records.
-- Notes and companies may be added specifically for users themselves, while problems cannot be created (pulled from LeetCode API).
+### Application Structure
 
-GET:
-
-- Only used for read operations (no database modification allowed).
-- Pass data to server using exclusively query parameters.
-- Should be easy for a user to type in the URL to get this data returned.
-
-DELETE, POST, PATCH:
-
-- These operations will modify the database.
-- Pass data to the server using request body.
-
-For the username/... routes:
-
-- Must check authenticated status of user.
-- Must check if the user specified in URL matches the user making the request.
-- If the URL user != request user ==> only return data if the resource is marked as public.
-
-Users:
-
-- GET http://127.0.0.1:8000/users: get all users (an admin route only ==> not public). ✓
-- GET http://127.0.0.1:8000/username: get a user profile by username. ✓
-- DELETE http://127.0.0.1:8000/username: delete a user by their username (test) \*
-- POST http://127.0.0.1:8000/users: create a new user (provide user info in request body) (test) \*
-- PATCH http://127.0.0.1:8000/username: update an existing user profile by their username (test) \*
-
-Notes:
-
--- Currently Unused --
-- GET http://127.0.0.1:8000/username/notes: get all the notes for a user (filtering by type can be done on the front end)
-- GET http://127.0.0.1:8000/username/notes/note_title: get note by note title
-- GET http://127.0.0.1:8000/username/notes[?type=___&favorite]: filter returned notes by their type or favorite status
-- GET http://127.0.0.1:8000/username/notes/note_title[?type=___&favorite]: ???
-- GET http://127.0.0.1:8000/username/notes/company/company_name/: get notes associated with specific company
-- GET http://127.0.0.1:8000/username/notes/problem/problem_name/: get notes associated with specific problem
--- Currently Unused --
-
-
-- GET http://127.0.0.1:8000/companies/company_name/notes: get all public notes associcated with a company ✓
-- GET http://127.0.0.1:8000/problems/problem_slug/notes: get all public notes associcated with a problem 
-
-- GET http://127.0.0.1:8000/username/companies/company_name/notes: get all notes associated with a company for a specific user
-- GET http://127.0.0.1:8000/username/problems/problem_slug/notes: get all notes associated with a company for a specific user
-
-- GET http://127.0.0.1:8000/problems/problem_slug/notes: get notes associated with specific problem
-
-- GET http://127.0.0.1:8000/users/username/notes: get all notes for a user ✓
-- GET http://127.0.0.1:8000/users/username/notes/note_id: get a single note ✓
-
-(There is not GET associated with /notes/)
-- DELETE http://127.0.0.1:8000/notes/: delete an existing note ✓
-- POST http://127.0.0.1:8000/notes/: create a new note ✓
-- PATCH http://127.0.0.1:8000/notes/: update an existing note ✓
-
-Companies:
-
-- GET http://127.0.0.1:8000/companies: list all companies (returns a subset of company table fields)
-- GET http://127.0.0.1:8000/companies/company_name: get company by company name (detailed info about a company -> returns all fields)
-- GET http://127.0.0.1:8000/companies/company_name/problems: get problems associated with a company
-- GET http://127.0.0.1:8000/companies/company_name/notes: get all public notes associated with a company
-
-Problems:
-
-- GET http://127.0.0.1:8000/problems: get all problems
-- GET http://127.0.0.1:8000/problems/problem_name: get problem by name
-- GET http://127.0.0.1:8000/problems/problem_name/companies: get all companies associated with a problem
-- GET http://127.0.0.1:8000/problems/problem_name/notes: get all public notes associated with a problem
-
-Favorite Notes:
-
-- GET http://127.0.0.1:8000/user_id/notes/favorites[?type=notes&favorite]: get favorite notes for specific types
-- GET http://127.0.0.1:8000/user_id/notes/favorites[?note_id=id]: specific favorite note
-- GET http://127.0.0.1:8000/user_id/notes/favorites[?type=notes&note_id=id]: type of note + specific favorite note
-- DELETE http://127.0.0.1:8000/user_id/notes/note_id/favorite: remove note as favorite
-- POST http://127.0.0.1:8000/user_id/notes/note_id/favorite: set note as favorite
-
-Favorite Problems:
-
-- GET http://127.0.0.1:8000/users/username/favorites/problems: get favorite problems for a user
-
-Favorite Companies:
-
-- GET http://127.0.0.1:8000/users/user_id/favorites/companies: get favorite companies for a user
-
-Leetcode API:
-
-- GET leetcode.something/completed_problems: get solved problems
-- GET leetcode.something/user_data: get LeetCode data for a user with a LeetCode account (signed in)
-
-### Project Structure:
+- `admin`: various Python scripts for obtaining data on companies, salaries, and problems.
+- `client`: user interface built with React, Next.js, and Material UI.
+- `docs`: style guide, API templates, archived documents, and SQL queries.
+- `server`: endpoints for Django API which interact with SQL database.
+  The project began as a Django web application generated by django-admin. Using the Django REST Framework and Postman, we created and tested the basic endpoints for performing REST API operations (Create, Read, Patch, Update, Delete). The main endpoint categories are /users, /problems, /companies, and /notes. The endpoints interact with a PostgreSQL database hosted on Supabase. We created ~15-20 SQL tables connected with primary/foreign keys and which are based on an Entity-Relationship Diagram we designed with Draw.io. Since Supabase provides an abstraction over plain SQL queries, we created SQL views and then performed select statements on these views to run more advanced SQL queries for our endpoints. The featured problems come from the LeetCode API, and the company salary data comes from a JSON file owned by Levels.fyi. After creating the back-end endpoints and populating the Supabase tables with mock users, mock notes, problems, and companies, we moved onto the front-end. We designed a website wireframe on Figma before generating a Next.js (React) application that utilizes TypeScript. To allow users to sign in with their Google accounts, we had to rewrite the adapter for Supabase Next.js Authentication because it was originally designed for a JavaScript back-end rather than a Python back-end. Additionally, we used TypeScript validator Zod to standardize our API responses and error messages. Some other aspects of our front-end design include the mobile-first design approach, using contexts to maintain a global state for all data (users, notes, companies, problems), Zod schemas for API data responses, and a fetcher file to request data from any URL endpoint. To maintain the growing complexity of our project, we used a Kanban board within GitHub Projects to manage weekly goals for future, in progress, and completed tasks. Additionally, we had weekly meetings to track our progress and documented the progress of the project on a google document.
